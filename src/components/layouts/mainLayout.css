@@ -1,0 +1,23 @@
+.mainLayout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.mainLayout .sidebar {
+  width: 340px;
+  transition: all 0.3s linear;
+  opacity: 1;
+}
+
+.mainLayout .sidebar.active {
+  width: 0;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.mainLayout > main {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}

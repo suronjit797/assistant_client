@@ -1,0 +1,446 @@
+import { userRoleFormate } from "@/constant/userRole";
+import { changeNavOpen } from "@/redux/features/themeSlice";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { Avatar, Menu, MenuProps } from "antd";
+import React, { useState } from "react";
+import { BiBuildingHouse } from "react-icons/bi";
+import { FaLocationDot, FaUsersGear } from "react-icons/fa6";
+import { HiOutlineDocumentReport } from "react-icons/hi";
+import { IoClose } from "react-icons/io5";
+import { MdOutlineDashboardCustomize, MdOutlineSensors } from "react-icons/md";
+import { TbReportMoney } from "react-icons/tb";
+import { TiBell, TiChartLine, TiCogOutline, TiHomeOutline, TiPower, TiUser } from "react-icons/ti";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
+
+interface NavConfig {
+  name: string;
+  path: string | null;
+  authorizedRoles: string[];
+  icon?: React.ReactNode;
+  children?: NavConfig[];
+  onClick?: (logOut?: () => void) => void;
+}
+
+interface NavItems {
+  key: string;
+  icon: React.ReactNode;
+  label: React.ReactNode | string;
+  onClick?: () => void;
+  children?: NavItems[];
+}
+
+interface LevelKeysProps {
+  key?: string;
+  children?: LevelKeysProps[];
+}
+
+const Sidebar = React.memo(() => {
+  // hooks
+  const { isNavOpen, isDark } = useAppSelector((state) => state.theme);
+  const { user } = useAppSelector((state) => state.auth || {});
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // states
+  const [stateOpenKeys, setStateOpenKeys] = useState(["2", "23"]);
+
+  // handler
+  const onOpenChange: MenuProps["onOpenChange"] = (openKeys) => {
+    const currentOpenKey = openKeys.find((key) => stateOpenKeys.indexOf(key) === -1);
+    // open
+    if (currentOpenKey !== undefined) {
+      const repeatIndex = openKeys
+        .filter((key) => key !== currentOpenKey)
+        .findIndex((key) => levelKeys[key] === levelKeys[currentOpenKey]);
+
+      setStateOpenKeys(
+        openKeys
+          // remove repeat key
+          .filter((_, index) => index !== repeatIndex)
+          // remove current level all child
+          .filter((key) => levelKeys[key] <= levelKeys[currentOpenKey])
+      );
+    } else {
+      // close
+      setStateOpenKeys(openKeys);
+    }
+  };
+
+  const logOut = async () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You want to logout.",
+      showCancelButton: true,
+      confirmButtonText: "Confirm",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // localStorage.setItem("isLoggedIn", "no");
+          // dispatch(setActiveDashboard(""));
+          // dispatch(setIsLogged(false));
+          // dispatch(changeTheme(false));
+          // dispatch(setUserDetails({}));
+          navigate("/");
+        } catch (error) {
+          if (error instanceof Error) {
+            console.log(error.message);
+          } else {
+            console.log("An unknown error occurred.");
+          }
+        }
+      }
+    });
+  };
+
+  // options
+
+  const items = generateMenuItems(navigationConfig(logOut), "superAdmin", logOut, location, isDark);
+
+  const getLevelKeys = (items1: LevelKeysProps[]) => {
+    const key: Record<string, number> = {};
+    const func = (items2: LevelKeysProps[], level = 1) => {
+      items2.forEach((item) => {
+        if (item.key) {
+          key[item.key] = level;
+        }
+        if (item.children) {
+          func(item.children, level + 1);
+        }
+      });
+    };
+    func(items1);
+    return key;
+  };
+
+  const levelKeys = getLevelKeys(items as LevelKeysProps[]);
+
+  return (
+    <div className="border-e border-e-gray-300 dark:border-e-slate-600 h-full">
+      <div className={`navbar-overlay ${isNavOpen ? "active" : ""}`} onClick={() => dispatch(changeNavOpen(false))} />
+      <div className={` ${isNavOpen ? "active" : ""}`}>
+        <div className="px-6">
+          <div className="close-container hidden">
+            <div className="close" onClick={() => dispatch(changeNavOpen(false))}>
+              <IoClose />
+            </div>
+          </div>
+          <div className=" pt-4 mb-8 mx-3">
+            <Link to="/" className="logo">
+              <img src={isDark? "/photos/logo_dark.webp" : "/photos/logo_light.webp"} alt="logo" />
+            </Link>
+          </div>
+          <div className="flex items-center gap-3">
+            <Avatar size="large" src={user?.avatar} className="" style={{ minWidth: 36 }}></Avatar>
+            <div className="text-sm">
+              <h6 title={user?.name} className="font-bold">
+                {(user?.name?.length ?? 0) > 23 ? `${user.name.slice(0, 21)}...` : user?.name || "John Doe"}
+              </h6>
+              <span className="text-capitalize text-gray-500">{userRoleFormate[user?.role]}</span>
+            </div>
+          </div>
+
+          <div className="text-xs mt-5 mb-1"> MAIN MENU </div>
+          <hr className="border-gray-300 dark:border-slate-600  mb-2" />
+        </div>
+
+        {/* menu */}
+        <Menu
+          defaultSelectedKeys={["/"]}
+          defaultOpenKeys={["sub1"]}
+          mode="inline"
+          openKeys={stateOpenKeys}
+          onOpenChange={onOpenChange}
+          // inlineCollapsed={collapsed}
+          items={items}
+        />
+      </div>
+    </div>
+  );
+});
+
+export default Sidebar;
+
+Sidebar.displayName = "Navbar";
+const navigationConfig = (logOut: () => void): NavConfig[] => [
+  {
+    name: "Home",
+    path: "/",
+    icon: <TiHomeOutline />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+  },
+  {
+    name: "Products",
+    path: "/products",
+    icon: <BiBuildingHouse />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    children: [
+      {
+        name: "All Products",
+        path: "/products",
+        authorizedRoles: ["superAdmin"],
+      },
+    ],
+  },
+  {
+    name: "Manage Users",
+    path: "/users",
+    icon: <FaUsersGear />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+    children: [
+      {
+        name: "All Users",
+        path: "/users",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+      },
+      {
+        name: "Manage Business Admins",
+        path: "/users?role=businessAdmin",
+        authorizedRoles: ["superAdmin"],
+      },
+      {
+        name: "Manage Installers",
+        path: "/users?role=installer",
+        authorizedRoles: ["superAdmin", "businessAdmin"],
+      },
+      {
+        name: "Manage Site Admins",
+        path: "/users?role=admin",
+        authorizedRoles: ["superAdmin", "businessAdmin"],
+      },
+      {
+        name: "Manage Site Users",
+        path: "/users?role=user",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+      },
+      {
+        name: "Manage Public Users",
+        path: "/users?role=public",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+      },
+    ],
+  },
+  {
+    name: "Site Locations",
+    path: "/site-locations",
+    icon: <FaLocationDot style={{ fontSize: "20px" }} />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    children: [
+      {
+        name: "All Site Locations",
+        path: "/site-locations",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+      },
+    ],
+  },
+  {
+    name: "Devices",
+    path: "/devices",
+    icon: <MdOutlineSensors />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    children: [
+      {
+        name: "All Devices",
+        path: "/devices",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+      },
+      {
+        name: "Manage Device Types",
+        path: "/device-types",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user"],
+      },
+    ],
+  },
+  {
+    name: "Analysis & Reporting",
+    path: "/data-analysis",
+    icon: <TiChartLine />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    children: [
+      {
+        name: "Data Analysis",
+        path: "/data-analysis",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+      },
+      {
+        name: "Billing Report",
+        path: "/billing-report",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+      },
+    ],
+  },
+  {
+    name: "Notification",
+    path: "/alarm-summary",
+    icon: <TiBell />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user", "public"],
+    children: [
+      {
+        name: "System Alarm Summary",
+        path: "/alarm-summary",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user", "public"],
+      },
+      {
+        name: "Notification Recipient List",
+        path: "/recipient-list",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user"],
+      },
+      {
+        name: "Alarm Trigger History",
+        path: "/alarm-history",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user", "public"],
+      },
+    ],
+  },
+  {
+    name: "Settings",
+    path: "/settings",
+    icon: <TiCogOutline />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    children: [
+      {
+        name: "Change Password",
+        path: "/settings",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+      },
+      {
+        name: "Activity Log",
+        path: "/activity-log",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+      },
+      {
+        name: "Electricity Tariff",
+        path: "/electricity-tariff",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+      },
+      {
+        name: "Manage System Parameters",
+        path: "/parameters",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin"],
+      },
+      {
+        name: "Manage Formulas",
+        path: "/formulas",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin"],
+      },
+    ],
+  },
+  {
+    name: "Dashboard",
+    path: "/dashboard-list",
+    icon: <MdOutlineDashboardCustomize />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user", "public"],
+    children: [
+      {
+        name: "Dashboard List",
+        path: "/dashboard-list",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user", "public"],
+      },
+      {
+        name: "Assign Dashboard",
+        path: "/assign-dashboard",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+      },
+    ],
+  },
+  {
+    name: "Custom Reports",
+    path: "/report-template-list",
+    icon: <HiOutlineDocumentReport />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+    children: [
+      {
+        name: "Report Template List",
+        path: "/report-template-list",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+      },
+      {
+        name: "Assign Report Template",
+        path: "/assign-report-template",
+        authorizedRoles: ["superAdmin", "businessAdmin"],
+      },
+      {
+        name: "Generate Report",
+        path: "/generate-report",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+      },
+      {
+        name: "Report List",
+        path: "/report-list",
+        authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+      },
+    ],
+  },
+  {
+    name: "Subscription",
+    path: "/plan-list",
+    icon: <TbReportMoney />,
+    authorizedRoles: ["superAdmin"],
+    children: [
+      {
+        name: "Plan List",
+        path: "/plan-list",
+        authorizedRoles: ["superAdmin"],
+      },
+      {
+        name: "Assign Plan to Business",
+        path: "/assign-plan",
+        authorizedRoles: ["superAdmin"],
+      },
+      {
+        name: "Subscription Summary",
+        path: "/subscription-summary",
+        authorizedRoles: ["superAdmin"],
+      },
+    ],
+  },
+  {
+    name: "My Subscription",
+    path: "/my-subscription",
+    icon: <TbReportMoney />,
+    authorizedRoles: ["businessAdmin"],
+  },
+  {
+    name: "Profile",
+    path: "/profile",
+    icon: <TiUser />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+  },
+  {
+    name: "Logout",
+    path: null,
+    icon: <TiPower />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    onClick: () => logOut(),
+  },
+];
+
+const generateMenuItems = (
+  config: NavConfig[],
+  role: string,
+  logout: () => void,
+  location: { pathname: string },
+  isDark: boolean
+): NavItems[] => {
+  return config
+    .filter((item) => item.authorizedRoles.includes(role))
+    .map((item) => {
+      const isActive = item.path && location?.pathname === item.path;
+      return {
+        key: item.path || item.name,
+        icon: <span className="text-xl!"> {item.icon} </span>,
+        label: (
+          <Link
+            to={item.path || "#"}
+            style={{ color: isActive ? "blue" : isDark ? "lightgray" : "black", textDecoration: "none" }}
+          >
+            {item.name}
+          </Link>
+        ),
+        onClick: item.onClick ? () => item.onClick?.(logout) : undefined,
+        children: item.children ? generateMenuItems(item.children, role, logout, location, isDark) : undefined,
+        disabled: !["Home", "Logout"].includes(item.name),
+      };
+    });
+};
