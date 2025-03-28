@@ -96,7 +96,7 @@ const HomeTable: React.FC = () => {
       key: "product",
     },
     {
-      title: "Donar Name",
+      title: "Donor Name",
       dataIndex: "donarName",
       key: "donarName",
     },
@@ -107,7 +107,7 @@ const HomeTable: React.FC = () => {
       align: "center",
     },
     {
-      title: "Trust Deed no",
+      title: "Trust Deed No",
       dataIndex: "tdn",
       key: "tdn",
       align: "center",
@@ -147,15 +147,15 @@ const HomeTable: React.FC = () => {
           <Button type="primary" title="Edit" icon={<EditOutlined />} onClick={() => handleEdit(record)}></Button>
           <Button
             type="default"
-            color="purple"
-            variant="solid"
+            color="blue"
+            variant="outlined"
             title="Banking Details"
             icon={<BankOutlined />}
             onClick={() => handleBankingDetails(record)}
           ></Button>
           <Button
             color="default"
-            variant="solid"
+            variant="outlined"
             type="default"
             title="Donor Details"
             icon={<UserOutlined />}
