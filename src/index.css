@@ -1,7 +1,26 @@
-
-html {
+html,
+body {
   font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   color: #525252;
 }
 
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #525252;
+}
+
+.dark p,
+.dark h1,
+.dark h2,
+.dark h3,
+.dark h4,
+.dark h5,
+.dark h6 {
+  color: lightgray;
+}

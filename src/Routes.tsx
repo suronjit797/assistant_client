@@ -13,6 +13,13 @@ import Notifications from "./pages/Notifications/Notifications";
 import Settings from "./pages/Settings/Settings";
 import Profile from "./pages/Profile/Profile";
 import Payments from "./pages/Payments/Payments";
+import CreateProduct from "./pages/Products/CreateProduct";
+import EditProduct from "./pages/Products/EditProduct";
+import CreateUser from "./pages/Users/CreateUser";
+import EditUser from "./pages/Users/EditUser";
+import EditLocation from "./pages/Locations/EditLocation";
+import CreateLocation from "./pages/Locations/CreateLocation";
+import ActivityLog from "./pages/Settings/ActivityLog";
 // import Register from "./pages/Register/Register";
 
 export const routes = createBrowserRouter([
@@ -33,12 +40,22 @@ export const routes = createBrowserRouter([
       },
 
       { path: "/products", element: <Products /> },
+      { path: "/products/create", element: <CreateProduct /> },
+      { path: "/products/edit/:id", element: <EditProduct /> },
+      // 
       { path: "/users", element: <Users /> },
+      { path: "/users/create", element: <CreateUser /> },
+      { path: "/users/edit/:id", element: <EditUser /> },
+      // 
       { path: "/locations", element: <Locations /> },
+      { path: "/locations/create", element: <CreateLocation /> },
+      { path: "/locations/edit/:id", element: <EditLocation /> },
+      // 
       { path: "/banking-settings", element: <BankingSettings /> },
       { path: "/reporting", element: <Reporting /> },
       { path: "/notification", element: <Notifications /> },
       { path: "/settings", element: <Settings /> },
+      { path: "/activity-log", element: <ActivityLog /> },
       { path: "/payments", element: <Payments /> },
       { path: "/profile", element: <Profile /> },
 

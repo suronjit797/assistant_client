@@ -1,4 +1,5 @@
 import { userRoleFormate } from "@/constant/userRole";
+import useLogout from "@/hooks/useLogout";
 import { changeNavOpen } from "@/redux/features/themeSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Avatar, Menu, MenuProps } from "antd";
@@ -9,8 +10,7 @@ import { IoClose } from "react-icons/io5";
 import { MdOutlineSensors } from "react-icons/md";
 import { TbReportMoney } from "react-icons/tb";
 import { TiBell, TiChartLine, TiCogOutline, TiHomeOutline, TiPower, TiUser } from "react-icons/ti";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
+import { Link, useLocation } from "react-router-dom";
 
 interface NavConfig {
   name: string;
@@ -39,8 +39,8 @@ const Sidebar = React.memo(() => {
   const { isNavOpen, isDark } = useAppSelector((state) => state.theme);
   const { user } = useAppSelector((state) => state.auth || {});
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
+  const logOut = useLogout();
 
   // states
   const [stateOpenKeys, setStateOpenKeys] = useState(["2"]);
@@ -64,44 +64,6 @@ const Sidebar = React.memo(() => {
       // close
       setStateOpenKeys(openKeys);
     }
-  };
-
-  // const onOpenChange: MenuProps["onOpenChange"] = (openKeys) => {
-  //   const key = openKeys[0];
-
-  //   const isExist = stateOpenKeys.find((k) => k === key);
-  //   if (isExist) {
-  //     setStateOpenKeys((pre) => pre.filter((k) => k !== key));
-  //   } else {
-  //     setStateOpenKeys([...stateOpenKeys, key]);
-  //   }
-  // };
-
-  const logOut = async () => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You want to logout.",
-      showCancelButton: true,
-      confirmButtonText: "Confirm",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        try {
-          // localStorage.setItem("isLoggedIn", "no");
-          // dispatch(setActiveDashboard(""));
-          // dispatch(setIsLogged(false));
-          // dispatch(changeTheme(false));
-          // dispatch(setUserDetails({}));
-          localStorage.clear();
-          navigate("/login");
-        } catch (error) {
-          if (error instanceof Error) {
-            console.log(error.message);
-          } else {
-            console.log("An unknown error occurred.");
-          }
-        }
-      }
-    });
   };
 
   // options

@@ -14,7 +14,7 @@ const MainLayout: React.FC = () => {
       </header>
       <main>
         <Header />
-        <div className="p-6">
+        <div className="p-4 border border-gray-300 dark:border-slate-600 h-full mx-4 rounded-md">
           <Outlet />
         </div>
         <Footer />
