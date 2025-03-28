@@ -4,9 +4,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { DashboardCount } from "./DashboardCount";
 import HomeTable from "./HomeTable";
+import { FullScreen } from "react-full-screen";
 
 const Home = () => {
   const { user } = useAppSelector((state) => state.auth);
+  const { fullScreenHandle } = useAppSelector((state) => state.theme);
 
   // states
   const [dashboardCounter, setDashboardCounter] = useState({});
@@ -19,7 +21,7 @@ const Home = () => {
   const [endDate, setEndDate] = useState("");
 
   return (
-    <div>
+    <>
       <div className="grid grid-cols-10 gap-4">
         {mainCounters?.map(({ entryName, url, roles, ...rest }, idx) => {
           return (
@@ -77,7 +79,7 @@ const Home = () => {
       <div className="mt-8">
         <HomeTable />
       </div>
-    </div>
+    </>
   );
 };
 

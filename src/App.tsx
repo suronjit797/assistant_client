@@ -4,7 +4,9 @@ import { RouterProvider } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./App.css";
 import { routes } from "./Routes";
-import { useAppSelector } from "./redux/store";
+import { useAppDispatch, useAppSelector } from "./redux/store";
+import { useFullScreenHandle } from "react-full-screen";
+import { setFullScreenHandle } from "./redux/features/themeSlice";
 
 const customDarkTheme = (isDark: boolean) => ({
   components: {
@@ -29,7 +31,8 @@ const customDarkTheme = (isDark: boolean) => ({
 });
 
 function App() {
-  const { isDark } = useAppSelector((state) => state.theme);
+  const { isDark,  } = useAppSelector((state) => state.theme);
+
   // network error handler
   useEffect(() => {
     const handleNetworkChange = () => {
@@ -58,6 +61,8 @@ function App() {
     };
   }, []);
 
+
+
   // dark mode
   useEffect(() => {
     if (isDark) {
@@ -69,7 +74,10 @@ function App() {
 
   return (
     <ConfigProvider theme={customDarkTheme(isDark)}>
-      <div className="min-h-screen bg-white text-black dark:bg-slate-800 dark:text-white" data-theme={isDark ? "dark" : ""}>
+      <div
+        className="min-h-screen bg-white text-black dark:bg-slate-800 dark:text-white"
+        data-theme={isDark ? "dark" : ""}
+      >
         <RouterProvider router={routes}></RouterProvider>
       </div>
     </ConfigProvider>

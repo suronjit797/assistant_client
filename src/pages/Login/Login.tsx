@@ -59,7 +59,7 @@ const Login = () => {
         {/* left side */}
         <div className="col-span-4 p-8 lg:px-20 bg-slate-100  h-full shadow-lg flex items-center justify-center flex-col">
           <div className="pb-5">
-            <img src="/photos/logo.webp" className="w-28" alt="logo" />
+            <img src="/photos/logo_dark.webp" className="w-28" alt="logo" />
           </div>
           <Form name="register" className="w-full" onFinish={handleLogin} layout="vertical">
             <Form.Item

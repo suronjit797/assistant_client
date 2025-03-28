@@ -77,8 +77,8 @@ const Header = () => {
                     <div className="mb-4">
                       <Avatar className="w-30! h-30!" />
                     </div>
-                    <div className="font-bold text-xl"> {user.name} </div>
-                    <div className=" text-sm text-gray-500"> {userRoleFormate[user.role] || "Site User"} </div>
+                    <div className="font-bold text-xl"> {user?.name} </div>
+                    <div className=" text-sm text-gray-500"> {userRoleFormate[user?.role] || "Site User"} </div>
                   </div>
 
                   <div>
@@ -98,7 +98,7 @@ const Header = () => {
       <div className="flex mt-3 text-[13px]">
         <label className="ms-auto">
           {dayjs(today).format("hh:mm A | DD MMMM YYYY")} | {/*  */}
-          <span className="text-capitalize">{userRoleFormate[user.role] || "Site User"}</span>
+          <span className="text-capitalize">{userRoleFormate[user?.role] || "Site User "} {/*  */}</span>
           Account
         </label>
       </div>

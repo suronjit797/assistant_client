@@ -82,7 +82,8 @@ const Sidebar = React.memo(() => {
           // dispatch(setIsLogged(false));
           // dispatch(changeTheme(false));
           // dispatch(setUserDetails({}));
-          navigate("/");
+          localStorage.clear();
+          navigate("/login");
         } catch (error) {
           if (error instanceof Error) {
             console.log(error.message);
@@ -126,9 +127,9 @@ const Sidebar = React.memo(() => {
               <IoClose />
             </div>
           </div>
-          <div className=" pt-4 mb-8 mx-3">
+          <div className="w-35 pt-4 mb-8 mx-3">
             <Link to="/" className="logo">
-              <img src={isDark? "/photos/logo_dark.webp" : "/photos/logo_light.webp"} alt="logo" />
+              <img src={isDark ? "/photos/logo_dark.webp" : "/photos/logo_light.webp"} alt="logo" />
             </Link>
           </div>
           <div className="flex items-center gap-3">
