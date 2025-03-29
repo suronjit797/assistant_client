@@ -1,10 +1,67 @@
 import CustomTable from "@/components/CustomTable";
-import { BankOutlined, EditOutlined, UserOutlined } from "@ant-design/icons";
+import { numberFormatter } from "@/utils/numberFormatter";
 import type { TableProps } from "antd";
-import { Button, Space } from "antd";
-import React from "react";
+import { Tabs } from "antd";
+import React, { useState } from "react";
 
-interface DataType {
+
+
+const HomeTable: React.FC = () => {
+
+  // states
+  const [tab, setTab] = useState('summary')
+
+
+
+  const tabValues = {
+    summary: <CustomTable data={summaryData} columns={summaryColumn} />,
+    banking:<CustomTable data={bankingData} columns={bankingColumn} />,
+    donor:<CustomTable data={donorData} columns={donorColumns} />,
+    advice:<CustomTable data={adviceData} columns={adviceColumns} />
+  }
+
+  return (
+    <div>
+      <div className="mb-3">
+      <Tabs defaultActiveKey="1" items={tabItems} activeKey={tab} onChange={(key)=> setTab(key)} />
+      </div>
+      
+
+{
+  tabValues[tab]
+}
+      {/* <CustomTable data={summaryData} columns={summaryColumn} /> */}
+
+    </div>
+  );
+};
+
+export default HomeTable;
+
+
+// tab data
+const tabItems = [
+  {
+    label: "Summary",
+    key: "summary",
+  },
+  {
+    label: "Banking Account Details",
+    key: "banking",
+  },
+  {
+    label: "Donor Details",
+    key: "donor",
+  },
+  {
+    label: "Advice Details",
+    key: "advice",
+  }
+]
+
+
+// summary
+interface SummaryDataType {
   key: string;
   product: string;
   donarName: string;
@@ -17,7 +74,7 @@ interface DataType {
   income: number;
 }
 
-const data: DataType[] = [
+const summaryData: SummaryDataType[] = [
   {
     key: "1",
     product: "Education Trust",
@@ -68,110 +125,296 @@ const data: DataType[] = [
   },
 ];
 
-const HomeTable: React.FC = () => {
-  // Functions to handle actions
-  const handleEdit = (record: DataType) => {
-    console.log("Edit clicked for:", record);
-  };
+const summaryColumn: TableProps<SummaryDataType>["columns"] = [
+  {
+    title: "No.",
+    dataIndex: "key",
+    key: "key",
+    render: (_text, _record, index) => index + 1,
+    align: "center",
+  },
+  {
+    title: "Product",
+    dataIndex: "product",
+    key: "product",
+  },
+  {
+    title: "Donor Name",
+    dataIndex: "donarName",
+    key: "donarName",
+  },
+  {
+    title: "Date of Trust Deed",
+    dataIndex: "dtd",
+    key: "dtd",
+    align: "center",
+  },
+  {
+    title: "Trust Deed No",
+    dataIndex: "tdn",
+    key: "tdn",
+    align: "center",
+  },
+  {
+    title: "Reference",
+    dataIndex: "ref",
+    key: "ref",
+    align: "center",
+  },
 
-  const handleBankingDetails = (record: DataType) => {
-    console.log("Banking Details clicked for:", record);
-  };
+  {
+    title: <div className='text-center'>Trust Amount (RM)</div> ,
+    dataIndex: "amount",
+    key: "amount",
+    render:(_, record)=> <> {numberFormatter(record.amount)} </>,
+    align: "end",
+  },
 
-  const handleDonorDetails = (record: DataType) => {
-    console.log("Donor Details clicked for:", record);
-  };
+  {
+    title: <div className='text-center'>Payable (%)</div>,
+    dataIndex: "amount",
+    key: "amount",
+    render:(_, record)=> <> {numberFormatter(record.payable)} </>,
+    align: "end",
 
-  const columns: TableProps<DataType>["columns"] = [
-    {
-      title: "No.",
-      dataIndex: "key",
-      key: "key",
-      render: (_text, _record, index) => index + 1,
-      align: "center",
-    },
-    {
-      title: "Product",
-      dataIndex: "product",
-      key: "product",
-    },
-    {
-      title: "Donor Name",
-      dataIndex: "donarName",
-      key: "donarName",
-    },
-    {
-      title: "Date of Trust Deed",
-      dataIndex: "dtd",
-      key: "dtd",
-      align: "center",
-    },
-    {
-      title: "Trust Deed No",
-      dataIndex: "tdn",
-      key: "tdn",
-      align: "center",
-    },
-    {
-      title: "Reference",
-      dataIndex: "ref",
-      key: "ref",
-      align: "center",
-    },
+  },
+  {
+    title: <div className="text-center">Income (RM)</div>,
+    dataIndex: "amount",
+    key: "amount",
+    render:(_, record)=> <> {numberFormatter(record.income)} </>,
+    align: "end",
+  },
 
-    {
-      title: "Trust Amount (RM)",
-      dataIndex: "amount",
-      key: "amount",
-      align: "center",
-    },
+  // {
+  //   title: "Action",
+  //   key: "action",
+  //   render: (_, record) => (
+  //     <Space size="middle" style={{columnGap: 8}}>
+  //       <Button type="primary" title="Advise Details" icon={<FaRegLightbulb />} onClick={() => handleAdvice(record)}></Button>
+  //       <Button
+  //         type="default"
+  //         color="blue"
+  //         variant="outlined"
+  //         title="Banking Details"
+  //         icon={<BankOutlined />}
+  //         onClick={() => handleBankingDetails(record)}
+  //       ></Button>
+  //       <Button
+  //         color="default"
+  //         variant="outlined"
+  //         type="default"
+  //         title="Donor Details"
+  //         icon={<UserOutlined />}
+  //         onClick={() => handleDonorDetails(record)}
+  //       ></Button>
+  //     </Space>
+  //   ),
+  //   align: "center",
+  // },
+];
 
-    {
-      title: "Payable (%)",
-      dataIndex: "amount",
-      key: "amount",
-      align: "center",
-    },
-    {
-      title: "Income (RM)",
-      dataIndex: "amount",
-      key: "amount",
-      align: "center",
-    },
+// banking
+const bankingColumn = [
+  {
+    title: "No.",
+    dataIndex: "key",
+    key: "key",
+    render: (_text, _record, index) => index + 1,
+    align: "center",
+  },
+  {
+    title: <div className="text-center"> Account Number </div>,
+    dataIndex: 'accountNumber',
+    key: 'accountNumber',
+    align:"center"
+  },
+  {
+    title: <div className=""> Account Name </div>,
+    dataIndex: 'accountName',
+    key: 'accountName',
+  },
+  {
+    title: <div className="text-center"> Bank </div>,
+    dataIndex: 'bank',
+    key: 'bank',
+        align:"center"
+  },
+  {
+    title: <div className="text-center"> Bank Code </div>,
+    dataIndex: 'bankCode',
+    key: 'bankCode',
+  },
+  {
+    title: <div className="text-center"> Payment Mode </div>,
+    dataIndex: 'paymentMode',
+    key: 'paymentMode',
+        align:"center"
+  },
+  {
+    title: <div className="text-center"> Name </div>,
+    dataIndex: 'name',
+    key: 'name',
+     align:"center"
 
-    {
-      title: "Action",
-      key: "action",
-      render: (_, record) => (
-        <Space size="middle" style={{columnGap: 8}}>
-          <Button type="primary" title="Edit" icon={<EditOutlined />} onClick={() => handleEdit(record)}></Button>
-          <Button
-            type="default"
-            color="blue"
-            variant="outlined"
-            title="Banking Details"
-            icon={<BankOutlined />}
-            onClick={() => handleBankingDetails(record)}
-          ></Button>
-          <Button
-            color="default"
-            variant="outlined"
-            type="default"
-            title="Donor Details"
-            icon={<UserOutlined />}
-            onClick={() => handleDonorDetails(record)}
-          ></Button>
-        </Space>
-      ),
-      align: "center",
-    },
-  ];
+  },
+  {
+    title: <div className="text-center"> NRIC NO. </div>,
+    dataIndex: 'nricNo',
+    key: 'nricNo',
+        align:"center"
+  },
+];
 
-  return (
-    <div>
-      <CustomTable data={data} columns={columns} />
-    </div>
-  );
-};
+const bankingData = [
+  {
+    key: '1',
+    accountNumber: '4381643522',
+    accountName: 'TAN MENG FAR',
+    bank: 'PBB',
+    bankCode: 'PBBEMYKL',
+    paymentMode: 'IG',
+    name: 'TAN MENG FAR',
+    nricNo: '740820085390',
+  },
+  {
+    key: '2',
+    accountNumber: '8008449537',
+    accountName: 'Wong Siew Ying',
+    bank: 'CIMB',
+    bankCode: 'CIBBMYKL',
+    paymentMode: 'IG',
+    name: 'Wong Siew Ying',
+    nricNo: '540425015150',
+  },
+  {
+    key: '3',
+    accountNumber: '8000186802',
+    accountName: 'KOPERASI DIDIK BERHAD',
+    bank: 'CIMB',
+    bankCode: 'CIBBMYKL',
+    paymentMode: 'IG',
+    name: 'KOPERASI DIDIK BERHAD',
+    nricNo: 'W60294',
+  },
+  {
+    key: '4',
+    accountNumber: '7058862124',
+    accountName: 'LOW YOKE SHIM @ LAN YOKE SHIM',
+    bank: 'CIMB',
+    bankCode: 'CIBBMYKL',
+    paymentMode: 'IG',
+    name: 'LOW YOKE SHIM @ LAN YOKE SHIM',
+    nricNo: 'S2635310F',
+  },
+];
 
-export default HomeTable;
+
+// donor
+const donorColumns = [
+  {
+    title: "No.",
+    dataIndex: "key",
+    key: "key",
+    render: (_text, _record, index) => index + 1,
+    align: "center",
+  },
+  {
+    title: <div className=""> Name </div>,
+    dataIndex: 'name',
+    key: 'name',
+  },
+  {
+    title: <div className="text-center"> NRIC/Passport No. </div>,
+    dataIndex: 'nric',
+    key: 'nric',
+     align:"center"
+  },
+  {
+    title: <div className="text-center"> Mobile No. </div>,
+    dataIndex: 'mobile',
+    key: 'mobile',
+     align:"center"
+  },
+  {
+    title: <div className=""> Email Address </div>,
+    dataIndex: 'email',
+    key: 'email',
+  },
+];
+
+const donorData = [
+  {
+    key: '1',
+    name: 'TAN MENG FAR',
+    nric: '740820-08-5390',
+    mobile: '016-2127652',
+    email: 'fannytan.siong@gmail.com',
+  },
+  {
+    key: '2',
+    name: 'WONG SIEW YING',
+    nric: '540425-01-5150',
+    mobile: '198631955',
+    email: 'sywongpersonal@gmail.com',
+  },
+  {
+    key: '3',
+    name: 'KOPERASI DIDIK BERHAD',
+    nric: 'W60294',
+    mobile: '-',
+    email: 'parames@mied.com.my',
+  },
+  {
+    key: '4',
+    name: 'LOW YOKE SHIM @ LAN YOKE SHIM',
+    nric: 'E6760781A',
+    mobile: '+6597417306',
+    email: 'mich_low@hotmail.com',
+  },
+];
+
+// advice
+const adviceColumns = [
+  {
+    title: "No.",
+    dataIndex: "key",
+    key: "key",
+    render: (_text, _record, index) => index + 1,
+    align: "center",
+  },
+  {
+    title: <div className=""> Advise Name </div>,
+    dataIndex: 'adviseName',
+    key: 'adviseName',
+  },
+  {
+    title: <div className="text-center"> Account Number </div>,
+    dataIndex: 'accountNumber',
+    key: 'accountNumber',
+     align:"center"
+  },
+];
+
+const adviceData = [
+  {
+    key: '1',
+    adviseName: 'Income for Education Trust Feb 2025',
+    accountNumber: '2-9-43590-5-1',
+  },
+  {
+    key: '2',
+    adviseName: 'Income for Cash Trust Feb 2025',
+    accountNumber: '2-2-43492-5-1',
+  },
+  {
+    key: '3',
+    adviseName: 'Income for Cash Trust III Feb 2025',
+    accountNumber: '2-24-98199-2-2',
+  },
+  {
+    key: '4',
+    adviseName: 'Income for Liquidity Trust Feb 2025',
+    accountNumber: '2-17-60390-1-1',
+  },
+];

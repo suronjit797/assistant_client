@@ -20,6 +20,7 @@ import EditUser from "./pages/Users/EditUser";
 import EditLocation from "./pages/Locations/EditLocation";
 import CreateLocation from "./pages/Locations/CreateLocation";
 import ActivityLog from "./pages/Settings/ActivityLog";
+import EditProfile from "./pages/Profile/EditProfile";
 // import Register from "./pages/Register/Register";
 
 export const routes = createBrowserRouter([
@@ -57,7 +58,9 @@ export const routes = createBrowserRouter([
       { path: "/settings", element: <Settings /> },
       { path: "/activity-log", element: <ActivityLog /> },
       { path: "/payments", element: <Payments /> },
+      // 
       { path: "/profile", element: <Profile /> },
+      { path: "/profile/edit", element: <EditProfile /> },
 
       {
         path: "/business",

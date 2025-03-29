@@ -7,7 +7,7 @@ interface Props<T> {
 }
 
 const CustomTable = <T extends object>({ columns, data }: Props<T>) => {
-  return <Table<T> columns={columns} dataSource={data} />;
+  return <Table<T> columns={columns} dataSource={data} scroll={{x:true}} />;
 };
 
 export default CustomTable;

@@ -11,3 +11,12 @@ export interface IRoute {
   path: string;
   icon: JSX.Element;
 }
+
+
+export interface ImageInterface {
+  uid: string;
+  name: string;
+  status: string;
+  url: string;
+  size: number;
+}

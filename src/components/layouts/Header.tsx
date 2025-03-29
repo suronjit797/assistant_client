@@ -76,7 +76,7 @@ const Header = () => {
 
                   <div className="text-center mb-4">
                     <div className="mb-4">
-                      <Avatar className="w-30! h-30!" />
+                      <Avatar src={user?.avatar?.url} className="w-30! h-30!" />
                     </div>
                     <div className="font-bold text-xl"> {user?.name} </div>
                     <div className=" text-sm text-gray-500"> {userRoleFormate[user?.role] || "Site User"} </div>
@@ -89,7 +89,7 @@ const Header = () => {
               }
               trigger="click"
             >
-              <Avatar src={user?.avatar} alt="" size="large" />
+              <Avatar src={user?.avatar?.url} alt="" size="large" />
             </Popover>
           </div>
         </div>

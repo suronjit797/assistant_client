@@ -6,3 +6,9 @@ export interface LoginRequest {
 export interface LoginResponse {
   token: string;
 }
+
+export interface IResponse<T> {
+  success: boolean,
+  message: string,
+  data: T
+}

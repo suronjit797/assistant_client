@@ -42,6 +42,7 @@ const Home: React.FC = () => {
                       {...rest}
                       bg="bg-blue-50 dark:bg-slate-900"
                       count={dashboardCounter?.[entryName] || 0}
+                      decimalCount={0}
                     />
                   </Link>
                 </div>
@@ -56,7 +57,7 @@ const Home: React.FC = () => {
           <div className="">
             <div className="flex items-center justify-between my-5">
               <h5 style={{ marginBottom: "-8px" }}>
-                <label htmlFor="date">Total Earnings ( {selectedMonth.format("MMM YYYY")} )</label>
+                <label htmlFor="date" className="cursor-pointer">Total Earnings ( {selectedMonth.format("MMM YYYY")} )</label>
                 <DatePicker
                   id="date"
                   className="opacity-0 -z-10"
@@ -146,17 +147,17 @@ const mainCounters: { title: string; bg: string; entryName: string; roles: strin
 
 const earningSummaryCounters = [
   {
-    title: "Total Trust Amount",
+    title: "Total Trust Amount (RM)",
     entryName: "totalTrustAmount",
     url: "/",
   },
   {
-    title: "Total Payout",
+    title: "Total Payout (RM)",
     entryName: "totalPayout",
     url: "/",
   },
   {
-    title: "Total Income",
+    title: "Total Income (RM)",
     entryName: "totalIncome",
     url: "/",
   },

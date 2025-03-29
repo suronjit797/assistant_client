@@ -4,10 +4,10 @@ import { changeNavOpen } from "@/redux/features/themeSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Avatar, Menu, MenuProps } from "antd";
 import React, { useState } from "react";
-import { BiBuildingHouse } from "react-icons/bi";
 import { FaLocationDot, FaUsersGear } from "react-icons/fa6";
+import { GrMoney } from "react-icons/gr";
 import { IoClose } from "react-icons/io5";
-import { MdOutlineSensors } from "react-icons/md";
+import { RiBankFill } from "react-icons/ri";
 import { TbReportMoney } from "react-icons/tb";
 import { TiBell, TiChartLine, TiCogOutline, TiHomeOutline, TiPower, TiUser } from "react-icons/ti";
 import { Link, useLocation } from "react-router-dom";
@@ -104,7 +104,7 @@ const Sidebar = React.memo(() => {
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <Avatar size="large" src={user?.avatar} className="" style={{ minWidth: 36 }}></Avatar>
+            <Avatar size="large" src={user?.avatar?.url} className="" style={{ minWidth: 36 }}></Avatar>
             <div className="text-sm">
               <h6 title={user?.name} className="font-bold">
                 {(user?.name?.length ?? 0) > 23 ? `${user.name.slice(0, 21)}...` : user?.name || "John Doe"}
@@ -151,7 +151,7 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
   {
     name: "Investment Products",
     path: "/products",
-    icon: <BiBuildingHouse />,
+    icon: <GrMoney />,
     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
     // children: [
     //   {
@@ -208,7 +208,7 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
   {
     name: "Banking Settings",
     path: "/banking-settings",
-    icon: <MdOutlineSensors />,
+    icon: <RiBankFill />,
     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
     // children: [
     //   {
@@ -343,7 +343,7 @@ const generateMenuItems = (
         ),
         onClick: item.onClick ? () => item.onClick?.(logout) : undefined,
         children: item.children ? generateMenuItems(item.children, role, logout, location, isDark) : undefined,
-        disabled: !["Home", "Logout"].includes(item.name),
+        disabled: !["Home", "Logout", "Profile"].includes(item.name),
       };
     });
 };
