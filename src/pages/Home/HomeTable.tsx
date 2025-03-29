@@ -4,40 +4,30 @@ import type { TableProps } from "antd";
 import { Tabs } from "antd";
 import React, { useState } from "react";
 
-
-
 const HomeTable: React.FC = () => {
-
   // states
-  const [tab, setTab] = useState('summary')
-
-
+  const [tab, setTab] = useState("summary");
 
   const tabValues = {
     summary: <CustomTable data={summaryData} columns={summaryColumn} />,
-    banking:<CustomTable data={bankingData} columns={bankingColumn} />,
-    donor:<CustomTable data={donorData} columns={donorColumns} />,
-    advice:<CustomTable data={adviceData} columns={adviceColumns} />
-  }
+    banking: <CustomTable data={bankingData} columns={bankingColumn} />,
+    donor: <CustomTable data={donorData} columns={donorColumns} />,
+    advice: <CustomTable data={adviceData} columns={adviceColumns} />,
+  };
 
   return (
     <div>
       <div className="mb-3">
-      <Tabs defaultActiveKey="1" items={tabItems} activeKey={tab} onChange={(key)=> setTab(key)} />
+        <Tabs defaultActiveKey="1" items={tabItems} activeKey={tab} onChange={(key) => setTab(key)} />
       </div>
-      
 
-{
-  tabValues[tab]
-}
+      {tabValues[tab]}
       {/* <CustomTable data={summaryData} columns={summaryColumn} /> */}
-
     </div>
   );
 };
 
 export default HomeTable;
-
 
 // tab data
 const tabItems = [
@@ -56,9 +46,8 @@ const tabItems = [
   {
     label: "Advice Details",
     key: "advice",
-  }
-]
-
+  },
+];
 
 // summary
 interface SummaryDataType {
@@ -163,26 +152,25 @@ const summaryColumn: TableProps<SummaryDataType>["columns"] = [
   },
 
   {
-    title: <div className='text-center'>Trust Amount (RM)</div> ,
+    title: <div className="text-center">Trust Amount (RM)</div>,
     dataIndex: "amount",
     key: "amount",
-    render:(_, record)=> <> {numberFormatter(record.amount)} </>,
+    render: (_, record) => <> {numberFormatter(record.amount)} </>,
     align: "end",
   },
 
   {
-    title: <div className='text-center'>Payable (%)</div>,
+    title: <div className="text-center">Payable (%)</div>,
     dataIndex: "amount",
     key: "amount",
-    render:(_, record)=> <> {numberFormatter(record.payable)} </>,
+    render: (_, record) => <> {numberFormatter(record.payable)} </>,
     align: "end",
-
   },
   {
     title: <div className="text-center">Income (RM)</div>,
     dataIndex: "amount",
     key: "amount",
-    render:(_, record)=> <> {numberFormatter(record.income)} </>,
+    render: (_, record) => <> {numberFormatter(record.income)} </>,
     align: "end",
   },
 
@@ -215,7 +203,18 @@ const summaryColumn: TableProps<SummaryDataType>["columns"] = [
 ];
 
 // banking
-const bankingColumn = [
+
+interface BankingDataType {
+  key: string;
+  accountNumber: string;
+  accountName: string;
+  bank: string;
+  bankCode: string;
+  paymentMode: string;
+  name: string;
+  nricNo: string;
+}
+const bankingColumn: TableProps<BankingDataType>["columns"] = [
   {
     title: "No.",
     dataIndex: "key",
@@ -225,93 +224,99 @@ const bankingColumn = [
   },
   {
     title: <div className="text-center"> Account Number </div>,
-    dataIndex: 'accountNumber',
-    key: 'accountNumber',
-    align:"center"
+    dataIndex: "accountNumber",
+    key: "accountNumber",
+    align: "center",
   },
   {
     title: <div className=""> Account Name </div>,
-    dataIndex: 'accountName',
-    key: 'accountName',
+    dataIndex: "accountName",
+    key: "accountName",
   },
   {
     title: <div className="text-center"> Bank </div>,
-    dataIndex: 'bank',
-    key: 'bank',
-        align:"center"
+    dataIndex: "bank",
+    key: "bank",
+    align: "center",
   },
   {
     title: <div className="text-center"> Bank Code </div>,
-    dataIndex: 'bankCode',
-    key: 'bankCode',
+    dataIndex: "bankCode",
+    key: "bankCode",
   },
   {
     title: <div className="text-center"> Payment Mode </div>,
-    dataIndex: 'paymentMode',
-    key: 'paymentMode',
-        align:"center"
+    dataIndex: "paymentMode",
+    key: "paymentMode",
+    align: "center",
   },
   {
     title: <div className="text-center"> Name </div>,
-    dataIndex: 'name',
-    key: 'name',
-     align:"center"
-
+    dataIndex: "name",
+    key: "name",
+    align: "center",
   },
   {
     title: <div className="text-center"> NRIC NO. </div>,
-    dataIndex: 'nricNo',
-    key: 'nricNo',
-        align:"center"
+    dataIndex: "nricNo",
+    key: "nricNo",
+    align: "center",
   },
 ];
 
-const bankingData = [
+const bankingData: BankingDataType[] = [
   {
-    key: '1',
-    accountNumber: '4381643522',
-    accountName: 'TAN MENG FAR',
-    bank: 'PBB',
-    bankCode: 'PBBEMYKL',
-    paymentMode: 'IG',
-    name: 'TAN MENG FAR',
-    nricNo: '740820085390',
+    key: "1",
+    accountNumber: "4381643522",
+    accountName: "TAN MENG FAR",
+    bank: "PBB",
+    bankCode: "PBBEMYKL",
+    paymentMode: "IG",
+    name: "TAN MENG FAR",
+    nricNo: "740820085390",
   },
   {
-    key: '2',
-    accountNumber: '8008449537',
-    accountName: 'Wong Siew Ying',
-    bank: 'CIMB',
-    bankCode: 'CIBBMYKL',
-    paymentMode: 'IG',
-    name: 'Wong Siew Ying',
-    nricNo: '540425015150',
+    key: "2",
+    accountNumber: "8008449537",
+    accountName: "Wong Siew Ying",
+    bank: "CIMB",
+    bankCode: "CIBBMYKL",
+    paymentMode: "IG",
+    name: "Wong Siew Ying",
+    nricNo: "540425015150",
   },
   {
-    key: '3',
-    accountNumber: '8000186802',
-    accountName: 'KOPERASI DIDIK BERHAD',
-    bank: 'CIMB',
-    bankCode: 'CIBBMYKL',
-    paymentMode: 'IG',
-    name: 'KOPERASI DIDIK BERHAD',
-    nricNo: 'W60294',
+    key: "3",
+    accountNumber: "8000186802",
+    accountName: "KOPERASI DIDIK BERHAD",
+    bank: "CIMB",
+    bankCode: "CIBBMYKL",
+    paymentMode: "IG",
+    name: "KOPERASI DIDIK BERHAD",
+    nricNo: "W60294",
   },
   {
-    key: '4',
-    accountNumber: '7058862124',
-    accountName: 'LOW YOKE SHIM @ LAN YOKE SHIM',
-    bank: 'CIMB',
-    bankCode: 'CIBBMYKL',
-    paymentMode: 'IG',
-    name: 'LOW YOKE SHIM @ LAN YOKE SHIM',
-    nricNo: 'S2635310F',
+    key: "4",
+    accountNumber: "7058862124",
+    accountName: "LOW YOKE SHIM @ LAN YOKE SHIM",
+    bank: "CIMB",
+    bankCode: "CIBBMYKL",
+    paymentMode: "IG",
+    name: "LOW YOKE SHIM @ LAN YOKE SHIM",
+    nricNo: "S2635310F",
   },
 ];
-
 
 // donor
-const donorColumns = [
+
+interface DonorDataType {
+  key: string;
+  name: string;
+  nric: string;
+  mobile: string;
+  email: string;
+}
+const donorColumns: TableProps<DonorDataType>["columns"] = [
   {
     title: "No.",
     dataIndex: "key",
@@ -321,61 +326,66 @@ const donorColumns = [
   },
   {
     title: <div className=""> Name </div>,
-    dataIndex: 'name',
-    key: 'name',
+    dataIndex: "name",
+    key: "name",
   },
   {
     title: <div className="text-center"> NRIC/Passport No. </div>,
-    dataIndex: 'nric',
-    key: 'nric',
-     align:"center"
+    dataIndex: "nric",
+    key: "nric",
+    align: "center",
   },
   {
     title: <div className="text-center"> Mobile No. </div>,
-    dataIndex: 'mobile',
-    key: 'mobile',
-     align:"center"
+    dataIndex: "mobile",
+    key: "mobile",
+    align: "center",
   },
   {
     title: <div className=""> Email Address </div>,
-    dataIndex: 'email',
-    key: 'email',
+    dataIndex: "email",
+    key: "email",
   },
 ];
 
-const donorData = [
+const donorData: DonorDataType[] = [
   {
-    key: '1',
-    name: 'TAN MENG FAR',
-    nric: '740820-08-5390',
-    mobile: '016-2127652',
-    email: 'fannytan.siong@gmail.com',
+    key: "1",
+    name: "TAN MENG FAR",
+    nric: "740820-08-5390",
+    mobile: "016-2127652",
+    email: "fannytan.siong@gmail.com",
   },
   {
-    key: '2',
-    name: 'WONG SIEW YING',
-    nric: '540425-01-5150',
-    mobile: '198631955',
-    email: 'sywongpersonal@gmail.com',
+    key: "2",
+    name: "WONG SIEW YING",
+    nric: "540425-01-5150",
+    mobile: "198631955",
+    email: "sywongpersonal@gmail.com",
   },
   {
-    key: '3',
-    name: 'KOPERASI DIDIK BERHAD',
-    nric: 'W60294',
-    mobile: '-',
-    email: 'parames@mied.com.my',
+    key: "3",
+    name: "KOPERASI DIDIK BERHAD",
+    nric: "W60294",
+    mobile: "-",
+    email: "parames@mied.com.my",
   },
   {
-    key: '4',
-    name: 'LOW YOKE SHIM @ LAN YOKE SHIM',
-    nric: 'E6760781A',
-    mobile: '+6597417306',
-    email: 'mich_low@hotmail.com',
+    key: "4",
+    name: "LOW YOKE SHIM @ LAN YOKE SHIM",
+    nric: "E6760781A",
+    mobile: "+6597417306",
+    email: "mich_low@hotmail.com",
   },
 ];
 
 // advice
-const adviceColumns = [
+interface AdviceDataType {
+  key: string;
+  adviseName: string;
+  accountNumber: string;
+}
+const adviceColumns: TableProps<AdviceDataType>["columns"] = [
   {
     title: "No.",
     dataIndex: "key",
@@ -385,36 +395,36 @@ const adviceColumns = [
   },
   {
     title: <div className=""> Advise Name </div>,
-    dataIndex: 'adviseName',
-    key: 'adviseName',
+    dataIndex: "adviseName",
+    key: "adviseName",
   },
   {
     title: <div className="text-center"> Account Number </div>,
-    dataIndex: 'accountNumber',
-    key: 'accountNumber',
-     align:"center"
+    dataIndex: "accountNumber",
+    key: "accountNumber",
+    align: "center",
   },
 ];
 
-const adviceData = [
+const adviceData: AdviceDataType[] = [
   {
-    key: '1',
-    adviseName: 'Income for Education Trust Feb 2025',
-    accountNumber: '2-9-43590-5-1',
+    key: "1",
+    adviseName: "Income for Education Trust Feb 2025",
+    accountNumber: "2-9-43590-5-1",
   },
   {
-    key: '2',
-    adviseName: 'Income for Cash Trust Feb 2025',
-    accountNumber: '2-2-43492-5-1',
+    key: "2",
+    adviseName: "Income for Cash Trust Feb 2025",
+    accountNumber: "2-2-43492-5-1",
   },
   {
-    key: '3',
-    adviseName: 'Income for Cash Trust III Feb 2025',
-    accountNumber: '2-24-98199-2-2',
+    key: "3",
+    adviseName: "Income for Cash Trust III Feb 2025",
+    accountNumber: "2-24-98199-2-2",
   },
   {
-    key: '4',
-    adviseName: 'Income for Liquidity Trust Feb 2025',
-    accountNumber: '2-17-60390-1-1',
+    key: "4",
+    adviseName: "Income for Liquidity Trust Feb 2025",
+    accountNumber: "2-17-60390-1-1",
   },
 ];
