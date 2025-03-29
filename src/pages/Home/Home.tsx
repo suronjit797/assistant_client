@@ -6,17 +6,26 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { DashboardCount } from "./DashboardCount";
 import HomeTable from "./HomeTable";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
 
-const Home:React.FC = () => {
+const Home: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
 
   // states
-  const [dashboardCounter, setDashboardCounter] = useState<Record<string, any>>({});
-  const [alarmCounter, setAlarmCounter] = useState<Record<string, any>>({
-    totalAcknowledged: 0,
-    totalAlarm: 0,
-    totalTriggeredAlarm: 0,
+  const [dashboardCounter, setDashboardCounter] = useState<Record<string, any>>({
+    donors: 394,
+    branches: 84,
+    products: 12,
+    banks: 23,
+    agents: 84,
   });
+  const [earningCounter, setEarningCounter] = useState<Record<string, any>>({
+    totalTrustAmount: 204482203.03,
+    totalPayout: 133324999.24,
+    totalIncome: 71157203.79,
+  });
+  const [selectedMonth, setSelectedMonth] = useState(dayjs());
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
 
@@ -46,23 +55,36 @@ const Home:React.FC = () => {
         {user?.role !== userRole?.installer && (
           <div className="">
             <div className="flex items-center justify-between my-5">
-              <h5 style={{ marginBottom: "-8px" }}>Alarm Summary</h5>
+              <h5 style={{ marginBottom: "-8px" }}>
+                <label htmlFor="date">Total Earnings ( {selectedMonth.format("MMM YYYY")} )</label>
+                <DatePicker
+                  id="date"
+                  className="opacity-0 -z-10"
+                  format="MMM YYYY"
+                  onChange={(date) => setSelectedMonth(date)}
+                  picker="month"
+                />
+              </h5>
             </div>
             <div className="grid grid-cols-12 gap-4">
-              {alarmSummaryCounters?.map(({ entryName, url, ...rest }) => {
+              {earningSummaryCounters?.map(({ entryName, url, ...rest }) => {
                 let params = url;
                 if (startDate) {
                   params = `${url}&startDate=${startDate}&endDate=${endDate}`;
                 }
                 return (
                   <div className="col-span-6 md:col-span-4" key={entryName}>
-                    {alarmCounter?.[entryName] === 0 ? (
-                      <DashboardCount {...rest} count={alarmCounter?.[entryName]} bg="bg-gray-200 dark:bg-slate-900" />
+                    {earningCounter?.[entryName] === 0 ? (
+                      <DashboardCount
+                        {...rest}
+                        count={earningCounter?.[entryName]}
+                        bg="bg-gray-200 dark:bg-slate-900"
+                      />
                     ) : (
                       <Link to={params}>
                         <DashboardCount
                           {...rest}
-                          count={alarmCounter?.[entryName]}
+                          count={earningCounter?.[entryName]}
                           bg="bg-gray-200 dark:bg-slate-900"
                         />
                       </Link>
@@ -86,56 +108,56 @@ export default Home;
 
 const mainCounters: { title: string; bg: string; entryName: string; roles: string[]; url: string }[] = [
   {
-    title: "Site Locations",
+    title: "Total Donors",
     bg: "var(--dashboard-layout)",
-    entryName: "locationCount",
+    entryName: "donors",
     roles: ["user", "public", "superAdmin", "businessAdmin", "admin"],
-    url: "/site-locations",
+    url: "/",
   },
   {
-    title: "All Site Admins",
+    title: "Total Branches",
     bg: "var(--dashboard-layout)",
-    entryName: "adminCount",
+    entryName: "branches",
     roles: ["businessAdmin", "superAdmin"],
-    url: "/users?role=admin",
+    url: "/",
   },
   {
-    title: "All Site Users",
+    title: "Total Products",
     bg: "var(--dashboard-layout)",
-    entryName: "userCount",
+    entryName: "products",
     roles: ["superAdmin", "businessAdmin", "admin"],
-    url: "/users?role=user",
+    url: "/",
   },
   {
-    title: "Devices",
+    title: "Total Banks",
     bg: "var(--dashboard-layout)",
-    entryName: "deviceCount",
+    entryName: "banks",
     roles: ["user", "public", "superAdmin", "businessAdmin", "admin"],
-    url: "/devices",
+    url: "/",
   },
   {
-    title: "Offline Devices",
+    title: "Total Agents",
     bg: "var(--dashboard-layout)",
-    entryName: "inactiveSensors",
+    entryName: "agents",
     roles: ["user", "public", "superAdmin", "businessAdmin", "admin"],
-    url: "/devices?status=inactive",
+    url: "/",
   },
 ];
 
-const alarmSummaryCounters = [
+const earningSummaryCounters = [
   {
-    title: "Total Alarms",
-    entryName: "totalAlarm",
-    url: "/alarm-summary?",
+    title: "Total Trust Amount",
+    entryName: "totalTrustAmount",
+    url: "/",
   },
   {
-    title: "Total Triggered Alarms",
-    entryName: "totalTriggeredAlarm",
-    url: "/alarm-history?",
+    title: "Total Payout",
+    entryName: "totalPayout",
+    url: "/",
   },
   {
-    title: "Total Alarms Acknowledged",
-    entryName: "totalAcknowledged",
-    url: "/alarm-history?acknowledged=true",
+    title: "Total Income",
+    entryName: "totalIncome",
+    url: "/",
   },
 ];

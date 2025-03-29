@@ -343,7 +343,7 @@ const generateMenuItems = (
         ),
         onClick: item.onClick ? () => item.onClick?.(logout) : undefined,
         children: item.children ? generateMenuItems(item.children, role, logout, location, isDark) : undefined,
-        // disabled: !["Home", "Logout"].includes(item.name),
+        disabled: !["Home", "Logout"].includes(item.name),
       };
     });
 };
