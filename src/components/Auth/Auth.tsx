@@ -1,10 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, ReactNode, useState } from "react";
+import envConfig from "@/config/envConfig";
+import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { setAuth, setUser } from "../../redux/features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
-import { useGetProfileQuery } from "@/redux/api/usersApi";
-import envConfig from "@/config/envConfig";
 
 interface AuthProps {
   children: ReactNode;
@@ -14,7 +13,7 @@ interface AuthProps {
 const Auth: React.FC<AuthProps> = ({ children, roles = [] }) => {
   // redux
   const dispatch = useAppDispatch();
-  const { isLogin, token } = useAppSelector((state) => state.auth);
+  const { isLogin, token, user } = useAppSelector((state) => state.auth);
 
   const [isLoading, setIsLoading] = useState(false);
 

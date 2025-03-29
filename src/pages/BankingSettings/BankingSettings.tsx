@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BankingSettings = () => {
+const BankingSettings:React.FC = () => {
   return (
     <div>
       BankingSettings

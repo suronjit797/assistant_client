@@ -1,12 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import appConfig from "@/config/appConfig";
+import { useLoginUserMutation } from "@/redux/api/usersApi";
+import { setAuth } from "@/redux/features/authSlice";
 import { Button, Checkbox, Form, Input, Spin } from "antd";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
-import appConfig from "@/config/appConfig";
-import { useLoginUserMutation } from "@/redux/api/usersApi";
 import Swal from "sweetalert2";
-import { setAuth } from "@/redux/features/authSlice";
-import envConfig from "@/config/envConfig";
+import { useAppDispatch, useAppSelector } from "../../redux/store";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -43,10 +43,10 @@ const Login = () => {
     }
   };
 
-  if (error) {
+  if (error ) {
     Swal.fire({
       title: "Error!",
-      text: error?.data?.message || "Login Failed",
+      text: (error as any)?.data?.message || "Login Failed",
       icon: "error",
       confirmButtonText: "OK",
       timer: 3000,

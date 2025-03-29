@@ -28,7 +28,7 @@ const beforeUpload = (file: RcFile): boolean => {
   return isJpgOrPng && isLt2M;
 };
 
-const ImgUpload: React.FC<ImgUploadProps> = ({ url, image, setImage }) => {
+const ImgUpload: React.FC<ImgUploadProps> = ({ url,  setImage }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
 
@@ -37,7 +37,7 @@ const ImgUpload: React.FC<ImgUploadProps> = ({ url, image, setImage }) => {
       getBase64(info.file.originFileObj, (url) => {
         setLoading(false);
         setImageUrl(url);
-        setImage(info.file.originFileObj);
+        setImage(info?.file?.originFileObj ?? null);
       });
     }
   };

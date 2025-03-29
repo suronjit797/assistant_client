@@ -2,13 +2,12 @@
 import { Button, Form, Input } from "antd";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../redux/store";
+import { useAppSelector } from "../../redux/store";
 
 const Login = () => {
   const navigate = useNavigate();
 
   // redux
-  const dispatch = useAppDispatch();
   const { isLogin } = useAppSelector((state) => state.auth);
 
   // navigate to home if login
@@ -20,7 +19,7 @@ const Login = () => {
   }, [isLogin]);
 
   const handleSubmit = async (values: { email: string; password: string }) => {
-    console.log({ data });
+    console.log({ values });
   };
 
   return (

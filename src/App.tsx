@@ -4,9 +4,7 @@ import { RouterProvider } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./App.css";
 import { routes } from "./Routes";
-import { useAppDispatch, useAppSelector } from "./redux/store";
-import { useFullScreenHandle } from "react-full-screen";
-import { setFullScreenHandle } from "./redux/features/themeSlice";
+import { useAppSelector } from "./redux/store";
 
 const customDarkTheme = (isDark: boolean) => ({
   components: {

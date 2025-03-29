@@ -16,7 +16,7 @@ export const postsApi = mainApi.injectEndpoints({
       query: (token) => ({
         url: "/users/profile",
         method: "GET",
-        headers: { Authorization: token },
+        headers: { Authorization: `${token}` },
       }),
     }),
 

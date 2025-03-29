@@ -1,18 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { userRole } from "@/constant/userRole";
 import { useAppSelector } from "@/redux/store";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { DashboardCount } from "./DashboardCount";
 import HomeTable from "./HomeTable";
-import { FullScreen } from "react-full-screen";
 
-const Home = () => {
+const Home:React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const { fullScreenHandle } = useAppSelector((state) => state.theme);
 
   // states
-  const [dashboardCounter, setDashboardCounter] = useState({});
-  const [alarmCounter, setAlarmCounter] = useState({
+  const [dashboardCounter, setDashboardCounter] = useState<Record<string, any>>({});
+  const [alarmCounter, setAlarmCounter] = useState<Record<string, any>>({
     totalAcknowledged: 0,
     totalAlarm: 0,
     totalTriggeredAlarm: 0,
@@ -47,7 +47,6 @@ const Home = () => {
           <div className="">
             <div className="flex items-center justify-between my-5">
               <h5 style={{ marginBottom: "-8px" }}>Alarm Summary</h5>
-              {/* <AlarmTimeFilter getAlarmCounter={getAlarmCounter} /> */}
             </div>
             <div className="grid grid-cols-12 gap-4">
               {alarmSummaryCounters?.map(({ entryName, url, ...rest }) => {
