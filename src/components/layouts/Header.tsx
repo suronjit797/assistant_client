@@ -68,7 +68,7 @@ const Header = () => {
             <IoMdNotificationsOutline />
           </span>
 
-          <div className="cursor-pointer">
+          <div className="cursor-pointer ms-3">
             <Popover
               content={
                 <div className="w-3xs">

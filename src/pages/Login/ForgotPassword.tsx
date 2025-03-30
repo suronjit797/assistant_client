@@ -1,54 +1,44 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import appConfig from "@/config/appConfig";
-import { useLoginUserMutation } from "@/redux/api/usersApi";
+import { useForgotPasswordMutation } from "@/redux/api/usersApi";
 import { Button, Form, Input, Spin } from "antd";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import Swal from "sweetalert2";
 
 const ForgotPassword = () => {
-//   const [loginUser, { error, isLoading }] = useLoginUserMutation();
-  const [, { error, isLoading }] = useLoginUserMutation();
-
-  // redux;
+  const [forgotPassword, { data, error, isLoading }] = useForgotPasswordMutation();
 
   useEffect(() => {
     document.title = `${appConfig.name} - Forgot Password`;
   }, []);
 
   const handleLogin = async ({ email }: { email: string }) => {
-    console.log(email);
-    // try {
-    //   const data = await loginUser({ password, email: email?.toLocaleLowerCase() });
-    //   if (data?.data) {
-    //     const token = "Bearer " + data.data.token;
-    //     dispatch(setAuth({ token }));
-    //     navigate("/");
-    //   }
-    // } catch {
-    //   Swal.fire({
-    //     title: "Error!",
-    //     text: "Login Failed",
-    //     icon: "error",
-    //     confirmButtonText: "OK",
-    //     timer: 3000,
-    //   });
-    // }
+    await forgotPassword({ email: email?.toLocaleLowerCase() });
   };
 
-  if (error) {
+  useEffect(() => {
+    document.title = `${appConfig.name} - Login`;
+  }, []);
+
+  if (data) {
     Swal.fire({
-      title: "Error!",
-      text: (error as any)?.data?.message || "Reset Password Failed",
-      icon: "error",
+      title: "Success",
+      text: "Password reset link sent in your email",
+      icon: "success",
       confirmButtonText: "OK",
       timer: 3000,
     });
   }
 
-  useEffect(() => {
-    document.title = `${appConfig.name} - Login`;
-  }, []);
+  if (error) {
+    Swal.fire({
+      title: "Error!",
+      text: "Password reset failed",
+      icon: "error",
+      confirmButtonText: "OK",
+      timer: 3000,
+    });
+  }
 
   return (
     <Spin spinning={isLoading}>
@@ -95,7 +85,7 @@ const ForgotPassword = () => {
                 <div className="px-3 fw-semibold">or</div>
                 <hr className="w-full border-gray-300 dark:border-slate-600" />
               </div>
-              <Link to="/" className="d-block my-3">
+              <Link to="/login" className="d-block my-3">
                 <Button block>Back To Login</Button>
               </Link>
             </div>

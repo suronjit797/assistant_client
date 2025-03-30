@@ -22,6 +22,7 @@ import CreateLocation from "./pages/Locations/CreateLocation";
 import ActivityLog from "./pages/Settings/ActivityLog";
 import EditProfile from "./pages/Profile/EditProfile";
 import ForgotPassword from "./pages/Login/ForgotPassword";
+import { ResetPassword } from "./pages/Login/ResetPassword";
 // import Register from "./pages/Register/Register";
 
 export const routes = createBrowserRouter([
@@ -74,6 +75,7 @@ export const routes = createBrowserRouter([
   },
   { path: "/login", element: <Login /> },
   { path: "/forgot-password", element: <ForgotPassword /> },
+  { path: "/reset-password/:token", element: <ResetPassword /> },
   {
     path: "*",
     element: <NotFound />,

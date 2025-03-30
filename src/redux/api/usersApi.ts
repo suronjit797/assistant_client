@@ -1,5 +1,5 @@
 import { TUser } from "@/interfaces/userInterface";
-import { IResponse, LoginRequest, LoginResponse,  } from "../reduxTypes";
+import { IResponse, LoginRequest, LoginResponse } from "../reduxTypes";
 import { mainApi } from "../mainApi";
 
 export const userApi = mainApi.injectEndpoints({
@@ -18,6 +18,24 @@ export const userApi = mainApi.injectEndpoints({
     loginUser: builder.mutation<LoginResponse, LoginRequest>({
       query: (body) => ({
         url: "/users/login",
+        method: "POST",
+        body,
+      }),
+    }),
+
+    // Forgot password
+    forgotPassword: builder.mutation<LoginResponse, { email: string }>({
+      query: (body) => ({
+        url: "/users/forgot-password",
+        method: "POST",
+        body,
+      }),
+    }),
+
+    // reset password
+    resetPassword: builder.mutation<IResponse<TUser>, { password: string; token: string }>({
+      query: (body) => ({
+        url: "/users/reset-password",
         method: "POST",
         body,
       }),
@@ -100,4 +118,8 @@ export const {
   useGetUserByIdQuery,
   useUpdateUserMutation,
   useDeleteUserMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
 } = userApi;
+
+// ! useLazyGetAllUsersQuery  //have to check
