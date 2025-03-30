@@ -53,6 +53,10 @@ const Login = () => {
     });
   }
 
+    useEffect(() => {
+      document.title = `${appConfig.name} - Login`;
+    }, []);
+
   return (
     <Spin spinning={isLoading}>
       <div className=" min-h-screen md:grid grid-cols-10 grid-rows-1 items-center ">
