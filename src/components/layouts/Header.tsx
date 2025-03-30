@@ -50,7 +50,7 @@ const Header = () => {
   }, []);
 
   return (
-    <div className=" p-4">
+    <div className=" p-4 select-none">
       <div className="flex items-center mt-6">
         <span className="cursor-pointer text-2xl" onClick={() => dispatch(changeNavOpen(!isNavOpen))}>
           <HiBars3CenterLeft />

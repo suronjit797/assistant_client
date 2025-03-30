@@ -14,7 +14,7 @@ interface ThemeState {
 const initialState: ThemeState = {
   isDark: false,
   isFullScreen: false,
-  isNavOpen: true,
+  isNavOpen: false,
   fullScreenHandle: null,
 };
 
