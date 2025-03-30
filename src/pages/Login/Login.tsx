@@ -43,7 +43,7 @@ const Login = () => {
     }
   };
 
-  if (error ) {
+  if (error) {
     Swal.fire({
       title: "Error!",
       text: (error as any)?.data?.message || "Login Failed",
@@ -53,15 +53,15 @@ const Login = () => {
     });
   }
 
-    useEffect(() => {
-      document.title = `${appConfig.name} - Login`;
-    }, []);
+  useEffect(() => {
+    document.title = `${appConfig.name} - Login`;
+  }, []);
 
   return (
     <Spin spinning={isLoading}>
-      <div className=" min-h-screen md:grid grid-cols-10 grid-rows-1 items-center ">
+      <div className=" min-h-screen flex flex-col md:grid grid-cols-10 grid-rows-1 items-center ">
         {/* left side */}
-        <div className="col-span-4 p-8 lg:px-20 bg-slate-100  h-full shadow-lg flex items-center justify-center flex-col">
+        <div className="col-span-4 p-8 lg:px-20 bg-slate-100 w-full h-full shadow-lg flex items-center justify-center flex-col">
           <div className="pb-6">
             <img src="/photos/logo_light.webp" className="w-28 h-16" alt="logo" />
           </div>
@@ -124,7 +124,7 @@ const Login = () => {
         </div>
         {/* right side */}
         <div className=" bg-[url('/photos/login_bg.webp')] h-full col-span-6 bg-cover"> </div>
-        <footer className=" col-span-full bg-black text-white py-2 text-sm px-5">
+        <footer className=" col-span-full bg-black text-white py-2 text-sm px-5 mt-auto w-full">
           <div className="text-center"> {appConfig.copyright} </div>
           <div className="text-end mt-[-20px]">Terms of Use | Privacy Policy</div>
         </footer>
