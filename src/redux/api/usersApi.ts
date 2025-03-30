@@ -42,11 +42,15 @@ export const userApi = mainApi.injectEndpoints({
     }),
 
     // Get Profile
-    getProfile: builder.query<IResponse<TUser>, void>({
-      query: () => ({
-        url: "/users/profile",
-        method: "GET",
-      }),
+    getProfile: builder.query<IResponse<TUser>, { token?: string }>({
+      query: (token) => {
+        console.log("tt", { token });
+        return {
+          url: "/users/profile",
+          method: "GET",
+          ...(token ? { headers: { Authorization: token as string } } : {}),
+        };
+      },
       providesTags: ["User"],
     }),
 
@@ -120,6 +124,7 @@ export const {
   useDeleteUserMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useLazyGetProfileQuery,
 } = userApi;
 
 // ! useLazyGetAllUsersQuery  //have to check

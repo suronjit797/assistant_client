@@ -7,7 +7,6 @@ export const mainApi = createApi({
     baseUrl: envConfig.BASED_API_URL + "/api/v1/",
     prepareHeaders: async (headers, { getState }) => {
       const token = await (getState() as RootState).auth.token;
-      console.log(token)
       if (token) {
         headers.set("Authorization", token);
       }
