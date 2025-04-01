@@ -100,9 +100,10 @@ const Header = () => {
         <label className="ms-auto">
           {dayjs(today).format("hh:mm A | DD MMMM YYYY")} | {/*  */}
           <span className="text-capitalize">
-            {userRoleFormate[user?.role] || "Site User "} {/*  */}
+          {user?.name}
+            {/* {userRoleFormate[user?.role] || "Site User "}  */}
           </span>
-          Account
+          {/*  */} Account
         </label>
       </div>
     </div>

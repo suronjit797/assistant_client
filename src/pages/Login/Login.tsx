@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { useAppDispatch, useAppSelector } from "../../redux/store";
+import LoginFooter from "./LoginFooter";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -61,7 +62,7 @@ const Login = () => {
     <Spin spinning={isLoading}>
       <div className=" min-h-screen flex flex-col md:grid grid-cols-10 grid-rows-1 items-center ">
         {/* left side */}
-        <div className="col-span-4 p-8 lg:px-20 bg-slate-100 w-full h-full shadow-lg flex items-center justify-center flex-col">
+        <div className="col-span-4 p-8 lg:px-20 flex-1 bg-slate-100 w-full h-full shadow-lg flex items-center justify-center flex-col">
           <div className="pb-6">
             <img src="/photos/logo_light.webp" className="w-28 h-16" alt="logo" />
           </div>
@@ -124,10 +125,7 @@ const Login = () => {
         </div>
         {/* right side */}
         <div className=" bg-[url('/photos/login_bg.webp')] h-full col-span-6 bg-cover"> </div>
-        <footer className=" col-span-full bg-black text-white py-2 text-sm px-5 mt-auto w-full">
-          <div className="text-center"> {appConfig.copyright} </div>
-          <div className="text-end mt-[-20px]">Terms of Use | Privacy Policy</div>
-        </footer>
+        <LoginFooter />
       </div>
     </Spin>
   );
