@@ -300,9 +300,21 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
 
   {
     name: "Payments",
-    path: "/payments",
+    path: "/manual-reconciliation",
     icon: <TbReportMoney />,
     authorizedRoles: ["superAdmin", "businessAdmin"],
+    children: [
+      {
+        name: "Manual Reconciliation",
+        path: "/manual-reconciliation",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+      },
+      {
+        name: "Reconciliation Summary",
+        path: "/reconciliation-summary",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+      },
+    ],
   },
   {
     name: "Profile",
@@ -343,7 +355,15 @@ const generateMenuItems = (
         ),
         onClick: item.onClick ? () => item.onClick?.(logout) : undefined,
         children: item.children ? generateMenuItems(item.children, role, logout, location, isDark) : undefined,
-        disabled: !["Home", "Logout", "Profile"].includes(item.name),
+        disabled: [
+          "Investment Products",
+          "Manage Locations",
+          "Banking Settings",
+          "Reporting",
+          "Notification",
+          "Settings",
+          "Manage Users",
+        ].includes(item.name),
       };
     });
 };

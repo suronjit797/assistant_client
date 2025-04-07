@@ -12,7 +12,7 @@ const MainLayout: React.FC = () => {
       <header className={`sidebar ${isNavOpen ? "active" : ""}`}>
         <Sidebar />
       </header>
-      <main>
+      <main className={isNavOpen ? "active" : ""}>
         <Header />
         <div className="p-4 border border-gray-300 dark:border-slate-600 h-full mx-4 rounded-md">
           <Outlet />
