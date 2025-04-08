@@ -29,7 +29,7 @@ const customDarkTheme = (isDark: boolean) => ({
 });
 
 function App() {
-  const { isDark,  } = useAppSelector((state) => state.theme);
+  const { isDark } = useAppSelector((state) => state.theme);
 
   // network error handler
   useEffect(() => {
@@ -58,8 +58,6 @@ function App() {
       window.removeEventListener("online", handleNetworkChange);
     };
   }, []);
-
-
 
   // dark mode
   useEffect(() => {

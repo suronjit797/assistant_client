@@ -2,7 +2,7 @@ import { IPayment } from "@/interfaces/paymentInterface";
 import { mainApi } from "../mainApi";
 import { IResponse } from "../reduxTypes";
 
-export const userApi = mainApi.injectEndpoints({
+export const paymentApi = mainApi.injectEndpoints({
   endpoints: (builder) => ({
     uploadPaymentCsv: builder.mutation<IResponse<IPayment[]>, FormData>({
       query: (body) => ({
@@ -15,4 +15,4 @@ export const userApi = mainApi.injectEndpoints({
   }),
 });
 
-export const { useUploadPaymentCsvMutation } = userApi;
+export const { useUploadPaymentCsvMutation } = paymentApi;

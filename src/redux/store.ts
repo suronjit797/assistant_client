@@ -37,11 +37,7 @@ export const store = configureStore({
   reducer: persistedReducer,
   devTools: envConfig.NODE_ENV === "development",
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoredActions: ["persist/PERSIST", "persist/REHYDRATE"],
-      },
-    }).concat(mainApi.middleware),
+    getDefaultMiddleware().concat(mainApi.middleware),
 });
 
 export const persistor = persistStore(store);

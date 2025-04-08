@@ -44,14 +44,13 @@ export const userApi = mainApi.injectEndpoints({
     // Get Profile
     getProfile: builder.query<IResponse<TUser>, { token?: string }>({
       query: (token) => {
-        console.log("tt", { token });
         return {
           url: "/users/profile",
           method: "GET",
           ...(token ? { headers: { Authorization: token as string } } : {}),
         };
       },
-      providesTags: ["User"],
+      // providesTags: ["User"],
     }),
 
     // Update Profile
@@ -73,12 +72,12 @@ export const userApi = mainApi.injectEndpoints({
       invalidatesTags: ["User"],
     }),
 
-    // Get All Users (Admin)
+    // Get All Users (Admin)  //! have to add query params
     getAllUsers: builder.query<IResponse<TUser[]>, void>({
-      query: () => ({
-        url: "/users",
-        method: "GET",
-      }),
+      query: () => {
+        console.log("get all user");
+        return { url: "/users" };
+      },
       providesTags: ["User"],
     }),
 

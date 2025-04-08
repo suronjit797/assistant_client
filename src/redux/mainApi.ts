@@ -10,11 +10,10 @@ export const mainApi = createApi({
       if (token) {
         headers.set("Authorization", token);
       }
-
       return headers;
     },
   }),
-  tagTypes: ["User", "Profile", "Payments"],
+  tagTypes: ["User", "Profile", "Payments", "PaymentHistory"],
   endpoints: (builder) => ({
     uploadImage: builder.mutation({
       query: (formData) => ({
