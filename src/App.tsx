@@ -8,12 +8,12 @@ import { useAppSelector } from "./redux/store";
 
 const customDarkTheme = (isDark: boolean) => ({
   components: {
-    Button: {
-      colorBgContainerDisabled: "#4b93fd",
-      colorTextDisabled: "#fff",
-      defaultHoverBorderColor: "#0d6efd",
-      defaultHoverColor: "#0c60d0",
-    },
+    // Button: {
+    //   colorBgContainerDisabled: "#4b93fd",
+    //   colorTextDisabled: "#fff",
+    //   defaultHoverBorderColor: "#0d6efd",
+    //   defaultHoverColor: "#0c60d0",
+    // },
     Input: {
       colorTextPlaceholder: "#95a5a6",
       hoverBorderColor: "#0d6efd",

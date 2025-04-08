@@ -84,7 +84,7 @@ const column: TableProps<IPaymentHistory>["columns"] = [
     ellipsis: true,
     render: () => (
       <>
-        <Button danger type="primary" disabled>
+        <Button danger type="primary" disabled >
           <IoTrashBin />
         </Button>
       </>
