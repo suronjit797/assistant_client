@@ -15,8 +15,8 @@ const CustomTable = <T extends object>({ columns, data, total, query, setQuery =
       <Table<T>
         columns={columns}
         pagination={{
-          defaultPageSize: (query?.limit as number) || 10,
-          current: (query?.page as number) || 1,
+          defaultPageSize: query?.limit ? Number(query?.limit) : 10,
+          current: query?.page ? Number(query?.page) : 1,
           total,
           showSizeChanger: true,
           onChange: (page, limit) => {

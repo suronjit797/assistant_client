@@ -27,7 +27,6 @@ const customDarkTheme = (isDark: boolean) => ({
     colorTextBase: isDark ? "#f8fafc" : "#000000", // Tailwind `text-slate-100`
     colorBgContainerDisabled: "",
     colorTextDisabled: "",
-    colorTextQuaternary:"rgba(0,0,0,0.25)"
   },
   algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
 });

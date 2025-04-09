@@ -7,7 +7,9 @@ input::placeholder {
 
 /* antd */
 
-*:disabled {
-  opacity: 0.6 !important;
+*:disabled,
+[class*="-disabled"],
+[area-disabled="true"] {
+  opacity: 0.5 !important;
   cursor: not-allowed;
 }
