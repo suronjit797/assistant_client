@@ -33,7 +33,7 @@ export interface IPaymentHistory {
   _id: string;
   payments: string[] | IPayment[];
   type: "auto" | "manual";
-  user: string | TUser;
+  user: TUser | string;
   bank?: string;
   createdAt: Date;
   updatedAt: Date;

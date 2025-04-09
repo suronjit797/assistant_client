@@ -66,7 +66,9 @@ const column: TableProps<IPaymentHistory>["columns"] = [
     ellipsis: true,
     dataIndex: "user",
     key: "user",
-    render: (_, record) => <> {record.user?.name} </>,
+    render: (_, record) => (
+      <> {typeof record.user === "object" && "name" in record.user ? record.user.name : record.user} </>
+    ),
     align: "start",
   },
 
