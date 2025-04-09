@@ -9,7 +9,7 @@ import { IoTrashBin } from "react-icons/io5";
 import Swal from "sweetalert2";
 
 const ReconciliationSummary: React.FC = () => {
-  const { data, isFetching, isError } = useGetPaymentHQuery(undefined);
+  const { data, isFetching, isError } = useGetPaymentHQuery({ populate: "user" });
 
   console.log("Query triggered"); // ← This should print
   console.log("Data", data); // ← This should show data or undefined
@@ -66,7 +66,7 @@ const column: TableProps<IPaymentHistory>["columns"] = [
     ellipsis: true,
     dataIndex: "user",
     key: "user",
-    render: (_, record) => <> {record.user} </>,
+    render: (_, record) => <> {record.user?.name} </>,
     align: "start",
   },
 
@@ -84,11 +84,11 @@ const column: TableProps<IPaymentHistory>["columns"] = [
     ellipsis: true,
     render: () => (
       <>
-        <Button danger type="primary" disabled >
+        <Button danger type="primary" disabled>
           <IoTrashBin />
         </Button>
       </>
     ),
-    align: "end"
+    align: "end",
   },
 ];

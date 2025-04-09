@@ -4,17 +4,21 @@ import { useQueryParams } from "@/hooks/useQueryParams";
 import { IPayment } from "@/interfaces/paymentInterface";
 import { useGetPaymentsQuery } from "@/redux/api/paymentApi";
 import { numberFormatter } from "@/utils/numberFormatter";
-import { Spin, TableProps } from "antd";
+import { Input, Spin, TableProps } from "antd";
+import { SearchProps } from "antd/es/input";
 import dayjs from "dayjs";
-import React from "react";
+import React, { useState } from "react";
 import Swal from "sweetalert2";
+const { Search } = Input;
 
 const PaymentSummary: React.FC = () => {
-  // states
+  // hooks
   const { queryParams, setQueryParams, getNonEmptyQueryParams } = useQueryParams({
     page: 1,
     limit: 10,
   });
+  // states
+  const [search, setSearch] = useState(queryParams.search as string);
 
   // rek query
   const { data, isFetching, isError } = useGetPaymentsQuery(getNonEmptyQueryParams);
@@ -28,9 +32,23 @@ const PaymentSummary: React.FC = () => {
       timer: 3000,
     });
   }
+
+  const onSearch: SearchProps["onSearch"] = (value) => setQueryParams({ search: value });
+
   return (
     <Spin spinning={isFetching}>
       <PageHeader title="Payments" subTitle="Reconciliation Summary" />
+      <div className="flex my-3">
+        <Search
+          placeholder="input search text"
+          className="ms-auto max-w-64"
+          onSearch={onSearch}
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
+          enterButton
+          allowClear
+        />
+      </div>
       <CustomTable
         data={data?.data || []}
         columns={column({ page: Number(queryParams.page), limit: Number(queryParams.limit) })}

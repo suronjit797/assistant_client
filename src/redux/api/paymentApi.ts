@@ -10,7 +10,7 @@ export const paymentApi = mainApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Payments"],
+      invalidatesTags: ["Payments", "PaymentHistory"],
     }),
     getPayments: builder.query<IResponse<IPayment[]>, Record<string, unknown>>({
       query: (params) => {

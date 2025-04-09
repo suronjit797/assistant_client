@@ -5,12 +5,12 @@ import { IResponse } from "../reduxTypes";
 export const paymentHistoryApi = mainApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get All PaymentHistory
-    getPaymentH: builder.query<IResponse<IPaymentHistory[]>, { token?: string }>({
-      query: (token) => {
+    getPaymentH: builder.query<IResponse<IPaymentHistory[]>, Record<string, unknown>>({
+      query: (params) => {
         return {
           url: "/payments-history",
           method: "GET",
-          ...(token ? { headers: { Authorization: token as string } } : {}),
+          params,
         };
       },
       providesTags: ["User"],
@@ -35,7 +35,6 @@ export const paymentHistoryApi = mainApi.injectEndpoints({
       }),
       providesTags: ["PaymentHistory"],
     }),
-
   }),
 });
 

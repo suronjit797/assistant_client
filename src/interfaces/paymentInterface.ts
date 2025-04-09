@@ -1,3 +1,5 @@
+import { TUser } from "./userInterface";
+
 export interface IPayment {
   _id: string;
   createdAt: Date;
@@ -31,7 +33,7 @@ export interface IPaymentHistory {
   _id: string;
   payments: string[] | IPayment[];
   type: "auto" | "manual";
-  user: string;
+  user: string | TUser;
   bank?: string;
   createdAt: Date;
   updatedAt: Date;
