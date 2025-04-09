@@ -9,8 +9,6 @@ export default function Profile() {
   const { data, isFetching } = useGetProfileQuery(undefined);
   const userDetails = data?.data;
 
-  console.log({ userDetails });
-
   useEffect(() => {
     document.title = `${appConfig.name} - Profile`;
   }, []);

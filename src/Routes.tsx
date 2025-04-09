@@ -24,6 +24,7 @@ import Settings from "./pages/Settings/Settings";
 import CreateUser from "./pages/Users/CreateUser";
 import EditUser from "./pages/Users/EditUser";
 import Users from "./pages/Users/Users";
+import PaymentSummary from "./pages/Payments/PaymentSummary";
 // import Register from "./pages/Register/Register";
 
 export const routes = createBrowserRouter([
@@ -63,6 +64,7 @@ export const routes = createBrowserRouter([
       //
       { path: "/manual-reconciliation", element: <ManualReconciliation /> },
       { path: "/reconciliation-summary", element: <ReconciliationSummary /> },
+      { path: "/payment-summary", element: <PaymentSummary /> },
       //
       { path: "/profile", element: <Profile /> },
       { path: "/profile/edit", element: <EditProfile /> },

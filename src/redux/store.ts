@@ -1,6 +1,6 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { persistReducer, persistStore } from "redux-persist";
+import { persistReducer, persistStore, FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER } from "redux-persist";
 import { encryptTransform } from "redux-persist-transform-encrypt";
 import storage from "redux-persist/lib/storage";
 
@@ -20,24 +20,26 @@ const persistConfig = {
   key: "root",
   storage: storage,
   transforms: [encryptor],
+  blackList: ["api"],
 };
 const rootReducer = combineReducers({
-  auth: authReducer,
-  theme: themeReducer,
+  auth: persistReducer(persistConfig, authReducer),
+  theme: persistReducer(persistConfig, themeReducer),
 
   // rtk query api
-  [mainApi.reducerPath]: mainApi.reducer,
+  api: mainApi.reducer,
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const persistedReducer = persistReducer(persistConfig, rootReducer as any);
-
-
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: rootReducer,
   devTools: envConfig.NODE_ENV === "development",
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(mainApi.middleware),
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(mainApi.middleware),
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(mainApi.middleware),
 });
 
 export const persistor = persistStore(store);

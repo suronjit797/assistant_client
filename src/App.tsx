@@ -14,6 +14,7 @@ const customDarkTheme = (isDark: boolean) => ({
     //   defaultHoverBorderColor: "#0d6efd",
     //   defaultHoverColor: "#0c60d0",
     // },
+
     Input: {
       colorTextPlaceholder: "#95a5a6",
       hoverBorderColor: "#0d6efd",
@@ -24,6 +25,9 @@ const customDarkTheme = (isDark: boolean) => ({
     colorPrimary: "#1677ff",
     colorBgBase: isDark ? "#14181e" : "#ffffff", // Tailwind `bg-slate-900`
     colorTextBase: isDark ? "#f8fafc" : "#000000", // Tailwind `text-slate-100`
+    colorBgContainerDisabled: "",
+    colorTextDisabled: "",
+    colorTextQuaternary:"rgba(0,0,0,0.25)"
   },
   algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
 });

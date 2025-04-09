@@ -12,7 +12,18 @@ export const paymentApi = mainApi.injectEndpoints({
       }),
       invalidatesTags: ["Payments"],
     }),
+    getPayments: builder.query<IResponse<IPayment[]>, Record<string, unknown>>({
+      query: (params) => {
+        console.log({ params });
+        return {
+          url: "/payments",
+          method: "GET",
+          params,
+        };
+      },
+      providesTags: ["Payments"],
+    }),
   }),
 });
 
-export const { useUploadPaymentCsvMutation } = paymentApi;
+export const { useUploadPaymentCsvMutation, useGetPaymentsQuery } = paymentApi;

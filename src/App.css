@@ -7,8 +7,7 @@ input::placeholder {
 
 /* antd */
 
-:where(.css-dev-only-do-not-override-vh6ynd).ant-btn-variant-solid:disabled {
-  background: "";
-  color: "";
-  opacity: 0.7;
+*:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed;
 }

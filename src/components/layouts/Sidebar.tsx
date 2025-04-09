@@ -47,7 +47,6 @@ const Sidebar = React.memo(() => {
 
   // handler
   const onOpenChange: MenuProps["onOpenChange"] = (openKeys) => {
-    console.log({ openKeys });
     const currentOpenKey = openKeys.find((key) => stateOpenKeys.indexOf(key) === -1);
     // open
     if (currentOpenKey !== undefined) {
@@ -310,6 +309,11 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
         authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
       },
       {
+        name: "Payment Summary",
+        path: "/payment-summary",
+        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+      },
+      {
         name: "Reconciliation Summary",
         path: "/reconciliation-summary",
         authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
@@ -343,7 +347,7 @@ const generateMenuItems = (
     .map((item) => {
       const isActive = item.path && location?.pathname === item.path;
       return {
-        key: item.path || item.name,
+        key: item.name || item.path,
         icon: <span className="text-xl!"> {item.icon} </span>,
         label: (
           <Link
