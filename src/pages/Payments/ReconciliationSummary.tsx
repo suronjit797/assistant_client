@@ -26,7 +26,7 @@ const ReconciliationSummary: React.FC = () => {
   return (
     <Spin spinning={isFetching}>
       <PageHeader title="Payments" subTitle="Reconciliation Summary" />
-      <CustomTable data={data?.data || []} columns={column} />,
+      <CustomTable data={data?.data || []} columns={column} />
     </Spin>
   );
 };
@@ -89,6 +89,6 @@ const column: TableProps<IPaymentHistory>["columns"] = [
         </Button>
       </>
     ),
-    align: "end",
+    align: "end"
   },
 ];

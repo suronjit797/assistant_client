@@ -18,12 +18,16 @@ const ManualReconciliation: React.FC = () => {
     summary: useRef<HTMLDivElement>(null),
     banking: useRef<HTMLDivElement>(null),
     donor: useRef<HTMLDivElement>(null),
-    advice: useRef<HTMLDivElement>(null),
   };
 
   const column: TableProps<IPayment>["columns"] = [
     {
-      title: "No.",
+      title: (
+        <div className="mx-[-16px] px-[16px]" ref={sectionRefs.summary}>
+          {" "}
+          No.{" "}
+        </div>
+      ),
       ellipsis: true,
       dataIndex: "key",
       key: "key",
@@ -43,7 +47,7 @@ const ManualReconciliation: React.FC = () => {
       key: "donorName",
     },
     {
-      title: <div ref={sectionRefs.summary}> Date of Trust Deed </div>,
+      title: <div> Date of Trust Deed </div>,
       ellipsis: true,
       dataIndex: "dtd",
       key: "dtd",
@@ -83,11 +87,7 @@ const ManualReconciliation: React.FC = () => {
       align: "end",
     },
     {
-      title: (
-        <div className="text-center" ref={sectionRefs.banking}>
-          Income (RM)
-        </div>
-      ),
+      title: <div className="text-center">Income (RM)</div>,
       ellipsis: true,
       dataIndex: "incomeForFeb2025",
       key: "incomeForFeb2025",
@@ -96,7 +96,11 @@ const ManualReconciliation: React.FC = () => {
     },
 
     {
-      title: <div className="text-center"> Account Number </div>,
+      title: (
+        <div className="text-center mx-[-16px] px-[16px]" ref={sectionRefs.banking}>
+          Account Number
+        </div>
+      ),
       ellipsis: true,
       dataIndex: "accountNumber",
       key: "accountNumber",
@@ -116,7 +120,7 @@ const ManualReconciliation: React.FC = () => {
       align: "center",
     },
     {
-      title: <div className="text-center"  ref={sectionRefs.donor}>Bank Code</div>,
+      title: <div className="text-center">Bank Code</div>,
       ellipsis: true,
       dataIndex: "bankCode",
       key: "bankCode",
@@ -137,7 +141,12 @@ const ManualReconciliation: React.FC = () => {
     },
 
     {
-      title: <div> Name </div>,
+      title: (
+        <div className="mx-[-16px] px-[16px]" ref={sectionRefs.donor}>
+          {" "}
+          Name{" "}
+        </div>
+      ),
       ellipsis: true,
       dataIndex: "name",
       key: "name",
@@ -150,7 +159,7 @@ const ManualReconciliation: React.FC = () => {
       align: "center",
     },
     {
-      title: <div className="text-center"  ref={sectionRefs.advice}> Mobile No. </div>,
+      title: <div className="text-center"> Mobile No. </div>,
       ellipsis: true,
       dataIndex: "mobileNo",
       key: "mobileNo",
@@ -202,7 +211,7 @@ const ManualReconciliation: React.FC = () => {
   }
   const handleTabClick = (key: string) => {
     const ref = sectionRefs[key as keyof typeof sectionRefs];
-    ref?.current?.scrollIntoView({ behavior: "smooth", block: "start", inline: "center" });
+    ref?.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
   };
 
   return (
@@ -214,13 +223,12 @@ const ManualReconciliation: React.FC = () => {
           </Button>
         </div>
       </PageHeader>
-      <a href="#name">click</a>
 
       <Spin spinning={isLoading}>
         <div className="mb-3">
           <Tabs defaultActiveKey="1" items={tabItems} onTabClick={handleTabClick} />
         </div>
-        <CustomTable data={data?.data || []} columns={column} />,
+        <CustomTable data={data?.data || []} columns={column} />
         <ManualReconciliationCvsModal modal={cvsModal} setModal={setCvsModal} uploadCsv={uploadCsv} />
       </Spin>
     </div>
@@ -243,8 +251,8 @@ const tabItems = [
     label: "Donor Details",
     key: "donor",
   },
-  {
-    label: "Advice Details",
-    key: "advice",
-  },
+  // {
+  //   label: "Advice Details",
+  //   key: "advice",
+  // },
 ];
