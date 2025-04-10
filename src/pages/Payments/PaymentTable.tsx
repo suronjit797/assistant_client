@@ -1,27 +1,44 @@
 import CustomTable from "@/components/CustomTable";
-import PageHeader from "@/components/PageHeader";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { IPayment } from "@/interfaces/paymentInterface";
-import { useUploadPaymentCsvMutation } from "@/redux/api/paymentApi";
+import { useGetPaymentsQuery } from "@/redux/api/paymentApi";
 import { numberFormatter } from "@/utils/numberFormatter";
-import { Button, Spin, TableProps, Tabs } from "antd";
+import { Spin, TableProps, Tabs } from "antd";
 import dayjs from "dayjs";
-import React, { useEffect, useRef, useState } from "react";
-import { FiUploadCloud } from "react-icons/fi";
+import React, { useRef } from "react";
 import Swal from "sweetalert2";
-import ManualReconciliationCvsModal from "./ManualReconciliationCvsModal";
-import appConfig from "@/config/appConfig";
 
-const ManualReconciliation: React.FC = () => {
-  const [cvsModal, setCvsModal] = useState(false);
-  const [uploadCsv, { error, isLoading, data }] = useUploadPaymentCsvMutation();
+const PaymentTable: React.FC = () => {
+  const { queryParams, setQueryParams, getNonEmptyQueryParams } = useQueryParams({ page: 1, limit: 10 });
+  // rek query
+  const { data, isFetching, isError } = useGetPaymentsQuery(getNonEmptyQueryParams);
+  const page = Number(queryParams.page);
+  const limit = Number(queryParams.limit);
 
+  //   ref
   const sectionRefs = {
     summary: useRef<HTMLDivElement>(null),
     banking: useRef<HTMLDivElement>(null),
     donor: useRef<HTMLDivElement>(null),
   };
 
-  const column: TableProps<IPayment>["columns"] = [
+  if (isError) {
+    Swal.fire({
+      icon: "error",
+      title: "Error",
+      text: "Payment summary fetch failed",
+      confirmButtonText: "OK",
+      timer: 3000,
+    });
+  }
+
+  const handleTabClick = (key: string) => {
+    const ref = sectionRefs[key as keyof typeof sectionRefs];
+    ref?.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+  };
+
+  //   constants
+  const paymentColumn: TableProps<IPayment>["columns"] = [
     {
       title: (
         <div className="mx-[-16px] px-[16px]" ref={sectionRefs.summary}>
@@ -31,7 +48,7 @@ const ManualReconciliation: React.FC = () => {
       ellipsis: true,
       dataIndex: "key",
       key: "key",
-      render: (_text, _record, index) => <div> {index + 1} </div>,
+      render: (_text, _record, index) => <div> {(page - 1) * limit + (index + 1)} </div>,
       align: "center",
     },
     {
@@ -178,77 +195,34 @@ const ManualReconciliation: React.FC = () => {
       dataIndex: "emailAddress",
       key: "emailAddress",
     },
-
-    // {
-    //   title: "Action",
-    //   key: "action",
-    //   render: (_, record) => (
-    //     <Space size="middle" style={{columnGap: 8}}>
-    //       <Button type="primary" title="Advise Details" icon={<FaRegLightbulb />} onClick={() => handleAdvice(record)}></Button>
-    //       <Button
-    //         type="default"
-    //         color="blue"
-    //         variant="outlined"
-    //         title="Banking Details"
-    //         icon={<BankOutlined />}
-    //         onClick={() => handleBankingDetails(record)}
-    //       ></Button>
-    //       <Button
-    //         color="default"
-    //         variant="outlined"
-    //         type="default"
-    //         title="Donor Details"
-    //         icon={<UserOutlined />}
-    //         onClick={() => handleDonorDetails(record)}
-    //       ></Button>
-    //     </Space>
-    //   ),
-    //   align: "center",
-    // },
+    {
+      title: <div className="text-center">Uploaded Date</div>,
+      ellipsis: true,
+      dataIndex: "date",
+      key: "date",
+      render: (_, record) => <> {dayjs(record.createdAt).format("DD/MM/YYYY hh:mm:ss")} </>,
+      align: "center",
+    },
   ];
 
-  if (error) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "Something went wrong while uploading the file.",
-      confirmButtonText: "OK",
-      timer: 3000,
-    });
-  }
-  const handleTabClick = (key: string) => {
-    const ref = sectionRefs[key as keyof typeof sectionRefs];
-    ref?.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
-  };
-
-  useEffect(() => {
-    document.title = `${appConfig.name} - Manual Reconciliation`;
-  }, []);
-
   return (
-    <div>
-      <PageHeader title="Payments" subTitle="Manual Reconciliation">
-        <div className="ms-auto">
-          <Button onClick={() => setCvsModal((prev) => !prev)} icon={<FiUploadCloud />} type="primary">
-            Bulk CSV Upload
-          </Button>
-        </div>
-      </PageHeader>
-
-      <Spin spinning={isLoading}>
-        <div className="mb-3">
-          <Tabs defaultActiveKey="1" items={tabItems} onTabClick={handleTabClick} />
-        </div>
-        <CustomTable data={data?.data || []} columns={column} />
-        <ManualReconciliationCvsModal modal={cvsModal} setModal={setCvsModal} uploadCsv={uploadCsv} />
-      </Spin>
-    </div>
+    <Spin spinning={isFetching}>
+      <div className="my-3">
+        <Tabs defaultActiveKey="1" items={tabItems} onTabClick={handleTabClick} />
+      </div>
+      <CustomTable
+        data={data?.data || []}
+        columns={paymentColumn}
+        total={data?.meta?.total || 0}
+        query={queryParams}
+        setQuery={setQueryParams}
+      />
+    </Spin>
   );
 };
 
-export default ManualReconciliation;
+export default PaymentTable;
 
-// tab data
 const tabItems = [
   {
     label: "Summary",

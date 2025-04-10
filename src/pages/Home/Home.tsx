@@ -2,12 +2,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { userRole } from "@/constant/userRole";
 import { useAppSelector } from "@/redux/store";
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { DashboardCount } from "./DashboardCount";
-import HomeTable from "./HomeTable";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import PaymentTable from "../Payments/PaymentTable";
+import { DashboardCount } from "./DashboardCount";
 
 const Home: React.FC = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -57,7 +57,9 @@ const Home: React.FC = () => {
           <div className="">
             <div className="flex items-center justify-between my-5">
               <h5 style={{ marginBottom: "-8px" }}>
-                <label htmlFor="date" className="cursor-pointer">Total Earnings ( {selectedMonth.format("MMM YYYY")} )</label>
+                <label htmlFor="date" className="cursor-pointer">
+                  Total Earnings ( {selectedMonth.format("MMM YYYY")} )
+                </label>
                 <DatePicker
                   id="date"
                   className="opacity-0 -z-10"
@@ -99,7 +101,7 @@ const Home: React.FC = () => {
       </div>
 
       <div className="mt-8">
-        <HomeTable />
+        <PaymentTable />
       </div>
     </>
   );
