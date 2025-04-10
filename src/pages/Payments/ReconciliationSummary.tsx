@@ -1,18 +1,20 @@
 import CustomTable from "@/components/CustomTable";
 import PageHeader from "@/components/PageHeader";
+import appConfig from "@/config/appConfig";
 import { IPaymentHistory } from "@/interfaces/paymentInterface";
 import { useGetPaymentHQuery } from "@/redux/api/paymentHistoryApi";
 import { Button, Spin, TableProps } from "antd";
 import dayjs from "dayjs";
-import React from "react";
+import React, { useEffect } from "react";
 import { IoTrashBin } from "react-icons/io5";
 import Swal from "sweetalert2";
 
 const ReconciliationSummary: React.FC = () => {
   const { data, isFetching, isError } = useGetPaymentHQuery({ populate: "user" });
 
-  console.log("Query triggered"); // ← This should print
-  console.log("Data", data); // ← This should show data or undefined
+  useEffect(() => {
+    document.title = `${appConfig.name} - Reconciliation Summary`;
+  }, []);
 
   if (isError) {
     Swal.fire({
@@ -69,7 +71,7 @@ const column: TableProps<IPaymentHistory>["columns"] = [
     render: (_, record) => (
       <> {typeof record.user === "object" && "name" in record.user ? record.user.name : record.user} </>
     ),
-    align: "start",
+    align: "center",
   },
 
   {
@@ -91,6 +93,6 @@ const column: TableProps<IPaymentHistory>["columns"] = [
         </Button>
       </>
     ),
-    align: "end",
+    align: "center",
   },
 ];

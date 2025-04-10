@@ -14,7 +14,7 @@ export interface IPayment {
   reference: string;
   trustAmount: number | null;
   interestDividendPayableToClient: number | null;
-  incomeForFeb2025: number | null;
+  income: number | null;
   payment: string;
   accountNumber: string;
   accountName: string;

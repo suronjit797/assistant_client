@@ -1,5 +1,6 @@
 import CustomTable from "@/components/CustomTable";
 import PageHeader from "@/components/PageHeader";
+import appConfig from "@/config/appConfig";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IPayment } from "@/interfaces/paymentInterface";
 import { useGetPaymentsQuery } from "@/redux/api/paymentApi";
@@ -7,7 +8,7 @@ import { numberFormatter } from "@/utils/numberFormatter";
 import { Input, Spin, TableProps } from "antd";
 import { SearchProps } from "antd/es/input";
 import dayjs from "dayjs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 const { Search } = Input;
 
@@ -22,6 +23,10 @@ const PaymentSummary: React.FC = () => {
 
   // rek query
   const { data, isFetching, isError } = useGetPaymentsQuery(getNonEmptyQueryParams);
+
+  useEffect(() => {
+    document.title = `${appConfig.name} - Payment Summary`;
+  }, []);
 
   if (isError) {
     Swal.fire({
@@ -128,7 +133,7 @@ const column = ({ page = 1, limit = 10 }: { page: number; limit: number }): Tabl
     ellipsis: true,
     dataIndex: "incomeForFeb2025",
     key: "incomeForFeb2025",
-    render: (_, record) => <> {numberFormatter(record.incomeForFeb2025)} </>,
+    render: (_, record) => <> {numberFormatter(record.income)} </>,
     align: "end",
   },
 

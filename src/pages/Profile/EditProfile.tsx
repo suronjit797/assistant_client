@@ -11,6 +11,7 @@ import { TUser } from "@/interfaces/userInterface";
 import { useGetProfileQuery, useUpdateProfileMutation } from "@/redux/api/usersApi";
 import { setUser } from "@/redux/features/authSlice";
 import { useUploadImageMutation } from "@/redux/mainApi";
+import appConfig from "@/config/appConfig";
 
 export default function EditProfile() {
   const dispatch = useDispatch();
@@ -47,6 +48,10 @@ export default function EditProfile() {
     }
   }, [userDetails]);
 
+  useEffect(() => {
+    document.title = `${appConfig.name} - Edit Profile`;
+  }, []);
+
   const handleFileUpload: UploadProps["beforeUpload"] = async (file) => {
     const formData = new FormData();
     formData.append("photo", file);
@@ -67,7 +72,7 @@ export default function EditProfile() {
     e.preventDefault();
 
     try {
-      const {data} = await updateUser(profileData).unwrap();
+      const { data } = await updateUser(profileData).unwrap();
       dispatch(setUser(data));
 
       Swal.fire({

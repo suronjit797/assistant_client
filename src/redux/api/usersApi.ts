@@ -50,7 +50,7 @@ export const userApi = mainApi.injectEndpoints({
           ...(token ? { headers: { Authorization: token as string } } : {}),
         };
       },
-      // providesTags: ["User"],
+      providesTags: ["Profile"],
     }),
 
     // Update Profile
@@ -60,7 +60,7 @@ export const userApi = mainApi.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["Profile"],
     }),
 
     // Delete Profile
@@ -69,7 +69,7 @@ export const userApi = mainApi.injectEndpoints({
         url: "/users/profile",
         method: "DELETE",
       }),
-      invalidatesTags: ["User"],
+      invalidatesTags: ["Profile"],
     }),
 
     // Get All Users (Admin)  //! have to add query params

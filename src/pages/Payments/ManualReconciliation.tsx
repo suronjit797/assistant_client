@@ -5,10 +5,11 @@ import { useUploadPaymentCsvMutation } from "@/redux/api/paymentApi";
 import { numberFormatter } from "@/utils/numberFormatter";
 import { Button, Spin, TableProps, Tabs } from "antd";
 import dayjs from "dayjs";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FiUploadCloud } from "react-icons/fi";
 import Swal from "sweetalert2";
 import ManualReconciliationCvsModal from "./ManualReconciliationCvsModal";
+import appConfig from "@/config/appConfig";
 
 const ManualReconciliation: React.FC = () => {
   const [cvsModal, setCvsModal] = useState(false);
@@ -55,6 +56,14 @@ const ManualReconciliation: React.FC = () => {
       render: (_, record) => dayjs(record.dateOfTrustDeed).format("DD/MM/YYYY"),
     },
     {
+      title: <div> Trust Deed Expire Date </div>,
+      ellipsis: true,
+      dataIndex: "dtd",
+      key: "dtd",
+      align: "center",
+      render: (_, record) => dayjs(record.trustDeedExpiryDate).format("DD/MM/YYYY"),
+    },
+    {
       title: "Trust Deed No",
       ellipsis: true,
       dataIndex: "trustDeedNo",
@@ -91,7 +100,7 @@ const ManualReconciliation: React.FC = () => {
       ellipsis: true,
       dataIndex: "incomeForFeb2025",
       key: "incomeForFeb2025",
-      render: (_, record) => <> {numberFormatter(record.incomeForFeb2025)} </>,
+      render: (_, record) => <> {numberFormatter(record.income)} </>,
       align: "end",
     },
 
@@ -213,6 +222,11 @@ const ManualReconciliation: React.FC = () => {
     const ref = sectionRefs[key as keyof typeof sectionRefs];
     ref?.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
   };
+
+  useEffect(() => {
+      document.title = `${appConfig.name} - Manual Reconciliation`;
+    }, []);
+  
 
   return (
     <div>
