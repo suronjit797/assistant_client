@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import "./App.css";
 import { routes } from "./Routes";
 import { useAppSelector } from "./redux/store";
+import "@ant-design/v5-patch-for-react-19";
 
 const customDarkTheme = (isDark: boolean) => ({
   components: {

@@ -352,7 +352,10 @@ const generateMenuItems = (
         label: (
           <Link
             to={item.path || "#"}
-            style={{ color: isActive ? "blue" : isDark ? "lightgray" : "black", textDecoration: "none" }}
+            style={{
+              color: isActive ? (isDark ? "white" : "blue") : isDark ? "lightgray" : "black",
+              textDecoration: "none",
+            }}
           >
             {item.name}
           </Link>

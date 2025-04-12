@@ -1,5 +1,6 @@
-import type { TableProps } from "antd";
+import type { TablePaginationConfig, TableProps } from "antd";
 import { Empty, Table } from "antd";
+import { FilterValue } from "antd/es/table/interface";
 
 interface Props<T> extends Omit<TableProps<T>, "dataSource" | "pagination"> {
   columns: TableProps<T>["columns"];
@@ -10,7 +11,21 @@ interface Props<T> extends Omit<TableProps<T>, "dataSource" | "pagination"> {
 }
 
 const CustomTable = <T extends object>({ columns, data, total, query, setQuery = () => {}, ...props }: Props<T>) => {
-  return data?.length ? (
+  const changeHandler = (pagination: TablePaginationConfig, filter: Record<string, FilterValue | null>) => {
+    const { current, pageSize } = pagination;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cleanedFilter: Record<string, any> = {};
+
+    Object.entries(filter).forEach(([key, value]) => {
+      if (value) {
+        cleanedFilter[key] = value;
+      }
+    });
+    console.log({ page: current, limit: pageSize, ...filter });
+    setQuery({ page: current, limit: pageSize, ...filter });
+  };
+
+  return (
     <>
       <Table<T>
         columns={columns}
@@ -19,20 +34,26 @@ const CustomTable = <T extends object>({ columns, data, total, query, setQuery =
           current: query?.page ? Number(query?.page) : 1,
           total,
           showSizeChanger: true,
-          onChange: (page, limit) => {
-            setQuery({ page, limit });
-          },
+          // onChange: (page, limit) => {
+          //   setQuery({ page, limit });
+          // },
           showTotal: (total, range) => `${range[0]}-${range[1]} of ${total}`,
           pageSizeOptions: [10, 20, 50],
           responsive: true,
         }}
         dataSource={data}
         scroll={{ x: true }}
+        onChange={changeHandler}
+        locale={{
+          emptyText: (
+            <div style={{ minHeight: "calc( 100vh - 300px )" }} className="flex items-center justify-center">
+              <Empty />
+            </div>
+          ),
+        }}
         {...{ props }}
       />
     </>
-  ) : (
-    <Empty />
   );
 };
 

@@ -2,11 +2,31 @@ import CustomTable from "@/components/CustomTable";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IPayment } from "@/interfaces/paymentInterface";
 import { useGetPaymentsQuery } from "@/redux/api/paymentApi";
+import tableSearchFilter from "@/utils/tableSearchFilter";
 import { numberFormatter } from "@/utils/numberFormatter";
+import { SearchOutlined } from "@ant-design/icons";
 import { Spin, TableProps, Tabs } from "antd";
 import dayjs from "dayjs";
 import React, { useRef } from "react";
 import Swal from "sweetalert2";
+
+const productFilters = [
+  { text: "Liquidity Trust", value: "Liquidity Trust" },
+  { text: "Cash Trust III", value: "Cash Trust III" },
+  { text: "Cash Trust", value: "Cash Trust" },
+  { text: "Education Trust", value: "Education Trust" },
+];
+
+const bankFilter = [
+  { text: "CIMB", value: "CIMB" },
+  { text: "PBB", value: "PBB" },
+];
+
+const bankCodeFilter = [
+  { text: "CIMB", value: "CIMB" },
+  { text: "PBB", value: "PBB" },
+];
+const paymentModeFilter = [{ text: "IG", value: "IG" }];
 
 const PaymentTable: React.FC = () => {
   const { queryParams, setQueryParams, getNonEmptyQueryParams } = useQueryParams({ page: 1, limit: 10 });
@@ -56,18 +76,24 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "product",
       key: "product",
+      filters: productFilters,
+      filterSearch: true,
     },
     {
       title: "Donor Name",
       ellipsis: true,
       dataIndex: "donorName",
       key: "donorName",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
     },
     {
       title: <div> Date of Trust Deed </div>,
       ellipsis: true,
       dataIndex: "dtd",
       key: "dtd",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      // ...getFilterColumnSearchProps,
       align: "center",
       render: (_, record) => dayjs(record.dateOfTrustDeed).format("DD/MM/YYYY"),
     },
@@ -76,6 +102,8 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "dtd",
       key: "dtd",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      // ...getFilterColumnSearchProps,
       align: "center",
       render: (_, record) => dayjs(record.trustDeedExpiryDate).format("DD/MM/YYYY"),
     },
@@ -84,6 +112,8 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "trustDeedNo",
       key: "trustDeedNo",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
       align: "center",
     },
     {
@@ -91,6 +121,8 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "reference",
       key: "reference",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
       align: "center",
     },
 
@@ -99,6 +131,8 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "amount",
       key: "amount",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
       render: (_, record) => <> {numberFormatter(record.trustAmount)} </>,
       align: "end",
     },
@@ -108,6 +142,8 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "interestDividendPayableToClient",
       key: "interestDividendPayableToClient",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
       render: (_, record) => <> {numberFormatter(record.interestDividendPayableToClient)} </>,
       align: "end",
     },
@@ -116,6 +152,8 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "incomeForFeb2025",
       key: "incomeForFeb2025",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
       render: (_, record) => <> {numberFormatter(record.income)} </>,
       align: "end",
     },
@@ -129,6 +167,8 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "accountNumber",
       key: "accountNumber",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
       align: "center",
     },
     {
@@ -136,6 +176,8 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "accountName",
       key: "accountName",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
     },
     {
       title: <div className="text-center"> Bank </div>,
@@ -143,12 +185,17 @@ const PaymentTable: React.FC = () => {
       dataIndex: "bank",
       key: "bank",
       align: "center",
+      filters: bankFilter,
+      filterSearch: true,
     },
     {
       title: <div className="text-center">Bank Code</div>,
       ellipsis: true,
       dataIndex: "bankCode",
       key: "bankCode",
+      align: "center",
+      filters: bankCodeFilter,
+      filterSearch: true,
     },
     {
       title: <div className="text-center"> Payment Mode </div>,
@@ -156,12 +203,16 @@ const PaymentTable: React.FC = () => {
       dataIndex: "paymentMode",
       key: "paymentMode",
       align: "center",
+      filters: paymentModeFilter,
+      filterSearch: true,
     },
     {
       title: <div className="text-center"> NRIC NO. </div>,
       ellipsis: true,
       dataIndex: "nricNo",
       key: "nricNo",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
       align: "center",
     },
 
@@ -174,12 +225,16 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "name",
       key: "name",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
     },
     {
       title: <div className="text-center"> NRIC/Passport No. </div>,
       ellipsis: true,
       dataIndex: "nricPassportNo",
       key: "nricPassportNo",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
       align: "center",
     },
     {
@@ -187,6 +242,8 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "mobileNo",
       key: "mobileNo",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
       align: "center",
     },
     {
@@ -194,12 +251,16 @@ const PaymentTable: React.FC = () => {
       ellipsis: true,
       dataIndex: "emailAddress",
       key: "emailAddress",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      ...tableSearchFilter,
     },
     {
       title: <div className="text-center">Uploaded Date</div>,
       ellipsis: true,
       dataIndex: "date",
       key: "date",
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+      // ...getFilterColumnSearchProps,
       render: (_, record) => <> {dayjs(record.createdAt).format("DD/MM/YYYY hh:mm:ss")} </>,
       align: "center",
     },
