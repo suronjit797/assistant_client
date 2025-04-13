@@ -63,10 +63,10 @@ const Login = () => {
       <div className=" min-h-screen flex flex-col md:grid grid-cols-10 grid-rows-1 items-center ">
         {/* left side */}
         <div className="col-span-4 p-8 lg:px-20 flex-1 bg-slate-100 w-full h-full shadow-lg flex items-center justify-center flex-col">
-          <div className="pb-6">
+          {/* <div className="pb-6">
             <img src="/photos/logo_light.webp" className="w-28 h-16" alt="logo" />
-          </div>
-          <div className="text-center pb-2 text-lg">Customer Management Portal</div>
+          </div> */}
+          <div className="text-center pb-2 text-lg">Agent Management Portal</div>
           <hr className="border-gray-300 pb-2 w-full dark:border-slate-600 my-3" />
           <Form name="register" className="w-full" onFinish={handleLogin} layout="vertical">
             <Form.Item

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CustomTable from "@/components/CustomTable";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IPayment } from "@/interfaces/paymentInterface";
 import { useGetPaymentsQuery } from "@/redux/api/paymentApi";
-import tableSearchFilter from "@/utils/tableSearchFilter";
 import { numberFormatter } from "@/utils/numberFormatter";
+import tableSearchFilter from "@/utils/tableSearchFilter";
 import { SearchOutlined } from "@ant-design/icons";
 import { Spin, TableProps, Tabs } from "antd";
 import dayjs from "dayjs";
@@ -66,8 +67,8 @@ const PaymentTable: React.FC = () => {
         </div>
       ),
       ellipsis: true,
-      dataIndex: "key",
-      key: "key",
+      dataIndex: "no",
+      key: "no",
       render: (_text, _record, index) => <div> {(page - 1) * limit + (index + 1)} </div>,
       align: "center",
     },
@@ -77,6 +78,7 @@ const PaymentTable: React.FC = () => {
       dataIndex: "product",
       key: "product",
       filters: productFilters,
+      filteredValue: (queryParams?.product as string)?.split(",") || null,
       filterSearch: true,
     },
     {
@@ -86,6 +88,7 @@ const PaymentTable: React.FC = () => {
       key: "donorName",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.donorName as any) || null,
     },
     {
       title: <div> Date of Trust Deed </div>,
@@ -114,6 +117,7 @@ const PaymentTable: React.FC = () => {
       key: "trustDeedNo",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.trustDeedNo as any) || null,
       align: "center",
     },
     {
@@ -123,6 +127,7 @@ const PaymentTable: React.FC = () => {
       key: "reference",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.reference as any) || null,
       align: "center",
     },
 
@@ -133,6 +138,7 @@ const PaymentTable: React.FC = () => {
       key: "amount",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.amount as any) || null,
       render: (_, record) => <> {numberFormatter(record.trustAmount)} </>,
       align: "end",
     },
@@ -144,16 +150,18 @@ const PaymentTable: React.FC = () => {
       key: "interestDividendPayableToClient",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.interestDividendPayableToClient as any) || null,
       render: (_, record) => <> {numberFormatter(record.interestDividendPayableToClient)} </>,
       align: "end",
     },
     {
       title: <div className="text-center">Income (RM)</div>,
       ellipsis: true,
-      dataIndex: "incomeForFeb2025",
-      key: "incomeForFeb2025",
+      dataIndex: "income",
+      key: "income",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.income as any) || null,
       render: (_, record) => <> {numberFormatter(record.income)} </>,
       align: "end",
     },
@@ -169,6 +177,7 @@ const PaymentTable: React.FC = () => {
       key: "accountNumber",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.accountNumber as any) || null,
       align: "center",
     },
     {
@@ -178,6 +187,7 @@ const PaymentTable: React.FC = () => {
       key: "accountName",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.accountName as any) || null,
     },
     {
       title: <div className="text-center"> Bank </div>,
@@ -186,6 +196,7 @@ const PaymentTable: React.FC = () => {
       key: "bank",
       align: "center",
       filters: bankFilter,
+      filteredValue: (queryParams?.bank as string)?.split(",") || null,
       filterSearch: true,
     },
     {
@@ -195,6 +206,7 @@ const PaymentTable: React.FC = () => {
       key: "bankCode",
       align: "center",
       filters: bankCodeFilter,
+      filteredValue: (queryParams?.bankCode as string)?.split(",") || null,
       filterSearch: true,
     },
     {
@@ -204,6 +216,7 @@ const PaymentTable: React.FC = () => {
       key: "paymentMode",
       align: "center",
       filters: paymentModeFilter,
+      filteredValue: (queryParams?.paymentMode as string)?.split(",") || null,
       filterSearch: true,
     },
     {
@@ -213,6 +226,7 @@ const PaymentTable: React.FC = () => {
       key: "nricNo",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.donorName as any) || null,
       align: "center",
     },
 
@@ -227,6 +241,7 @@ const PaymentTable: React.FC = () => {
       key: "name",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.donorName as any) || null,
     },
     {
       title: <div className="text-center"> NRIC/Passport No. </div>,
@@ -235,6 +250,7 @@ const PaymentTable: React.FC = () => {
       key: "nricPassportNo",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.donorName as any) || null,
       align: "center",
     },
     {
@@ -244,6 +260,7 @@ const PaymentTable: React.FC = () => {
       key: "mobileNo",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.donorName as any) || null,
       align: "center",
     },
     {
@@ -253,6 +270,7 @@ const PaymentTable: React.FC = () => {
       key: "emailAddress",
       filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
+      filteredValue: (queryParams.donorName as any) || null,
     },
     {
       title: <div className="text-center">Uploaded Date</div>,

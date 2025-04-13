@@ -5,7 +5,8 @@ import { Input, TableColumnType } from "antd";
 const { Search } = Input;
 
 const tableSearchFilter: TableColumnType<any> = {
-  filterDropdown: ({ setSelectedKeys, confirm }) => {
+  filterDropdown: ({ selectedKeys, setSelectedKeys, confirm, filters }) => {
+    console.log({ selectedKeys, d: selectedKeys["donorName"], filters });
     return (
       <div className="flex m-3">
         <Search
@@ -16,11 +17,13 @@ const tableSearchFilter: TableColumnType<any> = {
           onChange={(e) => setSelectedKeys(e.target.value ? e.target?.value?.trim() : ("" as any))}
           enterButton
           allowClear
+          value={selectedKeys as any}
         />
       </div>
     );
   },
   filterIcon: (filtered: boolean) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
+  filterResetToDefaultFilteredValue: true,
 };
 
 export default tableSearchFilter;
