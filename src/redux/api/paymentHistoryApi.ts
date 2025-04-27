@@ -18,7 +18,7 @@ export const paymentHistoryApi = mainApi.injectEndpoints({
           params,
         };
       },
-      providesTags: ["User"],
+      providesTags: ["PaymentHistory"],
     }),
     // getAllPaymentHistory: builder.query<IResponse<IPaymentHistory[]>, Record<string, unknown>>({
     //   query: (params) => {
