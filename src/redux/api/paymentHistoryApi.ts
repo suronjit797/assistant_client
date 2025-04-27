@@ -2,13 +2,18 @@ import { IPaymentHistory } from "@/interfaces/paymentInterface";
 import { mainApi } from "../mainApi";
 import { IResponse } from "../reduxTypes";
 
+const apiPath = "/payments-history";
+
 export const paymentHistoryApi = mainApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get All PaymentHistory
-    getPaymentH: builder.query<IResponse<IPaymentHistory[]>, Record<string, unknown>>({
+    getPaymentH: builder.query<
+      IResponse<IPaymentHistory[]>,
+      Record<string, unknown>
+    >({
       query: (params) => {
         return {
-          url: "/payments-history",
+          url: apiPath,
           method: "GET",
           params,
         };
@@ -30,12 +35,15 @@ export const paymentHistoryApi = mainApi.injectEndpoints({
     // Get Single PaymentHistory
     getPaymentHistoryById: builder.query<IResponse<IPaymentHistory>, string>({
       query: (id) => ({
-        url: `/payments-history/${id}`,
+        url: `${apiPath}/${id}`,
         method: "GET",
       }),
       providesTags: ["PaymentHistory"],
     }),
+
+    // end
   }),
 });
 
-export const { useGetPaymentHQuery, useGetPaymentHistoryByIdQuery } = paymentHistoryApi;
+export const { useGetPaymentHQuery, useGetPaymentHistoryByIdQuery } =
+  paymentHistoryApi;

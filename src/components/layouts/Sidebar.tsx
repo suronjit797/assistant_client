@@ -7,9 +7,16 @@ import React, { useState } from "react";
 import { FaLocationDot, FaUsersGear } from "react-icons/fa6";
 import { GrMoney } from "react-icons/gr";
 import { IoClose } from "react-icons/io5";
-import { RiBankFill } from "react-icons/ri";
+// import { RiBankFill } from "react-icons/ri";
 import { TbReportMoney } from "react-icons/tb";
-import { TiBell, TiChartLine, TiCogOutline, TiHomeOutline, TiPower, TiUser } from "react-icons/ti";
+import {
+  TiBell,
+  TiChartLine,
+  TiCogOutline,
+  TiHomeOutline,
+  TiPower,
+  TiUser,
+} from "react-icons/ti";
 import { Link, useLocation } from "react-router-dom";
 
 interface NavConfig {
@@ -47,7 +54,9 @@ const Sidebar = React.memo(() => {
 
   // handler
   const onOpenChange: MenuProps["onOpenChange"] = (openKeys) => {
-    const currentOpenKey = openKeys.find((key) => stateOpenKeys.indexOf(key) === -1);
+    const currentOpenKey = openKeys.find(
+      (key) => stateOpenKeys.indexOf(key) === -1
+    );
     // open
     if (currentOpenKey !== undefined) {
       const repeatIndex = openKeys
@@ -67,7 +76,13 @@ const Sidebar = React.memo(() => {
 
   // options
 
-  const items = generateMenuItems(navigationConfig(logOut), "superAdmin", logOut, location, isDark);
+  const items = generateMenuItems(
+    navigationConfig(logOut),
+    "superAdmin",
+    logOut,
+    location,
+    isDark
+  );
 
   const getLevelKeys = (items1: LevelKeysProps[]) => {
     const key: Record<string, number> = {};
@@ -89,49 +104,74 @@ const Sidebar = React.memo(() => {
 
   return (
     <div className="border-e border-e-gray-300 dark:border-e-slate-600 h-full">
-      <div className={`navbar-overlay ${isNavOpen ? "active" : ""}`} onClick={() => dispatch(changeNavOpen(false))} />
+      <div
+        className={`navbar-overlay ${isNavOpen ? "active" : ""}`}
+        onClick={() => dispatch(changeNavOpen(false))}
+      />
       <div className={` ${isNavOpen ? "active" : ""}`}>
-        <div className="px-6">
+        <div className="px-4">
           <div className="close-container hidden">
-            <div className="close" onClick={() => dispatch(changeNavOpen(false))}>
+            <div
+              className="close"
+              onClick={() => dispatch(changeNavOpen(false))}
+            >
               <IoClose />
             </div>
           </div>
           <div className="w-35 pt-4 mb-8 mx-3">
             <Link to="/" className="logo">
-              <img src={isDark ? "/photos/logo_dark.webp" : "/photos/logo_light.webp"} alt="logo" />
+              <img
+                src={
+                  isDark ? "/photos/logo_dark.webp" : "/photos/logo_light.webp"
+                }
+                alt="logo"
+                className="w-full"
+              />
             </Link>
           </div>
           <div className="flex items-center gap-3">
-            <Avatar size="large" src={user?.avatar?.url} className="" style={{ minWidth: 36 }}></Avatar>
+            <Avatar
+              size="large"
+              src={user?.avatar?.url}
+              className=""
+              style={{ minWidth: 36 }}
+            ></Avatar>
             <div className="text-sm">
               <h6 title={user?.name} className="font-bold">
-                {(user?.name?.length ?? 0) > 23 ? `${user.name.slice(0, 21)}...` : user?.name || "John Doe"}
+                {(user?.name?.length ?? 0) > 23
+                  ? `${user.name.slice(0, 21)}...`
+                  : user?.name || "John Doe"}
               </h6>
-              <span className="text-capitalize text-gray-500">{userRoleFormate[user?.role]}</span>
+              <span className="text-capitalize text-gray-500">
+                {userRoleFormate[user?.role]}
+              </span>
             </div>
           </div>
 
-          <div className="text-xs mt-5 mb-1"> MAIN MENU </div>
-          <hr className="border-gray-300 dark:border-slate-600  mb-2" />
+          <div className="ps-1">
+            <div className="text-xs mt-5 mb-1"> MAIN MENU </div>
+            <hr className="border-gray-300 dark:border-slate-600  mb-2" />
+          </div>
         </div>
 
         {/* menu */}
-        <Menu
-          defaultSelectedKeys={["/"]}
-          defaultOpenKeys={["sub1"]}
-          mode="inline"
-          inlineIndent={12}
-          openKeys={stateOpenKeys}
-          onOpenChange={onOpenChange}
-          // inlineCollapsed={collapsed}
-          items={items}
-          onClick={(item) => {
-            if (item.keyPath?.length <= 1) {
-              setStateOpenKeys([]);
-            }
-          }}
-        />
+        <div className="px-3">
+          <Menu
+            defaultSelectedKeys={["/"]}
+            defaultOpenKeys={["sub1"]}
+            mode="inline"
+            inlineIndent={12}
+            openKeys={stateOpenKeys}
+            onOpenChange={onOpenChange}
+            // inlineCollapsed={collapsed}
+            items={items}
+            onClick={(item) => {
+              if (item.keyPath?.length <= 1) {
+                setStateOpenKeys([]);
+              }
+            }}
+          />
+        </div>
       </div>
     </div>
   );
@@ -145,13 +185,27 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
     name: "Home",
     path: "/",
     icon: <TiHomeOutline />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    authorizedRoles: [
+      "superAdmin",
+      "businessAdmin",
+      "installer",
+      "admin",
+      "user",
+      "public",
+    ],
   },
   {
     name: "Investment Products",
     path: "/products",
     icon: <GrMoney />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    authorizedRoles: [
+      "superAdmin",
+      "businessAdmin",
+      "installer",
+      "admin",
+      "user",
+      "public",
+    ],
     // children: [
     //   {
     //     name: "All Products",
@@ -202,31 +256,45 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
     name: "Manage Locations",
     path: "/locations",
     icon: <FaLocationDot style={{ fontSize: "20px" }} />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    authorizedRoles: [
+      "superAdmin",
+      "businessAdmin",
+      "installer",
+      "admin",
+      "user",
+      "public",
+    ],
   },
+  // {
+  //   name: "Banking Settings",
+  //   path: "/banking-settings",
+  //   icon: <RiBankFill />,
+  //   authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+  // children: [
+  //   {
+  //     name: "All Devices",
+  //     path: "/devices",
+  //     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+  //   },
+  //   {
+  //     name: "Manage Device Types",
+  //     path: "/device-types",
+  //     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user"],
+  //   },
+  // ],
+  // },
   {
-    name: "Banking Settings",
-    path: "/banking-settings",
-    icon: <RiBankFill />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-    // children: [
-    //   {
-    //     name: "All Devices",
-    //     path: "/devices",
-    //     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-    //   },
-    //   {
-    //     name: "Manage Device Types",
-    //     path: "/device-types",
-    //     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user"],
-    //   },
-    // ],
-  },
-  {
-    name: "Reporting",
+    name: "Reports",
     path: "/reporting",
     icon: <TiChartLine />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    authorizedRoles: [
+      "superAdmin",
+      "businessAdmin",
+      "installer",
+      "admin",
+      "user",
+      "public",
+    ],
     // children: [
     //   {
     //     name: "Data Analysis",
@@ -241,7 +309,7 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
     // ],
   },
   {
-    name: "Notification",
+    name: "Support",
     path: "/notification",
     icon: <TiBell />,
     authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user", "public"],
@@ -267,17 +335,38 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
     name: "Settings",
     path: "/settings",
     icon: <TiCogOutline />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    authorizedRoles: [
+      "superAdmin",
+      "businessAdmin",
+      "installer",
+      "admin",
+      "user",
+      "public",
+    ],
     children: [
       {
         name: "Change Password",
         path: "/settings",
-        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+        authorizedRoles: [
+          "superAdmin",
+          "businessAdmin",
+          "installer",
+          "admin",
+          "user",
+          "public",
+        ],
       },
       {
         name: "Activity Log",
         path: "/activity-log",
-        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+        authorizedRoles: [
+          "superAdmin",
+          "businessAdmin",
+          "installer",
+          "admin",
+          "user",
+          "public",
+        ],
       },
       // {
       //   name: "Electricity Tariff",
@@ -306,17 +395,38 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
       {
         name: "Manual Reconciliation",
         path: "/manual-reconciliation",
-        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+        authorizedRoles: [
+          "superAdmin",
+          "businessAdmin",
+          "installer",
+          "admin",
+          "user",
+          "public",
+        ],
       },
       {
         name: "Payment Summary",
         path: "/payment-summary",
-        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+        authorizedRoles: [
+          "superAdmin",
+          "businessAdmin",
+          "installer",
+          "admin",
+          "user",
+          "public",
+        ],
       },
       {
         name: "Reconciliation Summary",
         path: "/reconciliation-summary",
-        authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+        authorizedRoles: [
+          "superAdmin",
+          "businessAdmin",
+          "installer",
+          "admin",
+          "user",
+          "public",
+        ],
       },
     ],
   },
@@ -324,13 +434,27 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
     name: "Profile",
     path: "/profile",
     icon: <TiUser />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    authorizedRoles: [
+      "superAdmin",
+      "businessAdmin",
+      "installer",
+      "admin",
+      "user",
+      "public",
+    ],
   },
   {
     name: "Logout",
     path: null,
     icon: <TiPower />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    authorizedRoles: [
+      "superAdmin",
+      "businessAdmin",
+      "installer",
+      "admin",
+      "user",
+      "public",
+    ],
     onClick: () => logOut(),
   },
 ];
@@ -353,7 +477,13 @@ const generateMenuItems = (
           <Link
             to={item.path || "#"}
             style={{
-              color: isActive ? (isDark ? "white" : "blue") : isDark ? "lightgray" : "black",
+              color: isActive
+                ? isDark
+                  ? "white"
+                  : "blue"
+                : isDark
+                  ? "lightgray"
+                  : "black",
               textDecoration: "none",
             }}
           >
@@ -361,7 +491,9 @@ const generateMenuItems = (
           </Link>
         ),
         onClick: item.onClick ? () => item.onClick?.(logout) : undefined,
-        children: item.children ? generateMenuItems(item.children, role, logout, location, isDark) : undefined,
+        children: item.children
+          ? generateMenuItems(item.children, role, logout, location, isDark)
+          : undefined,
         disabled: [
           "Investment Products",
           "Manage Locations",
@@ -370,6 +502,8 @@ const generateMenuItems = (
           "Notification",
           "Settings",
           "Manage Users",
+          "Reports",
+          "Support",
         ].includes(item.name),
       };
     });

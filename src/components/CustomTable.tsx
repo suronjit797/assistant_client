@@ -10,8 +10,18 @@ interface Props<T> extends Omit<TableProps<T>, "dataSource" | "pagination"> {
   setQuery?: React.Dispatch<React.SetStateAction<Record<string, unknown>>>;
 }
 
-const CustomTable = <T extends object>({ columns, data, total, query, setQuery = () => {}, ...props }: Props<T>) => {
-  const changeHandler = (pagination: TablePaginationConfig, filter: Record<string, FilterValue | null>) => {
+const CustomTable = <T extends object>({
+  columns,
+  data,
+  total,
+  query,
+  setQuery = () => {},
+  ...props
+}: Props<T>) => {
+  const changeHandler = (
+    pagination: TablePaginationConfig,
+    filter: Record<string, FilterValue | null>
+  ) => {
     const { current, pageSize } = pagination;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cleanedFilter: Record<string, any> = {};
@@ -46,12 +56,16 @@ const CustomTable = <T extends object>({ columns, data, total, query, setQuery =
         onChange={changeHandler}
         locale={{
           emptyText: (
-            <div style={{ minHeight: "calc( 100vh - 300px )" }} className="flex items-center justify-center">
+            <div
+              style={{ minHeight: "calc( 100vh - 300px )" }}
+              className="flex items-center justify-center"
+            >
               <Empty />
             </div>
           ),
         }}
-        {...{ props }}
+        // rowSelection={{ type: 'checkbox', ...[] }}
+        {...props}
       />
     </>
   );

@@ -7,24 +7,24 @@ import { Button, Spin, TableProps } from "antd";
 import dayjs from "dayjs";
 import React, { useEffect } from "react";
 import { IoTrashBin } from "react-icons/io5";
-import Swal from "sweetalert2";
 
 const ReconciliationSummary: React.FC = () => {
-  const { data, isFetching, isError } = useGetPaymentHQuery({ populate: "user" });
+  const { data, isFetching } = useGetPaymentHQuery({ populate: "user" });
 
   useEffect(() => {
     document.title = `${appConfig.name} - Reconciliation Summary`;
   }, []);
 
-  if (isError) {
-    Swal.fire({
-      icon: "error",
-      title: "Error",
-      text: "Payment summary fetch failed",
-      confirmButtonText: "OK",
-      timer: 3000,
-    });
-  }
+  // if (isError) {
+  //   Swal.fire({
+  //     icon: "error",
+  //     title: "Error",
+  //     text: "Payment summary fetch failed",
+  //     confirmButtonText: "OK",
+  //     timer: 3000,
+  //   });
+  // }
+
   return (
     <Spin spinning={isFetching}>
       <PageHeader title="Payments" subTitle="Reconciliation Summary" />
@@ -50,7 +50,9 @@ const column: TableProps<IPaymentHistory>["columns"] = [
     ellipsis: true,
     dataIndex: "date",
     key: "date",
-    render: (_, record) => <> {dayjs(record.createdAt).format("DD/MM/YYYY hh:mm:ss")} </>,
+    render: (_, record) => (
+      <> {dayjs(record.createdAt).format("DD/MM/YYYY hh:mm:ss")} </>
+    ),
     align: "center",
   },
 
@@ -59,7 +61,9 @@ const column: TableProps<IPaymentHistory>["columns"] = [
     ellipsis: true,
     dataIndex: "type",
     key: "type",
-    render: (_, record) => <> {record.type === "auto" ? "Automatic" : "Manual"} </>,
+    render: (_, record) => (
+      <> {record.type === "auto" ? "Automatic" : "Manual"} </>
+    ),
     align: "center",
   },
 
@@ -69,7 +73,12 @@ const column: TableProps<IPaymentHistory>["columns"] = [
     dataIndex: "user",
     key: "user",
     render: (_, record) => (
-      <> {typeof record.user === "object" && "name" in record.user ? record.user.name : record.user} </>
+      <>
+        {" "}
+        {typeof record.user === "object" && "name" in record.user
+          ? record.user.name
+          : record.user}{" "}
+      </>
     ),
     align: "center",
   },

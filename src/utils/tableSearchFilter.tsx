@@ -6,7 +6,7 @@ const { Search } = Input;
 
 const tableSearchFilter: TableColumnType<any> = {
   filterDropdown: ({ selectedKeys, setSelectedKeys, confirm, filters }) => {
-    console.log({ selectedKeys, d: selectedKeys["donorName"], filters });
+    // console.log({ selectedKeys, d: selectedKeys["donorName"], filters });
     return (
       <div className="flex m-3">
         <Search
