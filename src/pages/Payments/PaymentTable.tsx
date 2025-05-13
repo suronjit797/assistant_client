@@ -340,6 +340,11 @@ const PaymentTable: React.FC<Props> = ({
       ),
       align: "center",
     },
+    {
+      title: "",
+      dataIndex: "",
+      render: () => <div className="w-80"></div>,
+    },
   ];
 
   // rowSelection object indicates the need for row selection
