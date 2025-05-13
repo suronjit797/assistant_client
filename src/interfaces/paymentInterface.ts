@@ -1,6 +1,7 @@
 import { TUser } from "./userInterface";
 
 export interface IPayment {
+  success: any;
   _id: string;
   createdAt: Date;
   updatedAt: Date;

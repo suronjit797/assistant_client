@@ -22,7 +22,7 @@ const PaymentSummary: React.FC = () => {
     page: 1,
     limit: 10,
   });
-  const [deleteMany, { isSuccess }] = useDeleteManyPaymentMutation();
+  const [deleteMany] = useDeleteManyPaymentMutation();
 
   // states
   const [search, setSearch] = useState(queryParams.search as string);
@@ -49,7 +49,17 @@ const PaymentSummary: React.FC = () => {
 
     if (result.isConfirmed) {
       try {
-        deleteMany({ ids: selectedRowKeys });
+        const data = await deleteMany({ ids: selectedRowKeys });
+        console.log({ data: data.data });
+        if (data?.data?.success) {
+          Swal.fire({
+            title: "",
+            text: "Payment Deleted Successfully.",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        }
       } catch (error) {
         console.error(
           error instanceof Error ? error.message : "An unknown error occurred."
@@ -58,15 +68,15 @@ const PaymentSummary: React.FC = () => {
     }
   };
 
-  if (isSuccess) {
-    Swal.fire({
-      title: "",
-      text: "Payment Deleted Successfully.",
-      icon: "success",
-      timer: 2000,
-      showConfirmButton: false,
-    });
-  }
+  // if (isSuccess) {
+  //   Swal.fire({
+  //     title: "",
+  //     text: "Payment Deleted Successfully.",
+  //     icon: "success",
+  //     timer: 2000,
+  //     showConfirmButton: false,
+  //   });
+  // }
 
   return (
     <>
