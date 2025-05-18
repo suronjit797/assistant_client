@@ -17,6 +17,17 @@ const productFilters = [
   { text: "Education Trust", value: "Education Trust" },
 ];
 
+const statusFilters = [
+  { text: "Pending", value: "pending" },
+  { text: "Initializing", value: "initializing" },
+  { text: "Completed", value: "completed" },
+];
+
+const typeFilters = [
+  { text: "Auto", value: "auto" },
+  { text: "Manual", value: "manual" },
+];
+
 const bankFilter = [
   { text: "CIMB", value: "CIMB" },
   { text: "PBB", value: "PBB" },
@@ -201,6 +212,38 @@ const PaymentTable: React.FC<Props> = ({
       filteredValue: (queryParams.income as any) || null,
       render: (_, record) => <> {numberFormatter(record.income)} </>,
       align: "end",
+    },
+    {
+      title: <div className="text-center">Status</div>,
+      ellipsis: true,
+      dataIndex: "status",
+      key: "status",
+      filters: statusFilters,
+      filteredValue: (queryParams?.status as string)?.split(",") || null,
+      filterSearch: true,
+      render: (_, record) => (
+        <span
+          className={`capitalize `}
+          style={{ color: statusColor[record.status] }}
+        >
+          {record.status}
+        </span>
+      ),
+      align: "center",
+    },
+
+    {
+      title: <div className="text-center">Payment Type</div>,
+      ellipsis: true,
+      dataIndex: "type",
+      key: "type",
+      filters: typeFilters,
+      filteredValue: (queryParams?.type as string)?.split(",") || null,
+      filterSearch: true,
+      render: (_, record) => (
+        <span className={`capitalize `}>{record.type}</span>
+      ),
+      align: "center",
     },
 
     {
@@ -406,3 +449,9 @@ const tabItems = [
   //   key: "advice",
   // },
 ];
+
+const statusColor = {
+  pending: "red",
+  initializing: "orange",
+  completed: "green",
+};

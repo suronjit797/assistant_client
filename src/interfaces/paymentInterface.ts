@@ -1,7 +1,7 @@
 import { TUser } from "./userInterface";
 
 export interface IPayment {
-  success: any;
+  success: boolean;
   _id: string;
   createdAt: Date;
   updatedAt: Date;
@@ -16,6 +16,8 @@ export interface IPayment {
   trustAmount: number | null;
   interestDividendPayableToClient: number | null;
   income: number | null;
+  status: "pending" | "initializing" | "completed";
+  type: "auto" | "manual";
   payment: string;
   accountNumber: string;
   accountName: string;
