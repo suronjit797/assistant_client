@@ -109,6 +109,35 @@ const ManualReconciliation: React.FC = () => {
     },
 
     {
+      title: <div className="text-center">Status</div>,
+      ellipsis: true,
+      dataIndex: "status",
+      key: "status",
+      filterSearch: true,
+      render: (_, record) => (
+        <span
+          className={`capitalize `}
+          style={{ color: statusColor[record.status] }}
+        >
+          {record.status}
+        </span>
+      ),
+      align: "center",
+    },
+
+    {
+      title: <div className="text-center">Payment Type</div>,
+      ellipsis: true,
+      dataIndex: "type",
+      key: "type",
+      filterSearch: true,
+      render: (_, record) => (
+        <span className={`capitalize `}>{record.type}</span>
+      ),
+      align: "center",
+    },
+
+    {
       title: (
         <div
           className="text-center mx-[-16px] px-[16px]"
@@ -315,3 +344,9 @@ const tabItems = [
   //   key: "advice",
   // },
 ];
+
+const statusColor = {
+  pending: "red",
+  initializing: "orange",
+  completed: "green",
+};
