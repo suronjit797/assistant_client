@@ -15,6 +15,7 @@ import ReconciliationModal from "./ReconciliationModal";
 const ManualReconciliation: React.FC = () => {
   const [cvsModal, setCvsModal] = useState(false);
   const [uploadCsv, { error, isLoading, data }] = useUploadPaymentCsvMutation();
+  const [selectedRowKeys, setSelectedRowKeys] = React.useState<React.Key[]>([]);
 
   const sectionRefs = {
     summary: useRef<HTMLDivElement>(null),
@@ -236,6 +237,17 @@ const ManualReconciliation: React.FC = () => {
     document.title = `${appConfig.name} - Manual Reconciliation`;
   }, []);
 
+  const rowSelection: TableProps<IPayment>["rowSelection"] = {
+    selectedRowKeys,
+    onChange: (selectedRowKeys) => {
+      setSelectedRowKeys(selectedRowKeys);
+    },
+    getCheckboxProps: (record: IPayment) => ({
+      disabled: false,
+      name: record._id,
+    }),
+  };
+
   return (
     <div>
       <PageHeader title="Payments" subTitle="Manual Reconciliation">
@@ -263,7 +275,15 @@ const ManualReconciliation: React.FC = () => {
             onTabClick={handleTabClick}
           />
         </div>
-        <CustomTable data={data?.data || []} columns={column} />
+        <CustomTable
+          data={
+            Array.isArray(data?.data)
+              ? data?.data?.map((d) => ({ ...d, key: d?._id }))
+              : []
+          }
+          columns={column}
+          rowSelection={{ type: "checkbox", ...rowSelection }}
+        />
         <ManualReconciliationCvsModal
           modal={cvsModal}
           setModal={setCvsModal}
