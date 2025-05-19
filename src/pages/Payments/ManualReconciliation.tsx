@@ -10,6 +10,7 @@ import { FiUploadCloud } from "react-icons/fi";
 import Swal from "sweetalert2";
 import ManualReconciliationCvsModal from "./ManualReconciliationCvsModal";
 import appConfig from "@/config/appConfig";
+import ReconciliationModal from "./ReconciliationModal";
 
 const ManualReconciliation: React.FC = () => {
   const [cvsModal, setCvsModal] = useState(false);
@@ -60,7 +61,8 @@ const ManualReconciliation: React.FC = () => {
       dataIndex: "dtd",
       key: "dtd",
       align: "center",
-      render: (_, record) => dayjs(record.trustDeedExpiryDate).format("DD/MM/YYYY"),
+      render: (_, record) =>
+        dayjs(record.trustDeedExpiryDate).format("DD/MM/YYYY"),
     },
     {
       title: "Trust Deed No",
@@ -91,7 +93,9 @@ const ManualReconciliation: React.FC = () => {
       ellipsis: true,
       dataIndex: "interestDividendPayableToClient",
       key: "interestDividendPayableToClient",
-      render: (_, record) => <> {numberFormatter(record.interestDividendPayableToClient)} </>,
+      render: (_, record) => (
+        <> {numberFormatter(record.interestDividendPayableToClient)} </>
+      ),
       align: "end",
     },
     {
@@ -105,7 +109,10 @@ const ManualReconciliation: React.FC = () => {
 
     {
       title: (
-        <div className="text-center mx-[-16px] px-[16px]" ref={sectionRefs.banking}>
+        <div
+          className="text-center mx-[-16px] px-[16px]"
+          ref={sectionRefs.banking}
+        >
           Account Number
         </div>
       ),
@@ -218,7 +225,11 @@ const ManualReconciliation: React.FC = () => {
   }
   const handleTabClick = (key: string) => {
     const ref = sectionRefs[key as keyof typeof sectionRefs];
-    ref?.current?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+    ref?.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "start",
+    });
   };
 
   useEffect(() => {
@@ -229,18 +240,35 @@ const ManualReconciliation: React.FC = () => {
     <div>
       <PageHeader title="Payments" subTitle="Manual Reconciliation">
         <div className="ms-auto">
-          <Button onClick={() => setCvsModal((prev) => !prev)} icon={<FiUploadCloud />} type="primary">
+          <Button
+            onClick={() => setCvsModal((prev) => !prev)}
+            icon={<FiUploadCloud />}
+            type="primary"
+          >
             Bulk CSV Upload
           </Button>
         </div>
       </PageHeader>
 
       <Spin spinning={isLoading}>
+        <div className="mb-3 flex">
+          <div className="ms-auto">
+            <ReconciliationModal />
+          </div>
+        </div>
         <div className="mb-3">
-          <Tabs defaultActiveKey="1" items={tabItems} onTabClick={handleTabClick} />
+          <Tabs
+            defaultActiveKey="1"
+            items={tabItems}
+            onTabClick={handleTabClick}
+          />
         </div>
         <CustomTable data={data?.data || []} columns={column} />
-        <ManualReconciliationCvsModal modal={cvsModal} setModal={setCvsModal} uploadCsv={uploadCsv} />
+        <ManualReconciliationCvsModal
+          modal={cvsModal}
+          setModal={setCvsModal}
+          uploadCsv={uploadCsv}
+        />
       </Spin>
     </div>
   );

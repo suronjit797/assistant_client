@@ -10,6 +10,7 @@ import { RiDeleteBin7Line } from "react-icons/ri";
 import { useLocation, useNavigate } from "react-router-dom";
 import PaymentTable from "./PaymentTable";
 import Swal from "sweetalert2";
+import ReconciliationModal from "./ReconciliationModal";
 const { Search } = Input;
 
 const PaymentSummary: React.FC = () => {
@@ -68,16 +69,6 @@ const PaymentSummary: React.FC = () => {
     }
   };
 
-  // if (isSuccess) {
-  //   Swal.fire({
-  //     title: "",
-  //     text: "Payment Deleted Successfully.",
-  //     icon: "success",
-  //     timer: 2000,
-  //     showConfirmButton: false,
-  //   });
-  // }
-
   return (
     <>
       <PageHeader title="Payments" subTitle="Reconciliation Summary" />
@@ -106,7 +97,11 @@ const PaymentSummary: React.FC = () => {
           danger
           icon={<RiDeleteBin7Line />}
         />
+        <div className="">
+          <ReconciliationModal />
+        </div>
       </div>
+
       <PaymentTable
         {...{ selectedRowKeys, setSelectedRowKeys, muliSelect: true }}
       />
