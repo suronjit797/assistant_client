@@ -12,6 +12,7 @@ import { ResetPassword } from "./pages/Login/ResetPassword";
 import NotFound from "./pages/NotFound/NotFound";
 import Notifications from "./pages/Notifications/Notifications";
 import ManualReconciliation from "./pages/Payments/ManualReconciliation";
+import PaymentSummary from "./pages/Payments/PaymentSummary";
 import ReconciliationSummary from "./pages/Payments/ReconciliationSummary";
 import CreateProduct from "./pages/Products/CreateProduct";
 import EditProduct from "./pages/Products/EditProduct";
@@ -21,10 +22,9 @@ import Profile from "./pages/Profile/Profile";
 import Reporting from "./pages/Reporting/Reporting";
 import ActivityLog from "./pages/Settings/ActivityLog";
 import Settings from "./pages/Settings/Settings";
-import CreateUser from "./pages/Users/CreateUser";
-import EditUser from "./pages/Users/EditUser";
+import UserForm from "./pages/Users/UserForm";
 import Users from "./pages/Users/Users";
-import PaymentSummary from "./pages/Payments/PaymentSummary";
+import UserView from "./pages/Users/UserView";
 // import Register from "./pages/Register/Register";
 
 export const routes = createBrowserRouter([
@@ -49,8 +49,9 @@ export const routes = createBrowserRouter([
       { path: "/products/edit/:id", element: <EditProduct /> },
       //
       { path: "/users", element: <Users /> },
-      { path: "/users/create", element: <CreateUser /> },
-      { path: "/users/edit/:id", element: <EditUser /> },
+      { path: "/users/:id", element: <UserView /> },
+      { path: "/users/create", element: <UserForm mode="create" /> },
+      { path: "/users/edit/:id", element: <UserForm mode="edit" /> },
       //
       { path: "/locations", element: <Locations /> },
       { path: "/locations/create", element: <CreateLocation /> },

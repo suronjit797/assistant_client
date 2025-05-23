@@ -127,6 +127,7 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useLazyGetProfileQuery,
+  useLazyGetUserByIdQuery,
 } = userApi;
 
 // ! useLazyGetAllUsersQuery  //have to check

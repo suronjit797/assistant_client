@@ -1,8 +1,12 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import PageHeader from "@/components/PageHeader";
 import { userRoleFormate } from "@/constant/userRole";
 import { TUser } from "@/interfaces/userInterface";
-import { useRegisterUserMutation } from "@/redux/api/usersApi";
+import { useLazyGetUserByIdQuery, useRegisterUserMutation, useUpdateUserMutation } from "@/redux/api/usersApi";
 import { MailOutlined, UserOutlined } from "@ant-design/icons"; // Import icons
 import { Button, Form, Input, Select, Spin, Upload } from "antd";
+import { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const { Option } = Select;
 
@@ -13,20 +17,35 @@ interface Props {
 const UserForm: React.FC<Props> = ({ mode = "create" }) => {
   // hooks
   const [form] = Form.useForm();
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   // states
   //   const [formData, setFromData] = useState({});
 
   // rtk query
   const [registerUser, { error, isLoading }] = useRegisterUserMutation();
-  const [updateUser, { error: updateUserError, isLoading: updateUserIsLoading }] = useRegisterUserMutation();
+  const [updateUser, { error: updateUserError, isLoading: updateUserIsLoading }] = useUpdateUserMutation();
+  const [getUserData, { isLoading: getUserLoading }] = useLazyGetUserByIdQuery();
+
+  const userData = async (id: string) => {
+    const { data } = await getUserData(id);
+    form.setFieldsValue({ ...(data?.data || {}) });
+  };
+
+  useEffect(() => {
+    if (id && mode === "edit") {
+      userData(id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, mode]);
 
   // handler
   const onFinish = async (values: Partial<TUser>) => {
     console.log("Received values of form: ", values);
     const body = { ...values };
     if (mode === "edit") {
-      await updateUser(body);
+      await updateUser({ id, body });
     } else {
       body.isActive = body.isActive ?? true;
       await registerUser(body);
@@ -35,6 +54,10 @@ const UserForm: React.FC<Props> = ({ mode = "create" }) => {
 
   return (
     <Spin spinning={isLoading || updateUserIsLoading}>
+      <div className="mb-5">
+        <PageHeader title="Manage Users" subTitle={mode === "edit" ? "Edit User" : "Add New User"} />
+      </div>
+
       <Form
         form={form}
         name="userForm"
@@ -53,13 +76,11 @@ const UserForm: React.FC<Props> = ({ mode = "create" }) => {
           rules={[{ required: true, message: "Please select a user role!" }]}
           className="col-span-1"
         >
-          <Select placeholder="Select User Role" className="w-full">
-            {Object.entries(userRoleFormate).map(([key, value]) => (
-              <Option key={key} value={key}>
-                {value}
-              </Option>
-            ))}
-          </Select>
+          <Select
+            placeholder="Select User Role"
+            className="w-full"
+            options={Object.entries(userRoleFormate).map(([key, value]) => ({ value: key, label: value })) || []}
+          />
         </Form.Item>
 
         <Form.Item name="loginId" label="Login ID" rules={[{ required: true, message: "Please input your Login ID!" }]}>
@@ -151,6 +172,7 @@ const UserForm: React.FC<Props> = ({ mode = "create" }) => {
             className="avatar-uploader"
             showUploadList={false}
             //   action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+            disabled={true}
           >
             <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center">
               <UserOutlined style={{ fontSize: "32px", color: "#555" }} />
@@ -159,11 +181,11 @@ const UserForm: React.FC<Props> = ({ mode = "create" }) => {
         </div>
 
         <div className="col-span-1 md:col-span-2 flex justify-end space-x-3 mt-6">
-          <Button htmlType="button" className="px-6">
-            Cancel
-          </Button>
           <Button type="primary" htmlType="submit" className="bg-blue-600 hover:bg-blue-700 px-6">
-            Create User
+            {mode === "edit" ? "Update" : "Create"} User
+          </Button>
+          <Button htmlType="button" className="px-6" onClick={() => navigate(-1)}>
+            Cancel
           </Button>
         </div>
       </Form>
