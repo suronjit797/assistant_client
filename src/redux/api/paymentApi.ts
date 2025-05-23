@@ -16,7 +16,6 @@ export const paymentApi = mainApi.injectEndpoints({
     }),
     getPayments: builder.query<IResponse<IPayment[]>, Record<string, unknown>>({
       query: (params) => {
-        console.log({ params });
         return {
           url: "/payments",
           method: "GET",

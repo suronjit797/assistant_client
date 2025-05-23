@@ -1,11 +1,17 @@
-import React from 'react'
+import React from "react";
+import UserForm from "./UserForm";
+import PageHeader from "@/components/PageHeader";
 
-const CreateUser:React.FC = () => {
+const CreateUser: React.FC = () => {
   return (
     <div>
-      Create users
-    </div>
-  )
-}
+      <div className="mb-5">
+        <PageHeader title="Manage Users" subTitle="Add New Users" />
+      </div>
 
-export default CreateUser
+      <UserForm />
+    </div>
+  );
+};
+
+export default CreateUser;

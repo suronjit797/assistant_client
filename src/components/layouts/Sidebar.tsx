@@ -494,17 +494,19 @@ const generateMenuItems = (
         children: item.children
           ? generateMenuItems(item.children, role, logout, location, isDark)
           : undefined,
-        disabled: [
-          "Investment Products",
-          "Manage Locations",
-          "Banking Settings",
-          "Reporting",
-          "Notification",
-          "Settings",
-          "Manage Users",
-          "Reports",
-          "Support",
-        ].includes(item.name),
+        disabled: disabledList.includes(item.name),
       };
     });
 };
+
+const disabledList = [
+  "Investment Products",
+  "Manage Locations",
+  "Banking Settings",
+  "Reporting",
+  "Notification",
+  "Settings",
+  // "Manage Users",
+  "Reports",
+  "Support",
+];

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../redux/store";
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
 
   // redux
@@ -125,4 +125,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;
