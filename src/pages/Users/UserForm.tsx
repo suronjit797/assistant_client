@@ -7,6 +7,7 @@ import { MailOutlined, UserOutlined } from "@ant-design/icons"; // Import icons
 import { Button, Form, Input, Select, Spin, Upload } from "antd";
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const { Option } = Select;
 
@@ -50,6 +51,14 @@ const UserForm: React.FC<Props> = ({ mode = "create" }) => {
       body.isActive = body.isActive ?? true;
       await registerUser(body);
     }
+    await Swal.fire({
+      title: "Success",
+      text: `User ${mode === "edit" ? "Updated" : "Created"} Successfully`,
+      icon: "success",
+      confirmButtonText: "OK",
+      timer: 1000,
+    });
+    navigate("/users");
   };
 
   return (
@@ -63,7 +72,7 @@ const UserForm: React.FC<Props> = ({ mode = "create" }) => {
         name="userForm"
         layout="vertical"
         onFinish={onFinish}
-        className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4"
+        className="grid grid-cols-1 md:grid-cols-2 gap-x-8"
         scrollToFirstError={true}
         //   onValuesChange={(values) => {
         //     console.log({ values });
@@ -184,7 +193,11 @@ const UserForm: React.FC<Props> = ({ mode = "create" }) => {
           <Button type="primary" htmlType="submit" className="bg-blue-600 hover:bg-blue-700 px-6">
             {mode === "edit" ? "Update" : "Create"} User
           </Button>
-          <Button htmlType="button" className="px-6" onClick={() => navigate(-1)}>
+          <Button
+            htmlType="button"
+            className="!bg-gray-300 !text-black hover:!bg-gray-400 px-6"
+            onClick={() => navigate(-1)}
+          >
             Cancel
           </Button>
         </div>

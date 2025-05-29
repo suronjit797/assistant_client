@@ -6,9 +6,10 @@ import { useGetPaymentsQuery } from "@/redux/api/paymentApi";
 import { numberFormatter } from "@/utils/numberFormatter";
 import tableSearchFilter from "@/utils/tableSearchFilter";
 import { SearchOutlined } from "@ant-design/icons";
-import { Spin, TableProps, Tabs } from "antd";
+import { Button, Spin, TableProps, Tabs } from "antd";
 import dayjs from "dayjs";
 import React, { useRef } from "react";
+import { IoCloudDownloadOutline } from "react-icons/io5";
 
 const productFilters = [
   { text: "Liquidity Trust", value: "Liquidity Trust" },
@@ -45,13 +46,8 @@ interface Props {
   muliSelect?: boolean;
 }
 
-const PaymentTable: React.FC<Props> = ({
-  selectedRowKeys = [],
-  setSelectedRowKeys = () => {},
-  muliSelect = false,
-}) => {
-  const { queryParams, setQueryParams, getNonEmptyQueryParams } =
-    useQueryParams({ page: 1, limit: 10 });
+const PaymentTable: React.FC<Props> = ({ selectedRowKeys = [], setSelectedRowKeys = () => {}, muliSelect = false }) => {
+  const { queryParams, setQueryParams, getNonEmptyQueryParams } = useQueryParams({ page: 1, limit: 10 });
 
   // rek query
   const { data, isFetching } = useGetPaymentsQuery(getNonEmptyQueryParams);
@@ -95,9 +91,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "no",
       key: "no",
-      render: (_text, _record, index) => (
-        <div> {(page - 1) * limit + (index + 1)} </div>
-      ),
+      render: (_text, _record, index) => <div> {(page - 1) * limit + (index + 1)} </div>,
       align: "center",
     },
     {
@@ -114,9 +108,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "donorName",
       key: "donorName",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.donorName as any) || null,
     },
@@ -125,9 +117,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "dtd",
       key: "dtd",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       // ...getFilterColumnSearchProps,
       align: "center",
       render: (_, record) => dayjs(record.dateOfTrustDeed).format("DD/MM/YYYY"),
@@ -137,22 +127,17 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "dtd",
       key: "dtd",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       // ...getFilterColumnSearchProps,
       align: "center",
-      render: (_, record) =>
-        dayjs(record.trustDeedExpiryDate).format("DD/MM/YYYY"),
+      render: (_, record) => dayjs(record.trustDeedExpiryDate).format("DD/MM/YYYY"),
     },
     {
       title: "Trust Deed No",
       ellipsis: true,
       dataIndex: "trustDeedNo",
       key: "trustDeedNo",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.trustDeedNo as any) || null,
       align: "center",
@@ -162,9 +147,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "reference",
       key: "reference",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.reference as any) || null,
       align: "center",
@@ -175,9 +158,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "amount",
       key: "amount",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.amount as any) || null,
       render: (_, record) => <> {numberFormatter(record.trustAmount)} </>,
@@ -189,15 +170,10 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "interestDividendPayableToClient",
       key: "interestDividendPayableToClient",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
-      filteredValue:
-        (queryParams.interestDividendPayableToClient as any) || null,
-      render: (_, record) => (
-        <> {numberFormatter(record.interestDividendPayableToClient)} </>
-      ),
+      filteredValue: (queryParams.interestDividendPayableToClient as any) || null,
+      render: (_, record) => <> {numberFormatter(record.interestDividendPayableToClient)} </>,
       align: "end",
     },
     {
@@ -205,9 +181,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "income",
       key: "income",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.income as any) || null,
       render: (_, record) => <> {numberFormatter(record.income)} </>,
@@ -222,10 +196,7 @@ const PaymentTable: React.FC<Props> = ({
       filteredValue: (queryParams?.status as string)?.split(",") || null,
       filterSearch: true,
       render: (_, record) => (
-        <span
-          className={`capitalize `}
-          style={{ color: statusColor[record.status] }}
-        >
+        <span className={`capitalize `} style={{ color: statusColor[record.status] }}>
           {record.status}
         </span>
       ),
@@ -240,27 +211,20 @@ const PaymentTable: React.FC<Props> = ({
       filters: typeFilters,
       filteredValue: (queryParams?.type as string)?.split(",") || null,
       filterSearch: true,
-      render: (_, record) => (
-        <span className={`capitalize `}>{record.type}</span>
-      ),
+      render: (_, record) => <span className={`capitalize `}>{record.type}</span>,
       align: "center",
     },
 
     {
       title: (
-        <div
-          className="text-center mx-[-16px] px-[16px]"
-          ref={sectionRefs.banking}
-        >
+        <div className="text-center mx-[-16px] px-[16px]" ref={sectionRefs.banking}>
           Account Number
         </div>
       ),
       ellipsis: true,
       dataIndex: "accountNumber",
       key: "accountNumber",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.accountNumber as any) || null,
       align: "center",
@@ -270,9 +234,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "accountName",
       key: "accountName",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.accountName as any) || null,
     },
@@ -311,9 +273,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "nricNo",
       key: "nricNo",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.donorName as any) || null,
       align: "center",
@@ -328,9 +288,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "name",
       key: "name",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.donorName as any) || null,
     },
@@ -339,9 +297,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "nricPassportNo",
       key: "nricPassportNo",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.donorName as any) || null,
       align: "center",
@@ -351,9 +307,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "mobileNo",
       key: "mobileNo",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.donorName as any) || null,
       align: "center",
@@ -363,9 +317,7 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "emailAddress",
       key: "emailAddress",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       ...tableSearchFilter,
       filteredValue: (queryParams.donorName as any) || null,
     },
@@ -374,12 +326,20 @@ const PaymentTable: React.FC<Props> = ({
       ellipsis: true,
       dataIndex: "date",
       key: "date",
-      filterIcon: (filtered) => (
-        <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />
-      ),
+      filterIcon: (filtered) => <SearchOutlined style={{ color: filtered ? "#1677ff" : undefined }} />,
       // ...getFilterColumnSearchProps,
+      render: (_, record) => <> {dayjs(record.createdAt).format("DD/MM/YYYY hh:mm:ss")} </>,
+      align: "center",
+    },
+    {
+      title: <div className="text-center">Action</div>,
+      ellipsis: true,
       render: (_, record) => (
-        <> {dayjs(record.createdAt).format("DD/MM/YYYY hh:mm:ss")} </>
+        <>
+          <Button type="primary" title="Download Slip" disabled={record.status !== "completed"}>
+            <IoCloudDownloadOutline />
+          </Button>
+        </>
       ),
       align: "center",
     },
@@ -405,25 +365,15 @@ const PaymentTable: React.FC<Props> = ({
   return (
     <Spin spinning={isFetching}>
       <div className="my-3">
-        <Tabs
-          defaultActiveKey="1"
-          items={tabItems}
-          onTabClick={handleTabClick}
-        />
+        <Tabs defaultActiveKey="1" items={tabItems} onTabClick={handleTabClick} />
       </div>
       <CustomTable
-        data={
-          Array.isArray(data?.data)
-            ? data?.data?.map((d) => ({ ...d, key: d?._id }))
-            : []
-        }
+        data={Array.isArray(data?.data) ? data?.data?.map((d) => ({ ...d, key: d?._id })) : []}
         columns={paymentColumn}
         total={data?.meta?.total || 0}
         query={queryParams}
         setQuery={setQueryParams}
-        rowSelection={
-          muliSelect ? { type: "checkbox", ...rowSelection } : undefined
-        }
+        rowSelection={muliSelect ? { type: "checkbox", ...rowSelection } : undefined}
       />
     </Spin>
   );

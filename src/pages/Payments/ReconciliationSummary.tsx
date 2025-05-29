@@ -84,11 +84,11 @@ const column: TableProps<IPaymentHistory>["columns"] = [
   },
 
   {
-    title: <div className="text-center">Bank</div>,
+    title: <div className="text-center">Method</div>,
     ellipsis: true,
     dataIndex: "bank",
     key: "bank",
-    render: () => <> {"Maybank"} </>,
+    render: () => <> {"Billplz"} </>,
     align: "center",
   },
 

@@ -31,11 +31,7 @@ const ReconciliationModal: React.FC<Props> = ({ buttonText }) => {
 
   return (
     <>
-      <Button
-        className="!bg-green-600 hover:!bg-green-700"
-        type="primary"
-        onClick={() => setModal(true)}
-      >
+      <Button className="!bg-green-600 hover:!bg-green-700" type="primary" onClick={() => setModal(true)}>
         {buttonText ?? "Start Reconciliation"}
       </Button>
       <Modal
@@ -45,16 +41,9 @@ const ReconciliationModal: React.FC<Props> = ({ buttonText }) => {
         onCancel={handleCancel}
         centered={true}
       >
-        <Form
-          onFinish={handleSubmit}
-          layout="vertical"
-          name="upload_csv_form"
-          className="!py-4"
-        >
+        <Form onFinish={handleSubmit} layout="vertical" name="upload_csv_form" className="!py-4">
           {/* <Form.Item label="Title"> */}
-          <Form.Item
-            rules={[{ required: true, message: "Please input title!" }]}
-          >
+          <Form.Item rules={[{ required: true, message: "Please input title!" }]}>
             <Input placeholder="Title" />
           </Form.Item>
           <Form.Item>
@@ -63,6 +52,7 @@ const ReconciliationModal: React.FC<Props> = ({ buttonText }) => {
                 type="primary"
                 htmlType="submit"
                 disabled={fileList.length === 0}
+                className="!bg-green-600 hover:!bg-green-700"
               >
                 Start Reconciliation
               </Button>

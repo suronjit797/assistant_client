@@ -4,7 +4,7 @@ import appConfig from "@/config/appConfig";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { TUser } from "@/interfaces/userInterface";
 import { useDeleteUserMutation, useGetAllUsersQuery, useUpdateUserMutation } from "@/redux/api/usersApi";
-import { Button, Spin, TableProps } from "antd";
+import { Button, Spin, TableProps, Tag } from "antd";
 import dayjs from "dayjs";
 import React, { useEffect } from "react";
 import { FaRegEye } from "react-icons/fa6";
@@ -89,26 +89,57 @@ const Users = () => {
       align: "center",
     },
     {
+      title: "Status",
+      ellipsis: true,
+      dataIndex: "isActive",
+      key: "isActive",
+      render: (_text, record) => (
+        <div>
+          <Tag color={record?.isActive ? "success" : "error"} className="font-semibold">
+            {record?.isActive ? "Active" : "Inactive"}
+          </Tag>
+        </div>
+      ),
+      align: "center",
+    },
+    {
       title: "Action",
       ellipsis: true,
       render: (_text, record) => (
         <div className="flex gap-2">
-          <Button icon={<FaRegEye />} type="primary" onClick={() => navigate(`${record._id}`)} />
+          <Button icon={<FaRegEye />} type="primary" onClick={() => navigate(`${record._id}`)} title="View User" />
           <Button
             icon={<FiEdit />}
             type="primary"
             className="!bg-gray-300 !text-black hover:!bg-gray-400"
             onClick={() => navigate(`edit/${record._id}`)}
+            title="Edit User"
           />
           <div onClick={() => updateUser({ id: record._id, body: { isActive: !record.isActive } })}>
-            {record.isActive ? (
-              <Button icon={<FiUserCheck />} type="primary" className="!bg-green-700  hover:!bg-green-600" />
+            {!record.isActive ? (
+              <Button
+                icon={<FiUserCheck />}
+                type="primary"
+                className="!bg-green-700  hover:!bg-green-600"
+                title="Activate User"
+              />
             ) : (
-              <Button icon={<FiUserX />} type="primary" className="!bg-yellow-500  hover:!bg-yellow-600" />
+              <Button
+                icon={<FiUserX />}
+                type="primary"
+                className="!bg-yellow-500  hover:!bg-yellow-600"
+                title="Deactivate User"
+              />
             )}
           </div>
 
-          <Button icon={<RiDeleteBin7Line />} type="primary" danger onClick={() => deleteUser(record._id)} />
+          <Button
+            icon={<RiDeleteBin7Line />}
+            type="primary"
+            danger
+            onClick={() => deleteUser(record._id)}
+            title="Delete User"
+          />
         </div>
       ),
       width: 200,
