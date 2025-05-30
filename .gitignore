@@ -29,3 +29,6 @@ dist-ssr
 
 /*.zip
 .qodo
+
+**__dump
+* copy*

@@ -13,3 +13,12 @@ input::placeholder {
   opacity: 0.5 !important;
   cursor: not-allowed;
 }
+
+.sidebar::-webkit-scrollbar {
+  display: none;
+}
+
+.sidebar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -5,7 +5,7 @@
 }
 
 .mainLayout .sidebar {
-  width: 300px;
+  width: 290px;
   transition: all 0.3s linear;
   opacity: 1;
 }
@@ -20,7 +20,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  width: calc(100vw - 315px);
+  width: calc(100vw - 290px);
   transition: all 0.3s linear;
 }
 
