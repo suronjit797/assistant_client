@@ -1,13 +1,17 @@
-FROM node:20-alpine
+FROM node:22-alpine
+
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
-RUN yarn install
+COPY pnpm-lock.yaml package.json ./
+
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
+ENV NODE_ENV=development
+ENV HOST=0.0.0.0
 EXPOSE 3000
 
-# Run dev server (using ts-node-dev)
-CMD ["yarn", "dev"]
+CMD ["pnpm", "dev"]

@@ -1,5 +1,5 @@
 import { Button, Result } from "antd";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 const NotFound = () => {
   const navigate = useNavigate();
