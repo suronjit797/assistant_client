@@ -1,30 +1,23 @@
 import useLogout from "@/hooks/useLogout";
+import { NavConfig } from "@/interfaces/interfaces";
 import { changeNavOpen } from "@/redux/features/themeSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import React from "react";
-import { FaLocationDot, FaUsersGear } from "react-icons/fa6";
-import { GrMoney } from "react-icons/gr";
-import { IoClose } from "react-icons/io5";
-// import { RiBankFill } from "react-icons/ri";
-import { TbReportMoney } from "react-icons/tb";
-import { TiBell, TiChartLine, TiCogOutline, TiHomeOutline, TiPower, TiUser } from "react-icons/ti";
 import { Link, NavLink } from "react-router-dom";
-
-interface NavConfig {
-  name: string;
-  path: string | null;
-  authorizedRoles: string[];
-  icon?: React.ReactNode;
-  children?: NavConfig[];
-  onClick?: (logOut?: () => void) => void;
-}
+import { IoClose } from "react-icons/io5";
+import { GoHome } from "react-icons/go";
+import { SlCalender, SlEvent } from "react-icons/sl";
+import { MdAltRoute, MdOutlineConnectWithoutContact } from "react-icons/md";
+import { GiPayMoney, GiStairsGoal } from "react-icons/gi";
+import { LuListTodo } from "react-icons/lu";
+import { ImBlog } from "react-icons/im";
+import { PiNotebookLight } from "react-icons/pi";
+import { RiLockPasswordLine } from "react-icons/ri";
+import { TiPower } from "react-icons/ti";
 
 const Sidebar = React.memo(() => {
-  // hooks
-  const { isNavOpen } = useAppSelector((state) => state.theme);
-
+  const { isNavOpen, isDark } = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
-
   const logOut = useLogout();
 
   return (
@@ -39,13 +32,11 @@ const Sidebar = React.memo(() => {
           </div>
           <div className="py-6">
             <Link to="/" className="logo block text-center">
-              {/* <img src={isDark ? "/photos/logo_dark.webp" : "/photos/logo_light.webp"} alt="logo" className="w-full" /> */}
               <h1 className="font-bold text-4xl">P.A.</h1>
             </Link>
           </div>
         </div>
 
-        {/* menu */}
         <div className="px-3">
           <div>
             {navigationConfig(logOut).map((item, ind) => {
@@ -54,7 +45,7 @@ const Sidebar = React.memo(() => {
                   <NavLink
                     to={item.path || "#"}
                     className={({ isActive, isPending }) =>
-                      `flex items-center text-gray-500 font-semibold gap-2 py-2 px-4 my-1 w-full rounded-md ${isActive && "bg-[#4FC3F7] text-white"} ${isPending && "bg-blue-200"} hover:backdrop-brightness-90 transition-all active:hover:backdrop-brightness-80`
+                      `flex items-center ${isDark ? "text-gray-200" : "text-gray-500"} font-semibold gap-2 py-2 px-4 my-1 w-full rounded-md ${isActive && "bg-[#4FC3F7] text-white"} ${isPending && "bg-blue-200"} hover:backdrop-brightness-90 transition-all active:backdrop-brightness-80`
                     }
                     key={ind}
                   >
@@ -64,8 +55,9 @@ const Sidebar = React.memo(() => {
               } else {
                 return (
                   <div
-                    className={`flex items-center font-semibold text-red-500 gap-2 py-2 px-4 my-1 w-full rounded-md hover:backdrop-brightness-90 transition-all active:hover:backdrop-brightness-80`}
+                    className={`flex items-center font-semibold text-red-500 gap-2 py-2 px-4 my-1 w-full rounded-md hover:backdrop-brightness-90 transition-all active:backdrop-brightness-80`}
                     key={ind}
+                    onClick={item.onClick as any}
                   >
                     {item.icon} {item.name}
                   </div>
@@ -82,198 +74,79 @@ const Sidebar = React.memo(() => {
 export default Sidebar;
 
 Sidebar.displayName = "Sidebar";
+
 const navigationConfig = (logOut: () => void): NavConfig[] => [
   {
     name: "Home",
     path: "/",
-    icon: <TiHomeOutline />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    icon: <GoHome />,
+    authorizedRoles: ["user"],
   },
   {
-    name: "Investment Products",
-    path: "/products",
-    icon: <GrMoney />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-    // children: [
-    //   {
-    //     name: "All Products",
-    //     path: "/products",
-    //     authorizedRoles: ["superAdmin"],
-    //   },
-    // ],
+    name: "Calendar",
+    path: "/calender",
+    icon: <SlCalender />,
+    authorizedRoles: ["user"],
   },
   {
-    name: "Manage Users",
-    path: "/users",
-    icon: <FaUsersGear />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
+    name: "Daily Routine",
+    path: "/routine",
+    icon: <MdAltRoute />,
+    authorizedRoles: ["user"],
   },
   {
-    name: "Manage Locations",
-    path: "/locations",
-    icon: <FaLocationDot style={{ fontSize: "20px" }} />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-  },
-  // {
-  //   name: "Banking Settings",
-  //   path: "/banking-settings",
-  //   icon: <RiBankFill />,
-  //   authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-  // children: [
-  //   {
-  //     name: "All Devices",
-  //     path: "/devices",
-  //     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-  //   },
-  //   {
-  //     name: "Manage Device Types",
-  //     path: "/device-types",
-  //     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user"],
-  //   },
-  // ],
-  // },
-  {
-    name: "Reports",
-    path: "/reporting",
-    icon: <TiChartLine />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-    // children: [
-    //   {
-    //     name: "Data Analysis",
-    //     path: "/data-analysis",
-    //     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-    //   },
-    //   {
-    //     name: "Billing Report",
-    //     path: "/billing-report",
-    //     authorizedRoles: ["superAdmin", "businessAdmin", "admin"],
-    //   },
-    // ],
+    name: "Transaction",
+    path: "/transaction",
+    icon: <GiPayMoney />,
+    authorizedRoles: ["user"],
   },
   {
-    name: "Support",
-    path: "/notification",
-    icon: <TiBell />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user", "public"],
-    // children: [
-    //   {
-    //     name: "System Alarm Summary",
-    //     path: "/alarm-summary",
-    //     authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user", "public"],
-    //   },
-    //   {
-    //     name: "Notification Recipient List",
-    //     path: "/recipient-list",
-    //     authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user"],
-    //   },
-    //   {
-    //     name: "Alarm Trigger History",
-    //     path: "/alarm-history",
-    //     authorizedRoles: ["superAdmin", "businessAdmin", "admin", "user", "public"],
-    //   },
-    // ],
+    name: "Todo",
+    path: "/todo",
+    icon: <LuListTodo />,
+    authorizedRoles: ["user"],
   },
   {
-    name: "Settings",
-    path: "/settings",
-    icon: <TiCogOutline />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-    // children: [
-    //   {
-    //     name: "Change Password",
-    //     path: "/settings",
-    //     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-    //   },
-    //   {
-    //     name: "Activity Log",
-    //     path: "/activity-log",
-    //     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-    //   },
-    //   // {
-    //   //   name: "Electricity Tariff",
-    //   //   path: "/electricity-tariff",
-    //   //   authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-    //   // },
-    //   // {
-    //   //   name: "Manage System Parameters",
-    //   //   path: "/parameters",
-    //   //   authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin"],
-    //   // },
-    //   // {
-    //   //   name: "Manage Formulas",
-    //   //   path: "/formulas",
-    //   //   authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin"],
-    //   // },
-    // ],
-  },
-
-  {
-    name: "Payments",
-    path: "/manual-reconciliation",
-    icon: <TbReportMoney />,
-    authorizedRoles: ["superAdmin", "businessAdmin"],
-    // children: [
-    //   {
-    //     name: "Manual Reconciliation",
-    //     path: "/manual-reconciliation",
-    //     authorizedRoles: [
-    //       "superAdmin",
-    //       "businessAdmin",
-    //       "installer",
-    //       "admin",
-    //       "user",
-    //       "public",
-    //     ],
-    //   },
-    //   {
-    //     name: "Payment Summary",
-    //     path: "/payment-summary",
-    //     authorizedRoles: [
-    //       "superAdmin",
-    //       "businessAdmin",
-    //       "installer",
-    //       "admin",
-    //       "user",
-    //       "public",
-    //     ],
-    //   },
-    //   {
-    //     name: "Reconciliation Summary",
-    //     path: "/reconciliation-summary",
-    //     authorizedRoles: [
-    //       "superAdmin",
-    //       "businessAdmin",
-    //       "installer",
-    //       "admin",
-    //       "user",
-    //       "public",
-    //     ],
-    //   },
-    // ],
+    name: "Goals & Milestones",
+    path: "/goals",
+    icon: <GiStairsGoal />,
+    authorizedRoles: ["user"],
   },
   {
-    name: "Profile",
-    path: "/profile",
-    icon: <TiUser />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    name: "Blog",
+    path: "/blog",
+    icon: <ImBlog />,
+    authorizedRoles: ["user"],
+  },
+  {
+    name: "Diary",
+    path: "/diary",
+    icon: <PiNotebookLight />,
+    authorizedRoles: ["user"],
+  },
+  {
+    name: "Contact",
+    path: "/contact",
+    icon: <MdOutlineConnectWithoutContact />,
+    authorizedRoles: ["user"],
+  },
+  {
+    name: "Password Manager",
+    path: "/passwords",
+    icon: <RiLockPasswordLine />,
+    authorizedRoles: ["user"],
+  },
+  {
+    name: "Events",
+    path: "/event",
+    icon: <SlEvent />,
+    authorizedRoles: ["user"],
   },
   {
     name: "Logout",
     path: null,
     icon: <TiPower />,
-    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    authorizedRoles: ["user"],
     onClick: () => logOut(),
   },
 ];
-
-// const disabledList = [
-//   // "Investment Products",
-//   // "Manage Locations",
-//   // "Banking Settings",
-//   // "Reporting",
-//   // "Notification",
-//   // "Settings",
-//   // // "Manage Users",
-//   // "Reports",
-//   // "Support",
-// ];

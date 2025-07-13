@@ -6,15 +6,15 @@ import Sidebar from "./Sidebar";
 import { useAppSelector } from "@/redux/store";
 
 const MainLayout: React.FC = () => {
-  const { isNavOpen } = useAppSelector((state) => state.theme);
+  const { isNavOpen, isDark } = useAppSelector((state) => state.theme);
   return (
     <div className="mainLayout">
       <header className={`h-screen overflow-y-scroll shadow-lg sidebar ${isNavOpen ? "active" : ""}`}>
         <Sidebar />
       </header>
-      <main className={`${isNavOpen ? "active" : ""} h-screen overflow-y-auto`}>
+      <main className={`${isNavOpen ? "active" : ""} h-screen overflow-y-auto ${!isDark && "bg-gray-100"}`}>
         <Header />
-        <div className="p-4 border border-gray-300 dark:border-slate-600 h-full mx-4 rounded-md">
+        <div className="mx-4 rounded-md">
           <Outlet />
         </div>
         <Footer />

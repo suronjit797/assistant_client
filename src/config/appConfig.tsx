@@ -1,12 +1,7 @@
 const appConfig = {
   name: "Agent Management Portal",
-  version: "1.0.2",
-  copyright: (
-    <>
-      &copy; Reneon Technologies Sdn Bhd {new Date().getFullYear()}. All rights
-      reserved
-    </>
-  ),
+  version: "1.0.1",
+  copyright: <>&copy; Suronjit Pal {new Date().getFullYear()}. All Rights Reserved</>,
 };
 
 export default appConfig;

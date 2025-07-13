@@ -20,3 +20,12 @@ export interface ImageInterface {
   url: string;
   size: number;
 }
+
+export interface NavConfig {
+  name: string;
+  path: string | null;
+  authorizedRoles: string[];
+  icon?: React.ReactNode;
+  children?: NavConfig[];
+  onClick?: (logOut?: () => void) => void;
+}

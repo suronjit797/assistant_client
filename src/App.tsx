@@ -18,14 +18,14 @@ const customDarkTheme = (isDark: boolean) => ({
 
     Input: {
       colorTextPlaceholder: "#95a5a6",
-      hoverBorderColor: "#0d6efd",
-      activeBorderColor: "#0a58ca",
+      hoverBorderColor: "#4FC3F7",
+      activeBorderColor: "#4FC3F7",
     },
   },
   token: {
-    colorPrimary: "#1677ff",
-    colorBgBase: isDark ? "#14181e" : "#ffffff", // Tailwind `bg-slate-900`
-    colorTextBase: isDark ? "#f8fafc" : "#000000", // Tailwind `text-slate-100`
+    colorPrimary: "#4FC3F7",
+    colorBgBase: isDark ? "#14181e" : "#ffffff", 
+    colorTextBase: isDark ? "#f8fafc" : "#000000", 
     colorBgContainerDisabled: "",
     colorTextDisabled: "",
   },

@@ -1,35 +1,15 @@
 import { userRoleFormate } from "@/constant/userRole";
 import useLogout from "@/hooks/useLogout";
+import { NavConfig } from "@/interfaces/interfaces";
 import { changeNavOpen, changeTheme } from "@/redux/features/themeSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { Avatar, Menu, MenuProps, Popover } from "antd";
-import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import { Avatar, Button, Popover } from "antd";
 import { FiMaximize } from "react-icons/fi";
 import { HiBars3CenterLeft } from "react-icons/hi2";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { IoMoon, IoSunnySharp } from "react-icons/io5";
-import { Link } from "react-router-dom";
-
-type MenuItem = Required<MenuProps>["items"][number];
-
-const items = (logout: () => void): MenuItem[] => [
-  {
-    key: "sub1",
-    label: <Link to="/settings"> Settings </Link>,
-  },
-
-  {
-    key: "sub2",
-    label: <Link to="/profile"> Profile </Link>,
-  },
-  {
-    key: "sub3",
-    label: "Logout",
-    onClick: logout,
-    danger: true,
-  },
-];
+import { TiCogOutline, TiPower } from "react-icons/ti";
+import { NavLink } from "react-router-dom";
 
 const Header = () => {
   const { isDark, isNavOpen } = useAppSelector((state) => state.theme);
@@ -37,36 +17,33 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const logOut = useLogout();
 
-  // state
-  const [today, setDate] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setDate(new Date());
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
 
   return (
-    <div className=" p-4 select-none">
-      <div className="flex items-center mt-6">
-        <span className="cursor-pointer text-2xl" onClick={() => dispatch(changeNavOpen(!isNavOpen))}>
-          <HiBars3CenterLeft />
-        </span>
+    <div className={`pe-6 ps-2 py-2 select-none ${!isDark && "bg-gray-100"} sticky top-0 `}>
+      <div className="flex items-center">
+        <Button
+          type="text"
+          shape="circle"
+          icon={<HiBars3CenterLeft className="text-xl" />}
+          onClick={() => dispatch(changeNavOpen(!isNavOpen))}
+        />
 
-        <div className="ms-auto flex items-center gap-4 ">
-          <span className="cursor-pointer">
-            <FiMaximize />
-          </span>
-          <span className="cursor-pointer text-lg" onClick={() => dispatch(changeTheme(!isDark))}>
+        <div className="ms-auto flex items-center gap-2 ">
+          <Button type="text" shape="circle" className="cursor-pointer">
+            <FiMaximize className="text-md" />
+          </Button>
+          <Button
+            type="text"
+            shape="circle"
+            className="cursor-pointer text-lg"
+            onClick={() => dispatch(changeTheme(!isDark))}
+          >
             {" "}
-            {isDark ? <IoSunnySharp /> : <IoMoon />}{" "}
-          </span>
-          <span className="cursor-pointer text-xl">
-            <IoMdNotificationsOutline />
-          </span>
+            {isDark ? <IoSunnySharp className="text-md" /> : <IoMoon className="text-md" />}{" "}
+          </Button>
+          <Button type="text" shape="circle" className="cursor-pointer">
+            <IoMdNotificationsOutline className="text-lg" />
+          </Button>
 
           <div className="cursor-pointer ms-3">
             <Popover
@@ -83,31 +60,67 @@ const Header = () => {
                   </div>
 
                   <div>
-                    <Menu mode="inline" items={items(logOut)} />
+                    {navigationConfig(logOut).map((item, ind) => {
+                      if (item.path) {
+                        return (
+                          <NavLink
+                            to={item.path || "#"}
+                            className={({ isActive, isPending }) =>
+                              ` ${isDark ? "!text-gray-200" : "!text-gray-500"} block font-semibold  py-2 px-4 my-1 w-full rounded-md ${isActive && "!bg-[#4FC3F7] !text-white"} ${isPending && "!bg-blue-200"} hover:backdrop-brightness-90 transition-all active:backdrop-brightness-80`
+                            }
+                            key={ind}
+                          >
+                            {item.name}
+                          </NavLink>
+                        );
+                      } else {
+                        return (
+                          <div
+                            className={`font-semibold text-red-500 block py-2 px-4 my-1 w-full rounded-md hover:backdrop-brightness-90 transition-all active:backdrop-brightness-80`}
+                            key={ind}
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            onClick={item.onClick as any}
+                          >
+                            {item.name}
+                          </div>
+                        );
+                      }
+                    })}
                   </div>
                 </div>
               }
               trigger="click"
             >
-              <Avatar src={user?.avatar?.url} alt="" size="large" />
+              <Avatar src={user?.avatar?.url} alt="" size="default" />
             </Popover>
           </div>
         </div>
-      </div>
-
-      {/* timer  */}
-      <div className="flex mt-3 text-[13px]">
-        <label className="ms-auto">
-          {dayjs(today).format("hh:mm A | DD MMMM YYYY")} | {/*  */}
-          <span className="text-capitalize">
-          {user?.name}
-            {/* {userRoleFormate[user?.role] || "Site User "}  */}
-          </span>
-          {/*  */} Account
-        </label>
       </div>
     </div>
   );
 };
 
 export default Header;
+
+const navigationConfig = (logOut: () => void): NavConfig[] => [
+  {
+    name: "Settings",
+    path: "/settings",
+    icon: <TiCogOutline />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+  },
+  {
+    name: "Profile",
+    path: "/profile",
+    icon: <TiCogOutline />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+},
+
+  {
+    name: "Logout",
+    path: null,
+    icon: <TiPower />,
+    authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
+    onClick: () => logOut(),
+  },
+];

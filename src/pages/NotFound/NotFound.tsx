@@ -9,9 +9,14 @@ const NotFound = () => {
       title="404"
       subTitle="Sorry, the page you visited does not exist."
       extra={
-        <Button type="primary" onClick={() => navigate("/")}>
-          Back Home
-        </Button>
+        <div className="flex gap-3 items-center justify-center">
+          <Button type="primary" onClick={() => navigate("/")}>
+            Back to Home
+          </Button>
+          <Button type="default" onClick={() => navigate(-1)}>
+            Back to Previous
+          </Button>
+        </div>
       }
     />
   );
