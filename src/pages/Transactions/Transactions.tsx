@@ -1,8 +1,8 @@
 import React, { Key, useState } from "react";
-import { Button, Drawer, Input, Spin, TableProps, Tag } from "antd";
+import { Button,  Input, Spin, TableProps, Tag } from "antd";
 import PageHeader from "@/components/PageHeader";
 import CustomTable from "../../components/CustomTable";
-import { useGetAllTransactionsQuery } from "@/redux/api/transactionApi";
+import { useGetAllTransactionsQuery, useUpdateTransactionsMutation } from "@/redux/api/transactionApi";
 import { TTransactions } from "@/interfaces/transactionsInterface";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { FaRegEye } from "react-icons/fa6";
@@ -33,6 +33,7 @@ const Transactions: React.FC = () => {
 
   // rtk queries
   const { data, isFetching, refetch } = useGetAllTransactionsQuery(getNonEmptyQueryParams);
+  const [update, { isLoading: updateLoading }] = useUpdateTransactionsMutation();
 
   // handler
   const onSearch = (value: string) => {
@@ -67,7 +68,14 @@ const Transactions: React.FC = () => {
       ellipsis: true,
       dataIndex: "title",
       key: "title",
-      render: (_text, record) => (record.isImportant ? <IoMdStar /> : <IoMdStarOutline />),
+      render: (_text, record) => (
+        <div
+          className="text-xl cursor-pointer"
+          onClick={() => update({ id: record._id, body: { isImportant: !record.isImportant } })}
+        >
+          {record.isImportant ? <IoMdStar className="text-yellow-500" /> : <IoMdStarOutline />}
+        </div>
+      ),
       width: 60,
       align: "center",
     },
@@ -86,6 +94,7 @@ const Transactions: React.FC = () => {
       key: "type",
       width: 100,
       align: "center",
+      render: (_text, record) => <div className="text-center capitalize"> {record?.type} </div>,
     },
     {
       title: "Amount",
@@ -100,9 +109,15 @@ const Transactions: React.FC = () => {
       ellipsis: true,
       dataIndex: "title",
       key: "title",
-      render: (_text, record) =>
-        record.isPending ? <Tag color="red">Pending</Tag> : <Tag color="green"> Completed </Tag>,
-      width: 100,
+      render: (_text, record) => (
+        <div
+          className="text-center cursor-pointer"
+          onClick={() => update({ id: record._id, body: { isPending: !record.isPending } })}
+        >
+          {record.isPending ? <Tag color="red">Pending</Tag> : <Tag color="green"> Completed </Tag>}
+        </div>
+      ),
+      width: 120,
       align: "center",
     },
     {
@@ -110,8 +125,10 @@ const Transactions: React.FC = () => {
       ellipsis: true,
       dataIndex: "createdAt",
       key: "createdAt",
-      render: (_text, record) => dayjs(record.createdAt).format("DD-MM-YYYY HH:mm:ss"),
-      width: 100,
+      render: (_text, record) => (
+        <div className="text-center"> {dayjs(record.createdAt).format("DD-MM-YYYY HH:mm:ss")} </div>
+      ),
+      width: 200,
       align: "center",
     },
 
@@ -119,13 +136,16 @@ const Transactions: React.FC = () => {
       title: "Action",
       ellipsis: true,
       render: (_text, record) => (
-        <div className="flex gap-2">
+        <div className="flex gap-2 justify-center">
           <Button icon={<FaRegEye />} type="primary" onClick={() => navigate(`${record._id}`)} title="View User" />
           <Button
             icon={<FiEdit />}
             type="primary"
             className="!bg-gray-300 !text-black hover:!bg-gray-400"
-            onClick={() => setEditData(record)}
+            onClick={() => {
+              setEditData(record);
+              setOpen(true);
+            }}
             title="Edit User"
           />
           {/* <div onClick={() => updateUser({ id: record._id, body: { isActive: !record.isActive } })}>
@@ -161,7 +181,7 @@ const Transactions: React.FC = () => {
   ];
 
   return (
-    <Spin spinning={isFetching}>
+    <Spin spinning={isFetching || updateLoading}>
       <div>
         <div className="">
           <PageHeader {...{ title: "Transactions", subTitle: "All Transactions" }} />
@@ -205,14 +225,8 @@ const Transactions: React.FC = () => {
           />
         </div>
 
-        <Drawer
-          title={editData ? "Edit Transaction" : "Add Transaction"}
-          closable={{ "aria-label": "Close Button" }}
-          onClose={() => setOpen(false)}
-          open={open}
-        >
-          <TransactionsForm {...{ open, setOpen, mode: editData ? "edit" : "create", data: editData }} />
-        </Drawer>
+          <TransactionsForm {...{ open, setOpen, mode: editData ? "edit" : "create", data: editData, setData: setEditData }} />
+
       </div>
     </Spin>
   );

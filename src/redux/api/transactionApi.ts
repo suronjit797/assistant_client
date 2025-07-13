@@ -10,4 +10,4 @@ export const transactionsApi = mainApi.injectEndpoints({
   }),
 });
 
-export const { useGetAllTransactionsQuery } = transactionsApi;
+export const { useGetAllTransactionsQuery, useCreateTransactionsMutation, useUpdateTransactionsMutation } = transactionsApi;
