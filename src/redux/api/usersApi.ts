@@ -33,10 +33,7 @@ export const userApi = mainApi.injectEndpoints({
     }),
 
     // reset password
-    resetPassword: builder.mutation<
-      IResponse<TUser>,
-      { password: string; token: string }
-    >({
+    resetPassword: builder.mutation<IResponse<TUser>, { password: string; token: string }>({
       query: (body) => ({
         url: "/users/reset-password",
         method: "POST",
@@ -91,10 +88,7 @@ export const userApi = mainApi.injectEndpoints({
     }),
 
     // Update User (Admin)
-    updateUser: builder.mutation<
-      IResponse<TUser>,
-      { id: string; body: Partial<TUser> }
-    >({
+    updateUser: builder.mutation<IResponse<TUser>, { id: string; body: Partial<TUser> }>({
       query: ({ id, body }) => ({
         url: `/users/${id}`,
         method: "PUT",
@@ -129,5 +123,7 @@ export const {
   useLazyGetProfileQuery,
   useLazyGetUserByIdQuery,
 } = userApi;
+
+
 
 // ! useLazyGetAllUsersQuery  //have to check

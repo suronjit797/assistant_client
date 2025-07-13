@@ -19,7 +19,7 @@ const Header = () => {
 
 
   return (
-    <div className={`pe-6 ps-2 py-2 select-none ${!isDark && "bg-gray-100"} sticky top-0 `}>
+    <div className={`px-4 py-2 select-none ${!isDark && "bg-gray-100"} sticky top-0 `}>
       <div className="flex items-center">
         <Button
           type="text"

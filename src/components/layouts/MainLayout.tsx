@@ -12,9 +12,9 @@ const MainLayout: React.FC = () => {
       <header className={`h-screen overflow-y-scroll shadow-lg sidebar ${isNavOpen ? "active" : ""}`}>
         <Sidebar />
       </header>
-      <main className={`${isNavOpen ? "active" : ""} h-screen overflow-y-auto ${!isDark && "bg-gray-100"}`}>
+      <main className={`${isNavOpen ? "active" : ""} h-screen overflow-y-auto ${isDark ? "bg-slate-700" : "bg-gray-100"}`}>
         <Header />
-        <div className="mx-4 rounded-md">
+        <div className="mx-4 rounded-md mt-10 h-full shadow-sm bg-white dark:bg-slate-800 p-5 ">
           <Outlet />
         </div>
         <Footer />
