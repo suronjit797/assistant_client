@@ -1,5 +1,5 @@
 import React, { Key, useState } from "react";
-import { Button,  Input, Spin, TableProps, Tag } from "antd";
+import { Button, Input, Spin, TableProps, Tag } from "antd";
 import PageHeader from "@/components/PageHeader";
 import CustomTable from "../../components/CustomTable";
 import { useGetAllTransactionsQuery, useUpdateTransactionsMutation } from "@/redux/api/transactionApi";
@@ -15,11 +15,15 @@ import { MdOutlineFilterAltOff } from "react-icons/md";
 import { TfiReload } from "react-icons/tfi";
 import TransactionsForm from "./TransactionsFrom";
 import { IoMdStar, IoMdStarOutline } from "react-icons/io";
+import { transactionsTypes } from "@/constant/constants";
 const { Search } = Input;
 
 const Transactions: React.FC = () => {
   // hooks
-  const { queryParams, setQueryParams, getNonEmptyQueryParams } = useQueryParams({ page: 1, limit: 10 });
+  const { queryParams, setQueryParams, getNonEmptyQueryParams, clearQueryParams } = useQueryParams({
+    page: 1,
+    limit: 10,
+  });
   const navigate = useNavigate();
 
   // constants
@@ -38,6 +42,7 @@ const Transactions: React.FC = () => {
   // handler
   const onSearch = (value: string) => {
     console.log(value);
+    setQueryParams({ search: value });
   };
 
   // rowSelection object indicates the need for row selection
@@ -66,8 +71,8 @@ const Transactions: React.FC = () => {
     {
       title: "",
       ellipsis: true,
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "isImportant",
+      key: "isImportant",
       render: (_text, record) => (
         <div
           className="text-xl cursor-pointer"
@@ -78,6 +83,8 @@ const Transactions: React.FC = () => {
       ),
       width: 60,
       align: "center",
+      sorter: true,
+      sortDirections: ["ascend", "descend"],
     },
 
     {
@@ -85,6 +92,8 @@ const Transactions: React.FC = () => {
       ellipsis: true,
       dataIndex: "title",
       key: "title",
+      sorter: true,
+      sortDirections: ["ascend", "descend"],
     },
 
     {
@@ -95,6 +104,9 @@ const Transactions: React.FC = () => {
       width: 100,
       align: "center",
       render: (_text, record) => <div className="text-center capitalize"> {record?.type} </div>,
+      sorter: true,
+      sortDirections: ["ascend", "descend"],
+      filters: transactionsTypes.map((type) => ({ text: <span className="capitalize"> {type} </span>, value: type })),
     },
     {
       title: "Amount",
@@ -103,12 +115,14 @@ const Transactions: React.FC = () => {
       key: "amount",
       width: 200,
       align: "center",
+      sorter: true,
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Status",
       ellipsis: true,
-      dataIndex: "title",
-      key: "title",
+      dataIndex: "isPending",
+      key: "isPending",
       render: (_text, record) => (
         <div
           className="text-center cursor-pointer"
@@ -119,6 +133,8 @@ const Transactions: React.FC = () => {
       ),
       width: 120,
       align: "center",
+      sorter: true,
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Created At",
@@ -130,6 +146,8 @@ const Transactions: React.FC = () => {
       ),
       width: 200,
       align: "center",
+      sorter: true,
+      sortDirections: ["ascend", "descend"],
     },
 
     {
@@ -187,7 +205,13 @@ const Transactions: React.FC = () => {
           <PageHeader {...{ title: "Transactions", subTitle: "All Transactions" }} />
           <div className="flex">
             <div>
-              <Search placeholder="input search text" onSearch={onSearch} enterButton />
+              <Search
+                placeholder="input search text"
+                onSearch={onSearch}
+                enterButton
+                value={queryParams.search as string}
+                allowClear
+              />
             </div>
             <div className="ms-auto flex gap-2">
               <Button type="primary" title="Add Transaction" onClick={() => setOpen(true)} icon={<AiOutlinePlus />} />
@@ -201,7 +225,7 @@ const Transactions: React.FC = () => {
               <Button
                 type="default"
                 title="Clear Filter"
-                onClick={() => navigate("add")}
+                onClick={() => clearQueryParams()}
                 icon={<MdOutlineFilterAltOff />}
               />
               <Button
@@ -225,8 +249,9 @@ const Transactions: React.FC = () => {
           />
         </div>
 
-          <TransactionsForm {...{ open, setOpen, mode: editData ? "edit" : "create", data: editData, setData: setEditData }} />
-
+        <TransactionsForm
+          {...{ open, setOpen, mode: editData ? "edit" : "create", data: editData, setData: setEditData }}
+        />
       </div>
     </Spin>
   );

@@ -40,14 +40,18 @@ export const useQueryParams = (defaultParams: QueryParams = {}) => {
     return Object.fromEntries(
       Object.entries(params).filter(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        ([_, value]) => value !== undefined && value !== ""
-      )
+        ([_, value]) => value !== undefined && value !== "",
+      ),
     );
+  };
+  const clearQueryParams = () => {
+    navigate(location.pathname, { replace: true }); // remove all queries
   };
 
   return {
     queryParams: getQueryParams(), // Merged with defaults
     setQueryParams,
     getNonEmptyQueryParams: getNonEmptyQueryParams(),
+    clearQueryParams,
   };
 };

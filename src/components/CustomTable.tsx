@@ -1,6 +1,5 @@
-import type { TablePaginationConfig, TableProps } from "antd";
+import type { TableProps } from "antd";
 import { Empty, Table } from "antd";
-import { FilterValue } from "antd/es/table/interface";
 
 interface Props<T> extends Omit<TableProps<T>, "dataSource" | "pagination"> {
   columns: TableProps<T>["columns"];
@@ -10,29 +9,30 @@ interface Props<T> extends Omit<TableProps<T>, "dataSource" | "pagination"> {
   setQuery?: React.Dispatch<React.SetStateAction<Record<string, unknown>>>;
 }
 
-const CustomTable = <T extends object>({
-  columns,
-  data,
-  total,
-  query,
-  setQuery = () => {},
-  ...props
-}: Props<T>) => {
-  const changeHandler = (
-    pagination: TablePaginationConfig,
-    filter: Record<string, FilterValue | null>
-  ) => {
+const CustomTable = <T extends object>({ columns, data, total, query, setQuery = () => {}, ...props }: Props<T>) => {
+  const changeHandler: TableProps<T>["onChange"] = (pagination, filter, sorter, extra) => {
+    console.log({filter, extra})
     const { current, pageSize } = pagination;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const cleanedFilter: Record<string, any> = {};
+    const { field, order } = sorter as any;
 
-    Object.entries(filter).forEach(([key, value]) => {
-      if (value) {
-        cleanedFilter[key] = value;
-      }
+    // const cleanedFilter: Record<string, any> = {};
+
+    // Object.entries(filter).forEach(([key, value]) => {
+    //   if (value) {
+    //     cleanedFilter[key] = value;
+    //   }
+    // });
+    // console.log({ page: current, limit: pageSize, ...filter });
+
+    console.log({ field, order });
+    setQuery({
+      page: current,
+      limit: pageSize,
+      sortBy: field,
+      sortOrder: order ? (order === "ascend" ? "asc" : "desc") : undefined,
+      ...filter,
     });
-    console.log({ page: current, limit: pageSize, ...filter });
-    setQuery({ page: current, limit: pageSize, ...filter });
   };
 
   return (
@@ -53,13 +53,10 @@ const CustomTable = <T extends object>({
         }}
         dataSource={data}
         scroll={{ x: true }}
-        onChange={changeHandler}
+        onChange={changeHandler}        
         locale={{
           emptyText: (
-            <div
-              style={{ minHeight: "calc( 100vh - 300px )" }}
-              className="flex items-center justify-center"
-            >
+            <div style={{ minHeight: "calc( 100vh - 300px )" }} className="flex items-center justify-center">
               <Empty />
             </div>
           ),
