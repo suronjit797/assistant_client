@@ -185,7 +185,10 @@ const Transactions: React.FC = () => {
       dataIndex: "createdAt",
       key: "createdAt",
       render: (_text, record) => (
-        <div className="text-center"> {dayjs(record.createdAt).format("DD-MM-YYYY HH:mm:ss")} </div>
+        <div className="text-center">
+          <div className="text-center">{dayjs(record.createdAt).format("HH:mm:ss A")}</div>
+          <div className="text-center">{dayjs(record.createdAt).format("DD-MMM-YYYY")}</div>
+        </div>
       ),
       width: 200,
       align: "center",
@@ -240,8 +243,10 @@ const Transactions: React.FC = () => {
     },
   ];
 
+  const isLoading = isFetching || updateLoading || isSummaryFetching;
+
   return (
-    <Spin spinning={isFetching || updateLoading || isSummaryFetching}>
+    <Spin spinning={isLoading}>
       <div>
         <div>
           <PageHeader {...{ title: "Transactions", subTitle: "All Transactions" }} />
@@ -303,7 +308,7 @@ const Transactions: React.FC = () => {
         </div>
 
         {/* main table */}
-        <div className="mt-4">
+        <div className="mt-4" key={isLoading.toString()}>
           <CustomTable
             data={Array.isArray(data?.data) ? data?.data?.map((d) => ({ ...d, key: d?._id })) : []}
             columns={columns}
@@ -311,7 +316,6 @@ const Transactions: React.FC = () => {
             query={queryParams}
             setQuery={setQueryParams}
             rowSelection={rowSelection}
-
           />
         </div>
 
