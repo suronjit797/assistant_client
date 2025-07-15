@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { BaseQueryFn, EndpointBuilder, QueryDefinition, MutationDefinition } from "@reduxjs/toolkit/query";
 import { IResponse } from "./reduxTypes";
+import { Key } from "react";
 
 type EndpointName<TTag extends string> =
   | `getAll${TTag}`
@@ -24,10 +25,10 @@ export const globalEndpoints = <T, TTag extends string>(
         ? MutationDefinition<Partial<T>, BaseQueryFn, string, IResponse<T>, string>
         : K extends `update${string}`
           ? MutationDefinition<{ id: string; body: Partial<T> }, BaseQueryFn, string, IResponse<T>, string>
-          : K extends `delete${string}`
-            ? MutationDefinition<string, BaseQueryFn, string, void, string>
-            : K extends `deleteMany${string}`
-              ? MutationDefinition<string[], BaseQueryFn, string, void, string>
+          : K extends `deleteMany${string}`
+            ? MutationDefinition<string[] | Key[], BaseQueryFn, string, void, string>
+            : K extends `delete${string}`
+              ? MutationDefinition<string, BaseQueryFn, string, void, string>
               : never;
 } =>
   ({

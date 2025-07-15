@@ -1,15 +1,15 @@
 import PageHeader from "@/components/PageHeader";
-import { transactionsTypes } from "@/constant/constants";
+
+import { todosPriorities } from "@/constant/constants";
 import { useQueryParams } from "@/hooks/useQueryParams";
-import { TTransactions } from "@/interfaces/transactionsInterface";
+import { ITodos } from "@/interfaces/todosInterface";
 import {
-  useDeleteManyTransactionsMutation,
-  useDeleteTransactionsMutation,
-  useGetAllTransactionsQuery,
-  useGetSummaryQuery,
-  useUpdateTransactionsMutation,
-} from "@/redux/api/transactionApi";
-import { Button, DatePicker, Input, Spin, TableProps } from "antd";
+  useDeleteManyTodosMutation,
+  useDeleteTodosMutation,
+  useGetAllTodosQuery,
+  useUpdateTodosMutation,
+} from "@/redux/api/todoApi";
+import { Button, Input, Spin, TableProps } from "antd";
 import dayjs from "dayjs";
 import React, { Key, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -20,11 +20,10 @@ import { RiDeleteBin7Line } from "react-icons/ri";
 import { TfiReload } from "react-icons/tfi";
 import Swal from "sweetalert2";
 import CustomTable from "../../components/CustomTable";
-import TransactionsForm from "./TransactionsFrom";
-import TransactionSummaryCards from "./TransactionsSummary";
+import TodosForm from "./TodosFrom";
 const { Search } = Input;
 
-const Transactions: React.FC = () => {
+const Todos: React.FC = () => {
   // hooks
   const { queryParams, setQueryParams, getNonEmptyQueryParams, clearQueryParams } = useQueryParams({
     page: 1,
@@ -34,25 +33,20 @@ const Transactions: React.FC = () => {
   // constants
   const page = Number(queryParams.page);
   const limit = Number(queryParams.limit);
-  const year = Number(queryParams.year) || dayjs().year();
-  const month = Number(queryParams.month) || dayjs().month() + 1;
-  const pickerValue = dayjs(`${year}-${month.toString().padStart(2, "0")}`, "YYYY-MM");
+  // const year = Number(queryParams.year) || dayjs().year();
+  // const month = Number(queryParams.month) || dayjs().month() + 1;
+  // const pickerValue = dayjs(`${year}-${month.toString().padStart(2, "0")}`, "YYYY-MM");
 
   // states
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
   const [open, setOpen] = useState(false);
-  const [editData, setEditData] = useState<Partial<TTransactions>>();
+  const [editData, setEditData] = useState<Partial<ITodos>>();
 
   // rtk queries
-  const { data, isFetching, refetch } = useGetAllTransactionsQuery(getNonEmptyQueryParams);
-  const {
-    data: summaryData,
-    isFetching: isSummaryFetching,
-    refetch: summaryRefetch,
-  } = useGetSummaryQuery({ month, year });
-  const [update, { isLoading: updateLoading }] = useUpdateTransactionsMutation();
-  const [deleteData, { isLoading: deleteLoading }] = useDeleteTransactionsMutation();
-  const [deleteManyData, { isLoading: deleteManyLoading }] = useDeleteManyTransactionsMutation();
+  const { data, isFetching, refetch } = useGetAllTodosQuery(getNonEmptyQueryParams);
+  const [update, { isLoading: updateLoading }] = useUpdateTodosMutation();
+  const [deleteData, { isLoading: deleteLoading }] = useDeleteTodosMutation();
+  const [deleteManyData, { isLoading: deleteManyLoading }] = useDeleteManyTodosMutation();
 
   // handler
   const onSearch = (value: string) => {
@@ -61,16 +55,15 @@ const Transactions: React.FC = () => {
 
   const handleRefresh = () => {
     refetch();
-    summaryRefetch();
   };
 
   // rowSelection object indicates the need for row selection
-  const rowSelection: TableProps<TTransactions>["rowSelection"] = {
+  const rowSelection: TableProps<ITodos>["rowSelection"] = {
     selectedRowKeys,
     onChange: (keys) => {
       setSelectedRowKeys(keys);
     },
-    getCheckboxProps: (record: TTransactions) => ({
+    getCheckboxProps: (record: ITodos) => ({
       disabled: false,
       name: record._id,
     }),
@@ -78,7 +71,7 @@ const Transactions: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     const confirmResult = await Swal.fire({
-      title: "Deleted this transaction?",
+      title: "Deleted this todo?",
       text: "Please confirm your action.",
       icon: "warning",
       showCancelButton: true,
@@ -100,7 +93,7 @@ const Transactions: React.FC = () => {
 
   const handleDeleteMany = async (ids: string[] | Key[]) => {
     const confirmResult = await Swal.fire({
-      title: "Deleted all this transaction?",
+      title: "Deleted all this todo?",
       text: "Please confirm your action.",
       icon: "warning",
       showCancelButton: true,
@@ -122,7 +115,7 @@ const Transactions: React.FC = () => {
 
   // columns
 
-  const columns: TableProps<TTransactions>["columns"] = [
+  const columns: TableProps<ITodos>["columns"] = [
     {
       title: <div>No.</div>,
       ellipsis: true,
@@ -158,30 +151,34 @@ const Transactions: React.FC = () => {
       key: "title",
       sorter: true,
     },
+    {
+      title: "Description",
+      ellipsis: true,
+      dataIndex: "description",
+      key: "description",
+      sorter: true,
+    },
 
     {
-      title: "Type",
+      title: "Priority",
       ellipsis: true,
-      dataIndex: "type",
-      key: "type",
+      dataIndex: "priority",
+      key: "priority",
       width: 140,
       align: "center",
       sorter: true,
-      filters: transactionsTypes.map((type) => ({
-        text: <span className="capitalize">{type}</span>,
-        value: type,
+      filters: todosPriorities.map((priority) => ({
+        text: <span className="capitalize">{priority}</span>,
+        value: priority,
       })),
       // filteredValue: typeof queryParams.type === "string" ? queryParams.type.split(",") : undefined,
       render: (_text, record) => {
-        const type = record?.type;
+        const type = record?.priority;
         // Color map
         const colorMap: Record<string, string> = {
-          income: "bg-green-500",
-          expense: "bg-red-500",
-          give: "bg-yellow-500",
-          take: "bg-purple-500",
-          withdraw: "bg-pink-500",
-          save: "bg-blue-300",
+          high: "bg-red-500",
+          medium: "bg-green-500",
+          low: "bg-blue-300",
         };
 
         return (
@@ -192,32 +189,32 @@ const Transactions: React.FC = () => {
         );
       },
     },
-    {
-      title: "Amount",
-      ellipsis: true,
-      dataIndex: "amount",
-      key: "amount",
-      width: 200,
-      align: "center",
-      sorter: true,
-    },
+    // {
+    //   title: "Amount",
+    //   ellipsis: true,
+    //   dataIndex: "amount",
+    //   key: "amount",
+    //   width: 200,
+    //   align: "center",
+    //   sorter: true,
+    // },
     {
       title: "Status",
       ellipsis: true,
-      dataIndex: "isPending",
-      key: "isPending",
+      dataIndex: "isCompleted",
+      key: "isCompleted",
       render: (_text, record) => (
         <div
           className="text-center cursor-pointer"
-          onClick={() => update({ id: record._id, body: { isPending: !record.isPending } })}
+          onClick={() => update({ id: record._id, body: { isCompleted: !record.isCompleted } })}
         >
-          {record.isPending ? (
+          {record.isCompleted ? (
             <div className="flex items-center">
-              <div className="h-2 w-2 rounded-full bg-red-500 mr-2" /> Pending
+              <div className="h-2 w-2 rounded-full bg-blue-300 mr-2" /> Completed
             </div>
           ) : (
             <div className="flex items-center">
-              <div className="h-2 w-2 rounded-full bg-blue-300 mr-2" /> Completed
+              <div className="h-2 w-2 rounded-full bg-red-500 mr-2" /> Pending
             </div>
           )}
         </div>
@@ -243,6 +240,25 @@ const Transactions: React.FC = () => {
     },
 
     {
+      title: "Completed In",
+      ellipsis: true,
+      dataIndex: "dueDate",
+      key: "dueDate",
+      render: (_text, record) =>
+        record.dueDate ? (
+          <div className="text-center">
+            <div className="text-center">{dayjs(record.dueDate).format("HH:mm:ss A")}</div>
+            <div className="text-center">{dayjs(record.dueDate).format("DD-MMM-YYYY")}</div>
+          </div>
+        ) : (
+          "--"
+        ),
+      width: 200,
+      align: "center",
+      sorter: true,
+    },
+
+    {
       title: "Action",
       ellipsis: true,
       render: (_text, record) => (
@@ -255,7 +271,7 @@ const Transactions: React.FC = () => {
               setEditData(record);
               setOpen(true);
             }}
-            title="Edit Transactions"
+            title="Edit Todos"
           />
 
           <Button
@@ -263,7 +279,7 @@ const Transactions: React.FC = () => {
             type="primary"
             danger
             onClick={() => handleDelete(record?._id)}
-            title="Delete Transactions"
+            title="Delete Todos"
           />
         </div>
       ),
@@ -272,13 +288,13 @@ const Transactions: React.FC = () => {
     },
   ];
 
-  const isLoading = isFetching || updateLoading || isSummaryFetching || deleteLoading || deleteManyLoading;
+  const isLoading = isFetching || updateLoading || deleteLoading || deleteManyLoading;
 
   return (
     <Spin spinning={isLoading}>
       <div>
         <div>
-          <PageHeader {...{ title: "Transactions", subTitle: "All Transactions" }} />
+          <PageHeader {...{ title: "Todos", subTitle: "All Todos" }} />
 
           {/* filter */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -291,7 +307,7 @@ const Transactions: React.FC = () => {
                 allowClear
                 className="w-full !max-w-60 "
               />
-              <DatePicker
+              {/* <DatePicker
                 picker="month"
                 value={pickerValue}
                 className="w-full !max-w-60"
@@ -304,14 +320,14 @@ const Transactions: React.FC = () => {
                     setQueryParams({ month: undefined, year: undefined, page: 1 });
                   }
                 }}
-              />
+              /> */}
             </div>
             <div className="ms-auto flex gap-2">
-              <Button type="primary" title="Add Transaction" onClick={() => setOpen(true)} icon={<AiOutlinePlus />} />
+              <Button type="primary" title="Add Todo" onClick={() => setOpen(true)} icon={<AiOutlinePlus />} />
               <Button
                 type="primary"
                 danger
-                title="Remove MUlti Transactions"
+                title="Remove MUlti Todos"
                 onClick={() => handleDeleteMany(selectedRowKeys)}
                 icon={<RiDeleteBin7Line />}
               />
@@ -326,16 +342,6 @@ const Transactions: React.FC = () => {
           </div>
         </div>
 
-        {/* Summary */}
-        <div className="my-4">
-          <TransactionSummaryCards
-            allTime={summaryData?.data?.allTime || {}}
-            monthly={summaryData?.data?.monthly || {}}
-            month={Number(summaryData?.data?.month)}
-            year={summaryData?.data?.year}
-          />
-        </div>
-
         {/* main table */}
         <div className="mt-4" key={isLoading.toString()}>
           <CustomTable
@@ -345,15 +351,14 @@ const Transactions: React.FC = () => {
             query={queryParams}
             setQuery={setQueryParams}
             rowSelection={rowSelection}
+            rowClassName={(record) => (record.isCompleted ? "line-through text-gray-400" : "")}
           />
         </div>
 
-        <TransactionsForm
-          {...{ open, setOpen, mode: editData ? "edit" : "create", data: editData, setData: setEditData }}
-        />
+        <TodosForm {...{ open, setOpen, mode: editData ? "edit" : "create", data: editData, setData: setEditData }} />
       </div>
     </Spin>
   );
 };
 
-export default Transactions;
+export default Todos;

@@ -1,16 +1,17 @@
-import { transactionsTypes } from "@/constant/constants";
-import { TTransactions } from "@/interfaces/transactionsInterface";
-import { useCreateTransactionsMutation, useUpdateTransactionsMutation } from "@/redux/api/transactionApi";
-import { Button, Drawer, Form, Input, Select, Switch } from "antd";
+import { todosPriorities } from "@/constant/constants";
+import { ITodos } from "@/interfaces/todosInterface";
+import { useCreateTodosMutation, useUpdateTodosMutation } from "@/redux/api/todoApi";
+import { Button, DatePicker, Drawer, Form, Input, Select } from "antd";
+import dayjs from "dayjs";
 import React from "react";
 import Swal from "sweetalert2";
 
-const TransactionsForm: React.FC<{
+const TodosForm: React.FC<{
   mode?: "create" | "edit";
-  data?: Partial<TTransactions>;
+  data?: Partial<ITodos>;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setData: React.Dispatch<React.SetStateAction<TTransactions>>;
+  setData: React.Dispatch<React.SetStateAction<ITodos>>;
   loading?: boolean;
 }> = ({ mode = "create", data = {}, open, setOpen, loading, setData }) => {
   // hooks
@@ -19,8 +20,8 @@ const TransactionsForm: React.FC<{
   //   states
 
   //   rtk query
-  const [create, { isLoading }] = useCreateTransactionsMutation();
-  const [update, { isLoading: updateLoading }] = useUpdateTransactionsMutation();
+  const [create, { isLoading }] = useCreateTodosMutation();
+  const [update, { isLoading: updateLoading }] = useUpdateTodosMutation();
 
   //   useEffect
   React.useEffect(() => {
@@ -30,9 +31,9 @@ const TransactionsForm: React.FC<{
     }
   }, [data, form, mode]);
 
-  const handleSubmit = async (values: Partial<TTransactions>) => {
+  const handleSubmit = async (values: Partial<ITodos>) => {
     const confirmResult = await Swal.fire({
-      title: mode === "create" ? "Create this transaction?" : "Update this transaction?",
+      title: mode === "create" ? "Create this todo?" : "Update this todo?",
       text: "Please confirm your action.",
       icon: "warning",
       showCancelButton: true,
@@ -44,11 +45,7 @@ const TransactionsForm: React.FC<{
     if (!confirmResult.isConfirmed) return;
 
     try {
-      const body: Partial<TTransactions> = {
-        ...values,
-        isPending: Boolean(values.isPending),
-        amount: Number(values.amount),
-      };
+      const body: Partial<ITodos> = { ...values, isCompleted: Boolean(values.isCompleted) };
 
       if (mode === "create") {
         await create(body).unwrap();
@@ -58,7 +55,7 @@ const TransactionsForm: React.FC<{
 
       Swal.fire({
         title: "Success!",
-        text: `Transaction ${mode === "create" ? "created" : "updated"} successfully.`,
+        text: `Todo ${mode === "create" ? "created" : "updated"} successfully.`,
         icon: "success",
         timer: 1500,
         showConfirmButton: false,
@@ -83,7 +80,7 @@ const TransactionsForm: React.FC<{
 
   return (
     <Drawer
-      title={mode === "edit" ? "Edit Transaction" : "Add Transaction"}
+      title={mode === "edit" ? "Edit Todo" : "Add Todo"}
       closable={{ "aria-label": "Close Button" }}
       onClose={onCancel}
       open={open}
@@ -94,27 +91,38 @@ const TransactionsForm: React.FC<{
           label="Title"
           rules={[{ required: mode === "create", message: "Please enter a title" }]}
         >
-          <Input placeholder="Enter transaction title" className="w-full" />
+          <Input placeholder="Enter todo title" className="w-full" />
+        </Form.Item>
+        <Form.Item
+          name="description"
+          label="Description"
+          rules={[{ required: mode === "create", message: "Please enter a description" }]}
+        >
+          <Input placeholder="Enter todo description" className="w-full" />
         </Form.Item>
 
-        <Form.Item name="type" label="Type" rules={[{ required: mode === "create", message: "Please select a type" }]}>
+        <Form.Item
+          name="priority"
+          label="Priority"
+          rules={[{ required: mode === "create", message: "Please select a priority" }]}
+        >
           <Select
-            placeholder="Select transaction type"
+            placeholder="Select todo priority"
             className="w-full"
-            options={transactionsTypes.map((type) => ({
+            options={todosPriorities.map((type) => ({
               value: type,
-              label: <div className="capitalize">{type}</div>,
+              label: <div className="capitalize"> {type} </div>,
             }))}
           />
-     
         </Form.Item>
 
-        <Form.Item name="amount" label="Amount" rules={[{ required: true, message: "Please enter an amount" }]}>
-          <Input type="number" placeholder="Enter amount" className="w-full" min={0} step={0.01} />
-        </Form.Item>
-
-        <Form.Item name="isPending" label="Pending" valuePropName="checked">
-          <Switch className="bg-gray-300" />
+        <Form.Item
+          name="dueDate"
+          getValueProps={(value) => ({ value: value ? dayjs(value) : undefined })}
+          label="Due Date"
+          // rules={[{ required: true, message: "Please enter an dueDate" }]}
+        >
+          <DatePicker className="w-full" />
         </Form.Item>
 
         <div className="flex justify-end space-x-4 mt-6">
@@ -135,4 +143,4 @@ const TransactionsForm: React.FC<{
   );
 };
 
-export default TransactionsForm;
+export default TodosForm;

@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import Users from "./pages/Users/Users";
 import Profile from "./pages/Profile/Profile";
 import Transactions from "./pages/Transactions/Transactions";
+import Todos from "./pages/Todos/Todos";
 // import Register from "./pages/Register/Register";
 
 export const routes = createBrowserRouter([
@@ -48,6 +49,7 @@ export const routes = createBrowserRouter([
         ),
       },
       { path: "transaction", element: <Transactions /> },
+      { path: "todo", element: <Todos /> },
 
       //     {
       //       path: "/admin",
@@ -63,7 +65,6 @@ export const routes = createBrowserRouter([
       //     { path: "summary", element: <TransactionSummary /> },
       //     { path: "calender", element: <Calender /> },
       //     { path: "routine", element: <Routine /> },
-      //     { path: "todo", element: <Todo /> },
       //     { path: "event", element: <Event /> },
 
       //     //  not found route

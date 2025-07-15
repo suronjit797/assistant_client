@@ -28,4 +28,6 @@ export const {
   useCreateTransactionsMutation,
   useUpdateTransactionsMutation,
   useGetSummaryQuery,
+  useDeleteTransactionsMutation,
+  useDeleteManyTransactionsMutation,
 } = transactionsApi;
