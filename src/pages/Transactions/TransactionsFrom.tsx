@@ -33,7 +33,7 @@ const TransactionsForm: React.FC<{
 
   const handleSubmit = async (values: Partial<TTransactions>) => {
     try {
-      const body = { ...values, amount: Number(values.amount) };
+      const body = { ...values, isPending: Boolean(values.isPending), amount: Number(values.amount) };
       if (mode === "create") {
         await create(body);
       } else {

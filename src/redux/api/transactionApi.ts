@@ -1,13 +1,31 @@
-import { TTransactions } from "@/interfaces/transactionsInterface";
+import { ITransactionsSummary, TTransactions } from "@/interfaces/transactionsInterface";
 import { globalEndpoints } from "../globalEndpoints";
 import { mainApi } from "../mainApi";
+import { IResponse } from "../reduxTypes";
 
-const apiPath = "transactions";
+const path = "transactions";
+const name = "Transactions";
 
 export const transactionsApi = mainApi.injectEndpoints({
   endpoints: (builder) => ({
-    ...globalEndpoints<TTransactions, "Transactions">(builder, apiPath, "Transactions"),
+    // basic global endpoints
+    ...globalEndpoints<TTransactions, "Transactions">(builder, path, name, ["TransactionsSummary"]),
+
+    // rest endpoints
+    getSummary: builder.query<IResponse<ITransactionsSummary>, Record<string, unknown>>({
+      query: (params) => ({
+        url: `/${path}/summary`,
+        method: "GET",
+        params,
+      }),
+      providesTags: ["TransactionsSummary"],
+    }),
   }),
 });
 
-export const { useGetAllTransactionsQuery, useCreateTransactionsMutation, useUpdateTransactionsMutation } = transactionsApi;
+export const {
+  useGetAllTransactionsQuery,
+  useCreateTransactionsMutation,
+  useUpdateTransactionsMutation,
+  useGetSummaryQuery,
+} = transactionsApi;

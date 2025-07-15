@@ -13,7 +13,8 @@ type EndpointName<TTag extends string> =
 export const globalEndpoints = <T, TTag extends string>(
   builder: EndpointBuilder<BaseQueryFn, string, string>,
   path: string,
-  tag: TTag,
+  name: TTag,
+  tags?: string[],
 ): {
   [K in EndpointName<TTag>]: K extends `getAll${string}`
     ? QueryDefinition<Record<string, unknown>, BaseQueryFn, string, IResponse<T[]>, string>
@@ -30,55 +31,55 @@ export const globalEndpoints = <T, TTag extends string>(
               : never;
 } =>
   ({
-    [`getAll${tag}`]: builder.query<IResponse<T[]>, Record<string, unknown>>({
+    [`getAll${name}`]: builder.query<IResponse<T[]>, Record<string, unknown>>({
       query: (params) => ({
         url: `/${path}`,
         method: "GET",
         params,
       }),
-      providesTags: [tag],
+      providesTags: [name],
     }),
 
-    [`getById${tag}`]: builder.query<IResponse<T>, string>({
+    [`getById${name}`]: builder.query<IResponse<T>, string>({
       query: (id) => ({
         url: `/${path}/${id}`,
         method: "GET",
       }),
-      providesTags: [tag],
+      providesTags: [name],
     }),
 
-    [`create${tag}`]: builder.mutation<IResponse<T>, Partial<T>>({
+    [`create${name}`]: builder.mutation<IResponse<T>, Partial<T>>({
       query: (body) => ({
         url: `/${path}`,
         method: "POST",
         body,
       }),
-      invalidatesTags: [tag],
+      invalidatesTags: [name, ...tags],
     }),
 
-    [`update${tag}`]: builder.mutation<IResponse<T>, { id: string; body: Partial<T> }>({
+    [`update${name}`]: builder.mutation<IResponse<T>, { id: string; body: Partial<T> }>({
       query: ({ id, body }) => ({
         url: `/${path}/${id}`,
         method: "PUT",
         body,
       }),
-      invalidatesTags: [tag],
+      invalidatesTags: [name, ...tags],
     }),
 
-    [`delete${tag}`]: builder.mutation<void, string>({
+    [`delete${name}`]: builder.mutation<void, string>({
       query: (id) => ({
         url: `/${path}/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: [tag],
+      invalidatesTags: [name, ...tags],
     }),
 
-    [`deleteMany${tag}`]: builder.mutation<void, string[]>({
+    [`deleteMany${name}`]: builder.mutation<void, string[]>({
       query: (ids) => ({
         url: `/${path}/delete-many`,
         method: "POST",
         body: { ids },
       }),
-      invalidatesTags: [tag],
+      invalidatesTags: [name, ...tags],
     }),
   }) as any;

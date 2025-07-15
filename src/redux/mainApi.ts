@@ -13,7 +13,7 @@ export const mainApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ["User", "Profile", "Transactions"],
+  tagTypes: ["User", "Profile", "Transactions", "TransactionsSummary"],
   endpoints: (builder) => ({
     uploadImage: builder.mutation({
       query: (formData) => ({

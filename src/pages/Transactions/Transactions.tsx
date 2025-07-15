@@ -1,21 +1,26 @@
-import React, { Key, useState } from "react";
-import { Button, Input, Spin, TableProps, Tag } from "antd";
 import PageHeader from "@/components/PageHeader";
-import CustomTable from "../../components/CustomTable";
-import { useGetAllTransactionsQuery, useUpdateTransactionsMutation } from "@/redux/api/transactionApi";
-import { TTransactions } from "@/interfaces/transactionsInterface";
+import { transactionsTypes } from "@/constant/constants";
 import { useQueryParams } from "@/hooks/useQueryParams";
+import { TTransactions } from "@/interfaces/transactionsInterface";
+import {
+  useGetAllTransactionsQuery,
+  useGetSummaryQuery,
+  useUpdateTransactionsMutation,
+} from "@/redux/api/transactionApi";
+import { Button, DatePicker, Input, Spin, TableProps } from "antd";
+import dayjs from "dayjs";
+import React, { Key, useState } from "react";
+import { AiOutlinePlus } from "react-icons/ai";
 import { FaRegEye } from "react-icons/fa6";
 import { FiEdit } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
-import { RiDeleteBin7Line } from "react-icons/ri";
-import { AiOutlinePlus } from "react-icons/ai";
-import { MdOutlineFilterAltOff } from "react-icons/md";
-import { TfiReload } from "react-icons/tfi";
-import TransactionsForm from "./TransactionsFrom";
 import { IoMdStar, IoMdStarOutline } from "react-icons/io";
-import { transactionsTypes } from "@/constant/constants";
+import { MdOutlineFilterAltOff } from "react-icons/md";
+import { RiDeleteBin7Line } from "react-icons/ri";
+import { TfiReload } from "react-icons/tfi";
+import { useNavigate } from "react-router-dom";
+import CustomTable from "../../components/CustomTable";
+import TransactionsForm from "./TransactionsFrom";
+import TransactionSummaryCards from "./TransactionsSummary";
 const { Search } = Input;
 
 const Transactions: React.FC = () => {
@@ -24,11 +29,15 @@ const Transactions: React.FC = () => {
     page: 1,
     limit: 10,
   });
+
   const navigate = useNavigate();
 
   // constants
   const page = Number(queryParams.page);
   const limit = Number(queryParams.limit);
+  const year = Number(queryParams.year) || dayjs().year();
+  const month = Number(queryParams.month) || dayjs().month() + 1;
+  const pickerValue = dayjs(`${year}-${month.toString().padStart(2, "0")}`, "YYYY-MM");
 
   // states
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
@@ -37,12 +46,21 @@ const Transactions: React.FC = () => {
 
   // rtk queries
   const { data, isFetching, refetch } = useGetAllTransactionsQuery(getNonEmptyQueryParams);
+  const {
+    data: summaryData,
+    isFetching: isSummaryFetching,
+    refetch: summaryRefetch,
+  } = useGetSummaryQuery({ month, year });
   const [update, { isLoading: updateLoading }] = useUpdateTransactionsMutation();
 
   // handler
   const onSearch = (value: string) => {
-    console.log(value);
     setQueryParams({ search: value });
+  };
+
+  const handleRefresh = () => {
+    refetch();
+    summaryRefetch();
   };
 
   // rowSelection object indicates the need for row selection
@@ -84,7 +102,6 @@ const Transactions: React.FC = () => {
       width: 60,
       align: "center",
       sorter: true,
-      sortDirections: ["ascend", "descend"],
     },
 
     {
@@ -93,7 +110,6 @@ const Transactions: React.FC = () => {
       dataIndex: "title",
       key: "title",
       sorter: true,
-      sortDirections: ["ascend", "descend"],
     },
 
     {
@@ -101,12 +117,33 @@ const Transactions: React.FC = () => {
       ellipsis: true,
       dataIndex: "type",
       key: "type",
-      width: 100,
+      width: 140,
       align: "center",
-      render: (_text, record) => <div className="text-center capitalize"> {record?.type} </div>,
       sorter: true,
-      sortDirections: ["ascend", "descend"],
-      filters: transactionsTypes.map((type) => ({ text: <span className="capitalize"> {type} </span>, value: type })),
+      filters: transactionsTypes.map((type) => ({
+        text: <span className="capitalize">{type}</span>,
+        value: type,
+      })),
+      // filteredValue: typeof queryParams.type === "string" ? queryParams.type.split(",") : undefined,
+      render: (_text, record) => {
+        const type = record?.type;
+        // Color map
+        const colorMap: Record<string, string> = {
+          income: "bg-green-500",
+          expense: "bg-red-500",
+          give: "bg-yellow-500",
+          take: "bg-purple-500",
+          withdraw: "bg-pink-500",
+          save: "bg-blue-300",
+        };
+
+        return (
+          <div className="flex items-center capitalize">
+            <span className={`h-2 w-2 rounded-full mr-2 ${colorMap[type] || "bg-gray-400"}`} />
+            {type}
+          </div>
+        );
+      },
     },
     {
       title: "Amount",
@@ -116,7 +153,6 @@ const Transactions: React.FC = () => {
       width: 200,
       align: "center",
       sorter: true,
-      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Status",
@@ -128,13 +164,20 @@ const Transactions: React.FC = () => {
           className="text-center cursor-pointer"
           onClick={() => update({ id: record._id, body: { isPending: !record.isPending } })}
         >
-          {record.isPending ? <Tag color="red">Pending</Tag> : <Tag color="green"> Completed </Tag>}
+          {record.isPending ? (
+            <div className="flex items-center">
+              <div className="h-2 w-2 rounded-full bg-red-500 mr-2" /> Pending
+            </div>
+          ) : (
+            <div className="flex items-center">
+              <div className="h-2 w-2 rounded-full bg-blue-300 mr-2" /> Completed
+            </div>
+          )}
         </div>
       ),
       width: 120,
       align: "center",
       sorter: true,
-      sortDirections: ["ascend", "descend"],
     },
     {
       title: "Created At",
@@ -147,7 +190,6 @@ const Transactions: React.FC = () => {
       width: 200,
       align: "center",
       sorter: true,
-      sortDirections: ["ascend", "descend"],
     },
 
     {
@@ -199,18 +241,35 @@ const Transactions: React.FC = () => {
   ];
 
   return (
-    <Spin spinning={isFetching || updateLoading}>
+    <Spin spinning={isFetching || updateLoading || isSummaryFetching}>
       <div>
-        <div className="">
+        <div>
           <PageHeader {...{ title: "Transactions", subTitle: "All Transactions" }} />
-          <div className="flex">
-            <div>
+
+          {/* filter */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="flex gap-2">
               <Search
                 placeholder="input search text"
                 onSearch={onSearch}
                 enterButton
                 value={queryParams.search as string}
                 allowClear
+                className="w-full !max-w-60 "
+              />
+              <DatePicker
+                picker="month"
+                value={pickerValue}
+                className="w-full !max-w-60"
+                onChange={(value) => {
+                  if (value) {
+                    const selectedMonth = value.month() + 1;
+                    const selectedYear = value.year();
+                    setQueryParams({ month: selectedMonth, year: selectedYear, page: 1 });
+                  } else {
+                    setQueryParams({ month: undefined, year: undefined, page: 1 });
+                  }
+                }}
               />
             </div>
             <div className="ms-auto flex gap-2">
@@ -228,16 +287,22 @@ const Transactions: React.FC = () => {
                 onClick={() => clearQueryParams()}
                 icon={<MdOutlineFilterAltOff />}
               />
-              <Button
-                color="purple"
-                variant="solid"
-                title="Reload Data"
-                onClick={() => refetch()}
-                icon={<TfiReload />}
-              />
+              <Button color="purple" variant="solid" title="Reload Data" onClick={handleRefresh} icon={<TfiReload />} />
             </div>
           </div>
         </div>
+
+        {/* Summary */}
+        <div className="my-4">
+          <TransactionSummaryCards
+            allTime={summaryData?.data?.allTime || {}}
+            monthly={summaryData?.data?.monthly || {}}
+            month={Number(summaryData?.data?.month)}
+            year={summaryData?.data?.year}
+          />
+        </div>
+
+        {/* main table */}
         <div className="mt-4">
           <CustomTable
             data={Array.isArray(data?.data) ? data?.data?.map((d) => ({ ...d, key: d?._id })) : []}
@@ -246,6 +311,7 @@ const Transactions: React.FC = () => {
             query={queryParams}
             setQuery={setQueryParams}
             rowSelection={rowSelection}
+
           />
         </div>
 

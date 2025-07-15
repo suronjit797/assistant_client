@@ -1,10 +1,10 @@
 export const transactionsTypesObj = {
   income: "income",
   expense: "expense",
-  give: "give",
   take: "take",
-  save: "save",
+  give: "give",
   withdraw: "withdraw",
+  save: "save",
 };
 
 export const transactionsTypes = Object.keys(transactionsTypesObj);

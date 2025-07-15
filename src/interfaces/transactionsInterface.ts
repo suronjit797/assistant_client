@@ -9,3 +9,10 @@ export type TTransactions = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export interface ITransactionsSummary {
+  allTime: Record<string, number>;
+  monthly: Record<string, number>;
+  month: string | number;
+  year: string | number;
+}
