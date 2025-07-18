@@ -1,3 +1,4 @@
+// transactions
 export const transactionsTypesObj = {
   income: "income",
   expense: "expense",
@@ -9,6 +10,7 @@ export const transactionsTypesObj = {
 
 export const transactionsTypes = Object.keys(transactionsTypesObj);
 
+// todos
 export const todosPriorityObj = {
   low: "low",
   medium: "medium",
@@ -16,3 +18,16 @@ export const todosPriorityObj = {
 };
 
 export const todosPriorities = Object.keys(todosPriorityObj);
+
+// routine
+export const dayConstantsObj = {
+  sunday: "sunday",
+  monday: "monday",
+  tuesday: "tuesday",
+  wednesday: "wednesday",
+  thursday: "thursday",
+  friday: "friday",
+  saturday: "saturday",
+};
+
+export const dayConstants = Object.keys(dayConstantsObj);

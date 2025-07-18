@@ -223,21 +223,6 @@ const Todos: React.FC = () => {
       align: "center",
       sorter: true,
     },
-    {
-      title: "Created At",
-      ellipsis: true,
-      dataIndex: "createdAt",
-      key: "createdAt",
-      render: (_text, record) => (
-        <div className="text-center">
-          <div className="text-center">{dayjs(record.createdAt).format("HH:mm:ss A")}</div>
-          <div className="text-center">{dayjs(record.createdAt).format("DD-MMM-YYYY")}</div>
-        </div>
-      ),
-      width: 200,
-      align: "center",
-      sorter: true,
-    },
 
     {
       title: "Completed In",
@@ -253,6 +238,22 @@ const Todos: React.FC = () => {
         ) : (
           "--"
         ),
+      width: 200,
+      align: "center",
+      sorter: true,
+    },
+
+    {
+      title: "Created At",
+      ellipsis: true,
+      dataIndex: "createdAt",
+      key: "createdAt",
+      render: (_text, record) => (
+        <div className="text-center">
+          <div className="text-center">{dayjs(record.createdAt).format("HH:mm:ss A")}</div>
+          <div className="text-center">{dayjs(record.createdAt).format("DD-MMM-YYYY")}</div>
+        </div>
+      ),
       width: 200,
       align: "center",
       sorter: true,
