@@ -4,11 +4,11 @@ import MainLayout from "./components/layouts/MainLayout";
 import Home from "./pages/Home/Home";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
-import Users from "./pages/Users/Users";
+import PasswordManager from "./pages/PasswordManager/PasswordManager";
 import Profile from "./pages/Profile/Profile";
-import Transactions from "./pages/Transactions/Transactions";
 import Todos from "./pages/Todos/Todos";
-import Routines from "./pages/Routine/Routine";
+import Transactions from "./pages/Transactions/Transactions";
+import Users from "./pages/Users/Users";
 // import Register from "./pages/Register/Register";
 
 export const routes = createBrowserRouter([
@@ -51,7 +51,7 @@ export const routes = createBrowserRouter([
       },
       { path: "transaction", element: <Transactions /> },
       { path: "todo", element: <Todos /> },
-      { path: "routine", element: <Routines /> },
+      { path: "password-manager", element: <PasswordManager /> },
 
       //     {
       //       path: "/admin",
@@ -67,6 +67,8 @@ export const routes = createBrowserRouter([
       //     { path: "summary", element: <TransactionSummary /> },
       //     { path: "calender", element: <Calender /> },
       //     { path: "event", element: <Event /> },
+
+      // { path: "routine", element: <Routines /> }, //! need to fixed latter
 
       //     //  not found route
       { path: "*", element: <NotFound /> },

@@ -3,21 +3,21 @@ import { BaseQueryFn, EndpointBuilder, QueryDefinition, MutationDefinition } fro
 import { IResponse } from "./reduxTypes";
 import { Key } from "react";
 
-type EndpointName<TTag extends string> =
-  | `getAll${TTag}`
-  | `getById${TTag}`
-  | `create${TTag}`
-  | `update${TTag}`
-  | `delete${TTag}`
-  | `deleteMany${TTag}`;
+type EndpointName<Name extends string> =
+  | `getAll${Name}`
+  | `getById${Name}`
+  | `create${Name}`
+  | `update${Name}`
+  | `delete${Name}`
+  | `deleteMany${Name}`;
 
-export const globalEndpoints = <T, TTag extends string>(
+export const globalEndpoints = <T, Name extends string>(
   builder: EndpointBuilder<BaseQueryFn, string, string>,
   path: string,
-  name: TTag,
+  name: Name,
   tags?: string[],
 ): {
-  [K in EndpointName<TTag>]: K extends `getAll${string}`
+  [K in EndpointName<Name>]: K extends `getAll${string}`
     ? QueryDefinition<Record<string, unknown>, BaseQueryFn, string, IResponse<T[]>, string>
     : K extends `getById${string}`
       ? QueryDefinition<string, BaseQueryFn, string, IResponse<T>, string>

@@ -57,6 +57,7 @@ const Sidebar = React.memo(() => {
                   <div
                     className={`flex items-center font-semibold text-red-500 gap-2 py-2 px-4 my-1 w-full rounded-md hover:backdrop-brightness-90 transition-all active:backdrop-brightness-80`}
                     key={ind}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     onClick={item.onClick as any}
                   >
                     {item.icon} {item.name}
@@ -132,7 +133,7 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
   },
   {
     name: "Password Manager",
-    path: "/passwords",
+    path: "/password-manager",
     icon: <RiLockPasswordLine />,
     authorizedRoles: ["user"],
   },

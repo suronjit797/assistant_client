@@ -31,3 +31,15 @@ export const dayConstantsObj = {
 };
 
 export const dayConstants = Object.keys(dayConstantsObj);
+
+
+// password manager
+export const passwordManagerTypesObj = {
+  social: "social",
+  banking: "banking",
+  work: "work",
+  email: "email",
+  other: "other",
+};
+
+export const passwordManagerTypes = Object.keys(passwordManagerTypesObj);
