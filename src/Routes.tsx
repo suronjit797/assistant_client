@@ -11,6 +11,7 @@ import Transactions from "./pages/Transactions/Transactions";
 import Users from "./pages/Users/Users";
 import Diary from "./pages/Diary/Diary";
 import Blog from "./pages/Blog/Blog";
+import Contacts from "./pages/Contacts/Contacts";
 // import Register from "./pages/Register/Register";
 
 export const routes = createBrowserRouter([
@@ -56,6 +57,7 @@ export const routes = createBrowserRouter([
       { path: "password-manager", element: <PasswordManager /> },
       { path: "diary", element: <Diary /> },
       { path: "blog", element: <Blog /> },
+      { path: "contact", element: <Contacts /> },
       // { path: "routine", element: <Routines /> }, //! need to fixed latter with new design
 
       //     {
