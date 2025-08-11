@@ -2,7 +2,8 @@ import PageHeader from "@/components/PageHeader";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IContacts } from "@/interfaces/contactsInterface";
 import { useDeleteContactMutation, useDeleteManyContactMutation, useGetAllContactQuery } from "@/redux/api/contactsApi";
-import { Button, Divider, Input, Spin, TableProps } from "antd";
+import { copyHandler } from "@/utils/copyHandler";
+import { Button, Input, Spin, TableProps } from "antd";
 import React, { Key, useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
@@ -12,7 +13,6 @@ import { TfiReload } from "react-icons/tfi";
 import Swal from "sweetalert2";
 import CustomTable from "../../components/CustomTable";
 import ContactsForm from "./ContactsForm";
-import { copyHandler } from "@/utils/copyHandler";
 
 const { Search } = Input;
 
