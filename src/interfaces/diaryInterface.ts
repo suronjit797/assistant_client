@@ -1,7 +1,6 @@
 import { TUser } from "./userInterface";
 
 export interface IDiary {
-  _id: string;
   user: string | TUser;
   title: string;
   date: Date;
@@ -20,6 +19,7 @@ export interface IDiary {
     content: string;
     updatedAt: Date;
   }[];
+  _id: string;
   createdAt: Date;
   updatedAt: Date;
 }

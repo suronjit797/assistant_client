@@ -10,6 +10,7 @@ import Todos from "./pages/Todos/Todos";
 import Transactions from "./pages/Transactions/Transactions";
 import Users from "./pages/Users/Users";
 import Diary from "./pages/Diary/Diary";
+import Blog from "./pages/Blog/Blog";
 // import Register from "./pages/Register/Register";
 
 export const routes = createBrowserRouter([
@@ -54,6 +55,7 @@ export const routes = createBrowserRouter([
       { path: "todo", element: <Todos /> },
       { path: "password-manager", element: <PasswordManager /> },
       { path: "diary", element: <Diary /> },
+      { path: "blog", element: <Blog /> },
       // { path: "routine", element: <Routines /> }, //! need to fixed latter with new design
 
       //     {
@@ -70,7 +72,6 @@ export const routes = createBrowserRouter([
       //     { path: "summary", element: <TransactionSummary /> },
       //     { path: "calender", element: <Calender /> },
       //     { path: "event", element: <Event /> },
-
 
       //     //  not found route
       { path: "*", element: <NotFound /> },
