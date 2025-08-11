@@ -177,22 +177,25 @@ const PasswordManager: React.FC = () => {
           prev.map((item) => (item._id === record._id ? { ...item, decryptedPassword: data.decryptedPassword } : item)),
         );
       }
-
-      if (decryptedPassword) {
-        await navigator.clipboard.writeText(decryptedPassword);
-        Swal.fire({
-          title: "Copied!",
-          text: "Password copied to clipboard.",
-          icon: "success",
-          timer: 1000,
-          showConfirmButton: false,
-        });
-      } else {
-        Swal.fire({ title: "Failed", text: "Decryption failed.", icon: "error" });
-      }
+      await copyHandler(decryptedPassword, "Password");
     } catch (error) {
       console.log(error);
       Swal.fire({ title: "Error", text: "Something went wrong.", icon: "error" });
+    }
+  };
+
+  const copyHandler = async (text: string, name: string) => {
+    if (text) {
+      await navigator.clipboard.writeText(text);
+      Swal.fire({
+        title: "Copied!",
+        text: name + " copied to clipboard.",
+        icon: "success",
+        timer: 1000,
+        showConfirmButton: false,
+      });
+    } else {
+      Swal.fire({ title: "Failed", text: name + " Copy failed.", icon: "error" });
     }
   };
 
@@ -245,6 +248,15 @@ const PasswordManager: React.FC = () => {
       title: "Username",
       dataIndex: "username",
       key: "username",
+      render: (_text, record) => (
+        <div
+          title="Click to copy"
+          className="cursor-pointer"
+          onClick={async () => await copyHandler(record.username, "Username")}
+        >
+          {record.username}
+        </div>
+      ),
     },
     {
       title: "Password",

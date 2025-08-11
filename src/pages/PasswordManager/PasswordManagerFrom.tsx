@@ -1,8 +1,7 @@
 import { passwordManagerTypes } from "@/constant/constants";
 import { IPassword } from "@/interfaces/passwordManagerInterface";
 import { useCreatePasswordManagerMutation, useUpdatePasswordManagerMutation } from "@/redux/api/passwordManagerApi";
-import { Button, DatePicker, Drawer, Form, Input, Select } from "antd";
-import dayjs from "dayjs";
+import { Button, Drawer, Form, Input, Select } from "antd";
 import React from "react";
 import Swal from "sweetalert2";
 

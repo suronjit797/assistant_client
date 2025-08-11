@@ -14,13 +14,13 @@ import React, { Key, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 // import { FiEdit } from "react-icons/fi";
 // import { IoMdStar, IoMdStarOutline } from "react-icons/io";
+import { dayConstants } from "@/constant/constants";
 import { MdOutlineFilterAltOff } from "react-icons/md";
 import { RiDeleteBin7Line } from "react-icons/ri";
 import { TfiReload } from "react-icons/tfi";
 import Swal from "sweetalert2";
 import CustomTable from "../../components/CustomTable";
 import RoutinesForm from "./RoutineFrom";
-import { dayConstants } from "@/constant/constants";
 const { Search } = Input;
 
 const Routines: React.FC = () => {

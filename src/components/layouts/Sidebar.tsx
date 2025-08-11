@@ -3,17 +3,17 @@ import { NavConfig } from "@/interfaces/interfaces";
 import { changeNavOpen } from "@/redux/features/themeSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
-import { IoClose } from "react-icons/io5";
+import { GiPayMoney } from "react-icons/gi";
 import { GoHome } from "react-icons/go";
-import { SlCalender, SlEvent } from "react-icons/sl";
-import { MdAltRoute, MdOutlineConnectWithoutContact } from "react-icons/md";
-import { GiPayMoney, GiStairsGoal } from "react-icons/gi";
-import { LuListTodo } from "react-icons/lu";
 import { ImBlog } from "react-icons/im";
+import { IoClose } from "react-icons/io5";
+import { LuListTodo } from "react-icons/lu";
+import { MdOutlineConnectWithoutContact } from "react-icons/md";
 import { PiNotebookLight } from "react-icons/pi";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { SlEvent } from "react-icons/sl";
 import { TiPower } from "react-icons/ti";
+import { Link, NavLink } from "react-router-dom";
 
 const Sidebar = React.memo(() => {
   const { isNavOpen, isDark } = useAppSelector((state) => state.theme);
@@ -83,18 +83,18 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
     icon: <GoHome />,
     authorizedRoles: ["user"],
   },
-  {
-    name: "Calendar",
-    path: "/calender",
-    icon: <SlCalender />,
-    authorizedRoles: ["user"],
-  },
-  {
-    name: "Daily Routine",
-    path: "/routine",
-    icon: <MdAltRoute />,
-    authorizedRoles: ["user"],
-  },
+  // {
+  //   name: "Calendar",
+  //   path: "/calender",
+  //   icon: <SlCalender />,
+  //   authorizedRoles: ["user"],
+  // },
+  // {
+  //   name: "Daily Routine",
+  //   path: "/routine",
+  //   icon: <MdAltRoute />,
+  //   authorizedRoles: ["user"],
+  // },
   {
     name: "Transaction",
     path: "/transaction",
@@ -107,12 +107,12 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
     icon: <LuListTodo />,
     authorizedRoles: ["user"],
   },
-  {
-    name: "Goals & Milestones",
-    path: "/goals",
-    icon: <GiStairsGoal />,
-    authorizedRoles: ["user"],
-  },
+  // {
+  //   name: "Goals & Milestones",
+  //   path: "/goals",
+  //   icon: <GiStairsGoal />,
+  //   authorizedRoles: ["user"],
+  // },
   {
     name: "Blog",
     path: "/blog",
