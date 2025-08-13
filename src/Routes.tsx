@@ -12,6 +12,7 @@ import Users from "./pages/Users/Users";
 import Diary from "./pages/Diary/Diary";
 import Blog from "./pages/Blog/Blog";
 import Contacts from "./pages/Contacts/Contacts";
+import Events from "./pages/Events/Events";
 // import Register from "./pages/Register/Register";
 
 export const routes = createBrowserRouter([
@@ -58,6 +59,7 @@ export const routes = createBrowserRouter([
       { path: "diary", element: <Diary /> },
       { path: "blog", element: <Blog /> },
       { path: "contact", element: <Contacts /> },
+      { path: "event", element: <Events /> },
       // { path: "routine", element: <Routines /> }, //! need to fixed latter with new design
 
       //     {
