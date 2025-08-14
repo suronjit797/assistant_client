@@ -1,8 +1,9 @@
 import PageHeader from "@/components/PageHeader";
+import SearchItem from "@/components/SearchItem/SearchItem";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IEvent } from "@/interfaces/eventInterface";
 import { useDeleteEventMutation, useDeleteManyEventMutation, useGetAllEventQuery } from "@/redux/api/eventApi";
-import { Button, Input, Spin, TableProps } from "antd";
+import { Button, Spin, TableProps } from "antd";
 import dayjs from "dayjs";
 import React, { Key, useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -13,8 +14,6 @@ import { TfiReload } from "react-icons/tfi";
 import Swal from "sweetalert2";
 import CustomTable from "../../components/CustomTable";
 import EventsForm from "./EventsForm";
-
-const { Search } = Input;
 
 const Events: React.FC = () => {
   const { queryParams, setQueryParams, getNonEmptyQueryParams, clearQueryParams } = useQueryParams({
@@ -35,17 +34,11 @@ const Events: React.FC = () => {
   const [open, setOpen] = useState(false);
   const [editData, setEditData] = useState<Partial<IEvent>>();
   const [data, setData] = useState<IEvent[]>(eventsData?.data || []);
-  const [search, setSearch] = useState("");
 
   // Effects
   useEffect(() => {
     if (eventsData?.data) setData(eventsData?.data);
   }, [isFetching, eventsData?.data]);
-
-  // Handlers
-  const onSearch = () => {
-    setQueryParams({ search });
-  };
 
   const handleRefresh = () => {
     refetch();
@@ -191,15 +184,7 @@ const Events: React.FC = () => {
         {/* Filter */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="flex gap-2">
-            <Search
-              placeholder="Search events..."
-              onSearch={onSearch}
-              onChange={(e) => setSearch(e.target.value)}
-              enterButton
-              value={search}
-              allowClear
-              className="w-full !max-w-60"
-            />
+            <SearchItem name="todos" />
           </div>
           <div className="ms-auto flex gap-2">
             <Button type="primary" onClick={() => setOpen(true)} icon={<AiOutlinePlus />} />

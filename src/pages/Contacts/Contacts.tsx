@@ -1,9 +1,10 @@
 import PageHeader from "@/components/PageHeader";
+import SearchItem from "@/components/SearchItem/SearchItem";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IContacts } from "@/interfaces/contactsInterface";
 import { useDeleteContactMutation, useDeleteManyContactMutation, useGetAllContactQuery } from "@/redux/api/contactsApi";
 import { copyHandler } from "@/utils/copyHandler";
-import { Button, Input, Spin, TableProps } from "antd";
+import { Button, Spin, TableProps } from "antd";
 import React, { Key, useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
@@ -14,7 +15,6 @@ import Swal from "sweetalert2";
 import CustomTable from "../../components/CustomTable";
 import ContactsForm from "./ContactsForm";
 
-const { Search } = Input;
 
 const Contacts: React.FC = () => {
   const { queryParams, setQueryParams, getNonEmptyQueryParams, clearQueryParams } = useQueryParams({
@@ -44,11 +44,6 @@ const Contacts: React.FC = () => {
   useEffect(() => {
     if (contactsData?.data) setData(contactsData?.data);
   }, [isFetching, contactsData?.data]);
-
-  // Handlers
-  const onSearch = (value: string) => {
-    setQueryParams({ search: value });
-  };
 
   const handleRefresh = () => {
     refetch();
@@ -194,14 +189,7 @@ const Contacts: React.FC = () => {
         {/* Filter */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="flex gap-2">
-            <Search
-              placeholder="Search contacts..."
-              onSearch={onSearch}
-              enterButton
-              value={queryParams.search as string}
-              allowClear
-              className="w-full !max-w-60"
-            />
+            <SearchItem name="todos" />
           </div>
           <div className="ms-auto flex gap-2">
             <Button type="primary" onClick={() => setOpen(true)} icon={<AiOutlinePlus />} />

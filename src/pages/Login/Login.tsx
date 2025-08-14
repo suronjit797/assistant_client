@@ -61,50 +61,54 @@ const Login = () => {
   return (
     <Spin spinning={isLoading}>
       <div className=" min-h-screen bg-[url('/photos/login_bg.webp')] bg-cover flex flex-col justify-center items-center ">
-        <div className="glass-card flex items-center flex-col my-auto p-8 max-w-[345px] w-full">
-          <div className="text-center pb-2 text-sm">
-            <Image preview={false} width={80} src="/photos/logo.webp" alt="logo" />
-            <div className="text-white"> {appConfig.name} </div>
-          </div>
-          <hr className="border-gray-300 pb-2 w-full dark:border-slate-600 my-3" />
-          <Form name="register" className="w-full" onFinish={handleLogin} layout="vertical">
-            <Form.Item
-              name="email"
-              label={<div className="text-white"> Email/Login ID </div>}
-              rules={[
-                {
-                  required: true,
-                  message: "Please Input Your E-mail/Login ID!",
-                },
-              ]}
-            >
-              <Input className="" placeholder="Input E-mail/Login ID" />
-            </Form.Item>
-
-            <Form.Item
-              label={<div className="text-white"> Password </div>}
-              name="password"
-              rules={[
-                {
-                  required: true,
-                  message: "Please Input Your Password!",
-                },
-                {
-                  min: 6,
-                  message: "Min Length 6",
-                },
-              ]}
-            >
-              <Input.Password placeholder="Input Password" />
-            </Form.Item>
-
-            <div className="text-end">
-              <Link to="/forgot-password" className="!text-gray-200">
-                Forgot Password?
-              </Link>
+        <div className="py-4  max-w-[345px] w-full my-auto">
+          <div className="glass-card flex items-center flex-col p-8">
+            <div className="text-center pb-2 text-sm">
+              <Image preview={false} width={80} src="/photos/logo.webp" alt="logo" />
+              <div className="text-white"> {appConfig.name} </div>
             </div>
+            <hr className="border-gray-300 pb-2 w-full dark:border-slate-600 my-3" />
+            <Form name="register" className="w-full" onFinish={handleLogin} layout="vertical">
+              <Form.Item
+                name="email"
+                label={<div className="text-white"> Email/Login ID </div>}
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Input Your E-mail/Login ID!",
+                  },
+                ]}
+              >
+                <Input className="" placeholder="Input E-mail/Login ID" />
+              </Form.Item>
 
-            {/* <Form.Item name="terms" valuePropName="checked">
+              <Form.Item
+                label={<div className="text-white"> Password </div>}
+                name="password"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please Input Your Password!",
+                  },
+                  {
+                    min: 6,
+                    message: "Min Length 6",
+                  },
+                ]}
+              >
+                <Input.Password placeholder="Input Password" />
+              </Form.Item>
+
+              <div className="flex justify-between mb-2">
+                <Link to="/register" className="!text-gray-200">
+                  Register?
+                </Link>
+                <Link to="/forgot-password" className="!text-gray-200">
+                  Forgot Password?
+                </Link>
+              </div>
+
+              {/* <Form.Item name="terms" valuePropName="checked">
               <Checkbox className="!text-white">
                 You agree to our
                 <a href="#" rel="noreferrer" target="_blank" className="!text-gray-200 d-inline-block ms-1">
@@ -112,16 +116,17 @@ const Login = () => {
                 </a>
               </Checkbox>
             </Form.Item> */}
-            <Form.Item shouldUpdate>
-              {/* {({ getFieldValue }) => ( */}
-              {/* <Button className="w-full mb-2 " type="primary" htmlType="submit" disabled={!getFieldValue("terms")}> */}
-              <Button className="w-full my-2 " type="primary" htmlType="submit">
-                Sign In
-              </Button>
-              {/* )} */}
-            </Form.Item>
-            <div className="text-center text-white"> Version {appConfig.version} </div>
-          </Form>
+              <Form.Item shouldUpdate>
+                {/* {({ getFieldValue }) => ( */}
+                {/* <Button className="w-full mb-2 " type="primary" htmlType="submit" disabled={!getFieldValue("terms")}> */}
+                <Button className="w-full my-2 " type="primary" htmlType="submit">
+                  Sign In
+                </Button>
+                {/* )} */}
+              </Form.Item>
+              <div className="text-center text-white"> Version {appConfig.version} </div>
+            </Form>
+          </div>
         </div>
 
         <LoginFooter />

@@ -7,6 +7,7 @@ const Auth = lazy(() => import("./components/Auth/Auth"));
 const MainLayout = lazy(() => import("./components/layouts/MainLayout"));
 const Home = lazy(() => import("./pages/Home/Home"));
 const Login = lazy(() => import("./pages/Login/Login"));
+const Register = lazy(() => import("./pages/Login/Register"));
 const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
 const PasswordManager = lazy(() => import("./pages/PasswordManager/PasswordManager"));
 const Profile = lazy(() => import("./pages/Profile/Profile"));
@@ -67,5 +68,6 @@ export const routes = createBrowserRouter([
     ],
   },
   { path: "/login", element: withSuspense(<Login />) },
+  { path: "/register", element: withSuspense(<Register />) },
   { path: "*", element: withSuspense(<NotFound />) },
 ]);

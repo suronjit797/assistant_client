@@ -1,4 +1,5 @@
 import PageHeader from "@/components/PageHeader";
+import SearchItem from "@/components/SearchItem/SearchItem";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IPassword } from "@/interfaces/passwordManagerInterface";
 import {
@@ -7,7 +8,8 @@ import {
   useDeletePasswordManagerMutation,
   useGetAllPasswordManagerQuery,
 } from "@/redux/api/passwordManagerApi";
-import { Button, Input, Spin, TableProps } from "antd";
+import { copyHandler } from "@/utils/copyHandler";
+import { Button, Spin, TableProps } from "antd";
 import React, { Key, useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
@@ -18,8 +20,6 @@ import { TfiReload } from "react-icons/tfi";
 import Swal from "sweetalert2";
 import CustomTable from "../../components/CustomTable";
 import PasswordManagerForm from "./PasswordManagerFrom";
-import { copyHandler } from "@/utils/copyHandler";
-const { Search } = Input;
 
 const getUserPassword = async (): Promise<string | null> => {
   let userPassword = sessionStorage.getItem("userPassword");
@@ -77,11 +77,6 @@ const PasswordManager: React.FC = () => {
   useEffect(() => {
     if (passwordData?.data) setData(passwordData?.data);
   }, [isFetching, passwordData?.data]);
-
-  // handler
-  const onSearch = (value: string) => {
-    setQueryParams({ search: value });
-  };
 
   const handleRefresh = () => {
     refetch();
@@ -184,7 +179,6 @@ const PasswordManager: React.FC = () => {
       Swal.fire({ title: "Error", text: "Something went wrong.", icon: "error" });
     }
   };
-
 
   const handleShowPassword = async (record: IPassword) => {
     try {
@@ -317,14 +311,7 @@ const PasswordManager: React.FC = () => {
           {/* filter */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="flex gap-2">
-              <Search
-                placeholder="input search text"
-                onSearch={onSearch}
-                enterButton
-                value={queryParams.search as string}
-                allowClear
-                className="w-full !max-w-60 "
-              />
+              <SearchItem name="todos" />
               {/* <DatePicker
                 picker="month"
                 value={pickerValue}

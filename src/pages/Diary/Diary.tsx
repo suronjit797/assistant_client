@@ -1,8 +1,10 @@
 import PageHeader from "@/components/PageHeader";
+import SearchItem from "@/components/SearchItem/SearchItem";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IDiary } from "@/interfaces/diaryInterface";
 import { useDeleteDiaryMutation, useDeleteManyDiaryMutation, useGetAllDiaryQuery } from "@/redux/api/diaryApi";
-import { Button, Input, Spin, TableProps } from "antd";
+import { Button, Spin, TableProps } from "antd";
+import dayjs from "dayjs";
 import React, { Key, useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
@@ -12,9 +14,6 @@ import { TfiReload } from "react-icons/tfi";
 import Swal from "sweetalert2";
 import CustomTable from "../../components/CustomTable";
 import DiaryForm from "./DiaryForm";
-import dayjs from "dayjs";
-
-const { Search } = Input;
 
 const Diary: React.FC = () => {
   const { queryParams, setQueryParams, getNonEmptyQueryParams, clearQueryParams } = useQueryParams({
@@ -40,11 +39,6 @@ const Diary: React.FC = () => {
   useEffect(() => {
     if (diaryData?.data) setData(diaryData?.data);
   }, [isFetching, diaryData?.data]);
-
-  // Handlers
-  const onSearch = (value: string) => {
-    setQueryParams({ search: value });
-  };
 
   const handleRefresh = () => {
     refetch();
@@ -185,14 +179,7 @@ const Diary: React.FC = () => {
         {/* Filter */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           <div className="flex gap-2">
-            <Search
-              placeholder="Search diary..."
-              onSearch={onSearch}
-              enterButton
-              value={queryParams.search as string}
-              allowClear
-              className="w-full !max-w-60"
-            />
+            <SearchItem name="todos" />
           </div>
           <div className="ms-auto flex gap-2">
             <Button type="primary" onClick={() => setOpen(true)} icon={<AiOutlinePlus />} />

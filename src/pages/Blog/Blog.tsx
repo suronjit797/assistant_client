@@ -1,19 +1,18 @@
+import CustomTable from "@/components/CustomTable";
 import PageHeader from "@/components/PageHeader";
+import SearchItem from "@/components/SearchItem/SearchItem";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { IBlog } from "@/interfaces/blogInterface";
-import { useGetAllBlogQuery, useDeleteBlogMutation, useDeleteManyBlogMutation } from "@/redux/api/blogApi";
-import { Button, Input, Spin, TableProps, Tag } from "antd";
+import { useDeleteBlogMutation, useDeleteManyBlogMutation, useGetAllBlogQuery } from "@/redux/api/blogApi";
+import { Button, Spin, TableProps, Tag } from "antd";
 import React, { Key, useEffect, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
-import { RiDeleteBin7Line } from "react-icons/ri";
 import { MdOutlineFilterAltOff } from "react-icons/md";
+import { RiDeleteBin7Line } from "react-icons/ri";
 import { TfiReload } from "react-icons/tfi";
 import Swal from "sweetalert2";
-import CustomTable from "@/components/CustomTable";
 import BlogForm from "./BlogForm";
-
-const { Search } = Input;
 
 const Blog: React.FC = () => {
   const { queryParams, setQueryParams, getNonEmptyQueryParams, clearQueryParams } = useQueryParams({
@@ -36,10 +35,6 @@ const Blog: React.FC = () => {
   useEffect(() => {
     if (blogData?.data) setData(blogData?.data);
   }, [isFetching, blogData?.data]);
-
-  const onSearch = (value: string) => {
-    setQueryParams({ search: value });
-  };
 
   const handleRefresh = () => refetch();
 
@@ -139,14 +134,7 @@ const Blog: React.FC = () => {
       <PageHeader title="Blogs" subTitle="All blogs" />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
         <div className="flex gap-2">
-          <Search
-            placeholder="Search diary..."
-            onSearch={onSearch}
-            enterButton
-            value={queryParams.search as string}
-            allowClear
-            className="w-full !max-w-60"
-          />
+          <SearchItem name="todos" />
         </div>
         <div className="ms-auto flex gap-2">
           <Button type="primary" onClick={() => setOpen(true)} icon={<AiOutlinePlus />} />

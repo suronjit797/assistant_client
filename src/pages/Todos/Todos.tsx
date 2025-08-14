@@ -1,5 +1,6 @@
 import PageHeader from "@/components/PageHeader";
 
+import SearchItem from "@/components/SearchItem/SearchItem";
 import { todosPriorities } from "@/constant/constants";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { ITodos } from "@/interfaces/todosInterface";
@@ -9,7 +10,7 @@ import {
   useGetAllTodosQuery,
   useUpdateTodosMutation,
 } from "@/redux/api/todoApi";
-import { Button, Input, Spin, TableProps } from "antd";
+import { Button, Spin, TableProps } from "antd";
 import dayjs from "dayjs";
 import React, { Key, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -21,7 +22,6 @@ import { TfiReload } from "react-icons/tfi";
 import Swal from "sweetalert2";
 import CustomTable from "../../components/CustomTable";
 import TodosForm from "./TodosFrom";
-const { Search } = Input;
 
 const Todos: React.FC = () => {
   // hooks
@@ -33,9 +33,6 @@ const Todos: React.FC = () => {
   // constants
   const page = Number(queryParams.page);
   const limit = Number(queryParams.limit);
-  // const year = Number(queryParams.year) || dayjs().year();
-  // const month = Number(queryParams.month) || dayjs().month() + 1;
-  // const pickerValue = dayjs(`${year}-${month.toString().padStart(2, "0")}`, "YYYY-MM");
 
   // states
   const [selectedRowKeys, setSelectedRowKeys] = useState<Key[]>([]);
@@ -48,12 +45,7 @@ const Todos: React.FC = () => {
   const [deleteData, { isLoading: deleteLoading }] = useDeleteTodosMutation();
   const [deleteManyData, { isLoading: deleteManyLoading }] = useDeleteManyTodosMutation();
 
-  // handler
-  const onSearch = (value: string) => {
-    setQueryParams({ search: value });
-  };
-
-  const handleRefresh = () => {
+   const handleRefresh = () => {
     refetch();
   };
 
@@ -300,14 +292,8 @@ const Todos: React.FC = () => {
           {/* filter */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="flex gap-2">
-              <Search
-                placeholder="input search text"
-                onSearch={onSearch}
-                enterButton
-                value={queryParams.search as string}
-                allowClear
-                className="w-full !max-w-60 "
-              />
+              <SearchItem name="todos" />
+              
               {/* <DatePicker
                 picker="month"
                 value={pickerValue}

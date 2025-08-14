@@ -1,5 +1,7 @@
 import PageHeader from "@/components/PageHeader";
+import SearchItem from "@/components/SearchItem/SearchItem";
 import { transactionsTypes } from "@/constant/constants";
+import { userRole } from "@/constant/userRole";
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { TTransactions } from "@/interfaces/transactionsInterface";
 import {
@@ -9,7 +11,8 @@ import {
   useGetSummaryQuery,
   useUpdateTransactionsMutation,
 } from "@/redux/api/transactionApi";
-import { Button, DatePicker, Input, Spin, TableProps } from "antd";
+import { useAppSelector } from "@/redux/store";
+import { Button, DatePicker, Spin, TableProps } from "antd";
 import dayjs from "dayjs";
 import React, { Key, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
@@ -22,7 +25,7 @@ import Swal from "sweetalert2";
 import CustomTable from "../../components/CustomTable";
 import TransactionsForm from "./TransactionsFrom";
 import TransactionSummaryCards from "./TransactionsSummary";
-const { Search } = Input;
+
 
 const Transactions: React.FC = () => {
   // hooks
@@ -30,6 +33,8 @@ const Transactions: React.FC = () => {
     page: 1,
     limit: 10,
   });
+
+  const { user = {} } = useAppSelector((state) => state.auth);
 
   // constants
   const page = Number(queryParams.page);
@@ -44,7 +49,10 @@ const Transactions: React.FC = () => {
   const [editData, setEditData] = useState<Partial<TTransactions>>();
 
   // rtk queries
-  const { data, isFetching, refetch } = useGetAllTransactionsQuery(getNonEmptyQueryParams);
+  const { data, isFetching, refetch } = useGetAllTransactionsQuery({
+    ...getNonEmptyQueryParams,
+    ...(user.role === "superAdmin" ? { populate: "user" } : {}),
+  });
   const {
     data: summaryData,
     isFetching: isSummaryFetching,
@@ -53,11 +61,6 @@ const Transactions: React.FC = () => {
   const [update, { isLoading: updateLoading }] = useUpdateTransactionsMutation();
   const [deleteData, { isLoading: deleteLoading }] = useDeleteTransactionsMutation();
   const [deleteManyData, { isLoading: deleteManyLoading }] = useDeleteManyTransactionsMutation();
-
-  // handler
-  const onSearch = (value: string) => {
-    setQueryParams({ search: value });
-  };
 
   const handleRefresh = () => {
     refetch();
@@ -192,6 +195,19 @@ const Transactions: React.FC = () => {
         );
       },
     },
+    ...(user?.role === userRole.superAdmin
+      ? [
+          {
+            title: "User",
+            ellipsis: true,
+            dataIndex: "user",
+            key: "user",
+            render: (text, record) => record.user?.name,
+            sorter: true,
+          },
+        ]
+      : []),
+
     {
       title: "Amount",
       ellipsis: true,
@@ -283,14 +299,7 @@ const Transactions: React.FC = () => {
           {/* filter */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="flex gap-2">
-              <Search
-                placeholder="input search text"
-                onSearch={onSearch}
-                enterButton
-                value={queryParams.search as string}
-                allowClear
-                className="w-full !max-w-60 "
-              />
+              <SearchItem name="todos" />
               <DatePicker
                 picker="month"
                 value={pickerValue}
