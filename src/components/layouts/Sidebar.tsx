@@ -2,6 +2,7 @@ import useLogout from "@/hooks/useLogout";
 import { NavConfig } from "@/interfaces/interfaces";
 import { changeNavOpen } from "@/redux/features/themeSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { Image } from "antd";
 import React from "react";
 import { GiPayMoney } from "react-icons/gi";
 import { GoHome } from "react-icons/go";
@@ -19,6 +20,7 @@ const Sidebar = React.memo(() => {
   const { isNavOpen, isDark } = useAppSelector((state) => state.theme);
   const dispatch = useAppDispatch();
   const logOut = useLogout();
+  const navItems = React.useMemo(() => navigationConfig(logOut), [logOut]);
 
   return (
     <div className="select-none">
@@ -30,16 +32,16 @@ const Sidebar = React.memo(() => {
               <IoClose />
             </div>
           </div>
-          <div className="py-6">
+          <div className="pt-3">
             <Link to="/" className="logo block text-center">
-              <h1 className="font-bold text-4xl">P.A.</h1>
+                <Image preview={false} width={80} src="/photos/logo.webp" />
             </Link>
           </div>
         </div>
 
         <div className="px-3">
           <div>
-            {navigationConfig(logOut).map((item, ind) => {
+            {navItems?.map((item, ind) => {
               if (item.path) {
                 return (
                   <NavLink

@@ -1,0 +1,24 @@
+{
+  "short_name": "PA",
+  "lang": "en-US",
+  "version": "1.0.0",
+  "name": "Personal Assistant",
+  "start_url": "/index.html",
+  "author": "Suronjit Pal",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "/photos/logo.webp",
+      "type": "image/webp",
+      "sizes": "192x192"    
+    }
+ 
+  ],
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

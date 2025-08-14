@@ -1,90 +1,71 @@
+import { Spin } from "antd";
+import { JSX, Suspense, lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Auth from "./components/Auth/Auth";
-import MainLayout from "./components/layouts/MainLayout";
-import Home from "./pages/Home/Home";
-import Login from "./pages/Login/Login";
-import NotFound from "./pages/NotFound/NotFound";
-import PasswordManager from "./pages/PasswordManager/PasswordManager";
-import Profile from "./pages/Profile/Profile";
-import Todos from "./pages/Todos/Todos";
-import Transactions from "./pages/Transactions/Transactions";
-import Users from "./pages/Users/Users";
-import Diary from "./pages/Diary/Diary";
-import Blog from "./pages/Blog/Blog";
-import Contacts from "./pages/Contacts/Contacts";
-import Events from "./pages/Events/Events";
-// import Register from "./pages/Register/Register";
+
+// Lazy imports
+const Auth = lazy(() => import("./components/Auth/Auth"));
+const MainLayout = lazy(() => import("./components/layouts/MainLayout"));
+const Home = lazy(() => import("./pages/Home/Home"));
+const Login = lazy(() => import("./pages/Login/Login"));
+const NotFound = lazy(() => import("./pages/NotFound/NotFound"));
+const PasswordManager = lazy(() => import("./pages/PasswordManager/PasswordManager"));
+const Profile = lazy(() => import("./pages/Profile/Profile"));
+const Todos = lazy(() => import("./pages/Todos/Todos"));
+const Transactions = lazy(() => import("./pages/Transactions/Transactions"));
+const Users = lazy(() => import("./pages/Users/Users"));
+const Diary = lazy(() => import("./pages/Diary/Diary"));
+const Blog = lazy(() => import("./pages/Blog/Blog"));
+const Contacts = lazy(() => import("./pages/Contacts/Contacts"));
+const Events = lazy(() => import("./pages/Events/Events"));
+
+// Simple loading fallback
+
+// Helper wrapper to avoid repeating <Suspense>
+const withSuspense = (element: JSX.Element) => <Suspense fallback={<Spin />}>{element}</Suspense>;
 
 export const routes = createBrowserRouter([
   {
     path: "/",
-    element: (
+    element: withSuspense(
       <Auth>
         <MainLayout />
-      </Auth>
+      </Auth>,
     ),
     children: [
       {
         index: true,
-        element: (
-          // is login user
+        element: withSuspense(
           <Auth>
             <Home />
-          </Auth>
+          </Auth>,
         ),
       },
-
-      // admin
       {
         path: "/users",
-        element: (
-          //! is user match his role
+        element: withSuspense(
           <Auth roles={["admin"]}>
             <Users />
-          </Auth>
+          </Auth>,
         ),
       },
       {
         path: "/profile",
-        element: (
-          //! is user match his role
+        element: withSuspense(
           <Auth>
             <Profile />
-          </Auth>
+          </Auth>,
         ),
       },
-      { path: "transaction", element: <Transactions /> },
-      { path: "todo", element: <Todos /> },
-      { path: "password-manager", element: <PasswordManager /> },
-      { path: "diary", element: <Diary /> },
-      { path: "blog", element: <Blog /> },
-      { path: "contact", element: <Contacts /> },
-      { path: "event", element: <Events /> },
-      // { path: "routine", element: <Routines /> }, //! need to fixed latter with new design
-
-      //     {
-      //       path: "/admin",
-      //       element: (
-      //         //! is user match his role
-      //         <Auth roles={["admin"]}>
-      //           <Admin />
-      //         </Auth>
-      //       ),
-      //     },
-
-      //     // services routes
-      //     { path: "summary", element: <TransactionSummary /> },
-      //     { path: "calender", element: <Calender /> },
-      //     { path: "event", element: <Event /> },
-
-      //     //  not found route
-      { path: "*", element: <NotFound /> },
+      { path: "transaction", element: withSuspense(<Transactions />) },
+      { path: "todo", element: withSuspense(<Todos />) },
+      { path: "password-manager", element: withSuspense(<PasswordManager />) },
+      { path: "diary", element: withSuspense(<Diary />) },
+      { path: "blog", element: withSuspense(<Blog />) },
+      { path: "contact", element: withSuspense(<Contacts />) },
+      { path: "event", element: withSuspense(<Events />) },
+      { path: "*", element: withSuspense(<NotFound />) },
     ],
   },
-  { path: "/login", element: <Login /> },
-  // { path: "/register", element: <Register /> },
-  {
-    path: "*",
-    element: <NotFound />,
-  },
+  { path: "/login", element: withSuspense(<Login />) },
+  { path: "*", element: withSuspense(<NotFound />) },
 ]);
