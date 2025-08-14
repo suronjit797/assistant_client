@@ -34,11 +34,12 @@ export const themeSlice = createSlice({
     setFullScreenHandle: (state, { payload }: PayloadAction<FullScreenHandle>) => {
       state.fullScreenHandle = payload ; 
     },
+    resetTheme: () => initialState,
   },
 });
 
 // Export actions
-export const { changeTheme, changeFullScreen, changeNavOpen, setFullScreenHandle } = themeSlice.actions;
+export const { changeTheme, changeFullScreen, changeNavOpen, setFullScreenHandle, resetTheme } = themeSlice.actions;
 
 // Export reducer (corrected)
 export default themeSlice.reducer;

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Swal from "sweetalert2";
 import { setAuth } from "@/redux/features/authSlice";
+import { resetTheme } from "@/redux/features/themeSlice";
 
 const useLogout = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const useLogout = () => {
     if (result.isConfirmed) {
       try {
         dispatch(setAuth({ token: null, user: {} }));
+        dispatch(resetTheme());
         localStorage.clear();
         navigate("/login");
       } catch (error) {
