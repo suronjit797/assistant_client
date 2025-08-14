@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import appConfig from "@/config/appConfig";
 import { useLoginUserMutation } from "@/redux/api/usersApi";
 import { setAuth } from "@/redux/features/authSlice";
-import { Button, Checkbox, Form, Input, Spin } from "antd";
+import { Button, Form, Image, Input, Spin } from "antd";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -47,6 +46,7 @@ const Login = () => {
   if (error) {
     Swal.fire({
       title: "Error!",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       text: (error as any)?.data?.message || "Login Failed",
       icon: "error",
       confirmButtonText: "OK",
@@ -60,18 +60,17 @@ const Login = () => {
 
   return (
     <Spin spinning={isLoading}>
-      <div className=" min-h-screen flex flex-col md:grid grid-cols-10 grid-rows-1 items-center ">
-        {/* left side */}
-        <div className="col-span-4 p-8 lg:px-20 flex-1 bg-slate-100 w-full h-full shadow-lg flex items-center justify-center flex-col">
-          {/* <div className="pb-6">
-            <img src="/photos/logo_light.webp" className="w-28 h-16" alt="logo" />
-          </div> */}
-          <div className="text-center pb-2 text-lg">Agent Management Portal</div>
+      <div className=" min-h-screen bg-[url('/photos/login_bg.webp')] bg-cover flex flex-col justify-center items-center ">
+        <div className="glass-card flex items-center flex-col my-auto p-8 max-w-[345px] w-full">
+          <div className="text-center pb-2 text-sm">
+            <Image preview={false} width={80} src="/photos/logo.webp" alt="logo" />
+            <div className="text-white"> {appConfig.name} </div>
+          </div>
           <hr className="border-gray-300 pb-2 w-full dark:border-slate-600 my-3" />
           <Form name="register" className="w-full" onFinish={handleLogin} layout="vertical">
             <Form.Item
               name="email"
-              label="Email/Login ID"
+              label={<div className="text-white"> Email/Login ID </div>}
               rules={[
                 {
                   required: true,
@@ -83,7 +82,7 @@ const Login = () => {
             </Form.Item>
 
             <Form.Item
-              label="Password"
+              label={<div className="text-white"> Password </div>}
               name="password"
               rules={[
                 {
@@ -100,31 +99,31 @@ const Login = () => {
             </Form.Item>
 
             <div className="text-end">
-              <Link to="/forgot-password" className="text-primary">
+              <Link to="/forgot-password" className="!text-gray-200">
                 Forgot Password?
               </Link>
             </div>
 
-            <Form.Item name="terms" valuePropName="checked">
-              <Checkbox>
+            {/* <Form.Item name="terms" valuePropName="checked">
+              <Checkbox className="!text-white">
                 You agree to our
-                <a href="#" rel="noreferrer" target="_blank" className="text-primary d-inline-block ms-1">
+                <a href="#" rel="noreferrer" target="_blank" className="!text-gray-200 d-inline-block ms-1">
                   Terms & Conditions
                 </a>
               </Checkbox>
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item shouldUpdate>
-              {({ getFieldValue }) => (
-                <Button className="w-full mb-2" type="primary" htmlType="submit" disabled={!getFieldValue("terms")}>
-                  Sign In
-                </Button>
-              )}
+              {/* {({ getFieldValue }) => ( */}
+              {/* <Button className="w-full mb-2 " type="primary" htmlType="submit" disabled={!getFieldValue("terms")}> */}
+              <Button className="w-full my-2 " type="primary" htmlType="submit">
+                Sign In
+              </Button>
+              {/* )} */}
             </Form.Item>
-            <div className="text-center text-gray-500"> Version {appConfig.version} </div>
+            <div className="text-center text-white"> Version {appConfig.version} </div>
           </Form>
         </div>
-        {/* right side */}
-        <div className=" bg-[url('/photos/login_bg.webp')] h-full col-span-6 bg-cover"> </div>
+
         <LoginFooter />
       </div>
     </Spin>

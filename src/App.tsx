@@ -1,36 +1,14 @@
-import { ConfigProvider, theme } from "antd";
+import "@ant-design/v5-patch-for-react-19";
+import { ConfigProvider } from "antd";
 import { useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import Swal from "sweetalert2";
 import "./App.css";
 import { routes } from "./Routes";
 import { useAppSelector } from "./redux/store";
-import "@ant-design/v5-patch-for-react-19";
+import { customDarkTheme } from "./utils/themeUtils";
 
-const customDarkTheme = (isDark: boolean) => ({
-  components: {
-    // Button: {
-    //   colorBgContainerDisabled: "#4b93fd",
-    //   colorTextDisabled: "#fff",
-    //   defaultHoverBorderColor: "#0d6efd",
-    //   defaultHoverColor: "#0c60d0",
-    // },
 
-    Input: {
-      colorTextPlaceholder: "#95a5a6",
-      hoverBorderColor: "#4FC3F7",
-      activeBorderColor: "#4FC3F7",
-    },
-  },
-  token: {
-    colorPrimary: "#4FC3F7",
-    colorBgBase: isDark ? "#14181e" : "#ffffff", 
-    colorTextBase: isDark ? "#f8fafc" : "#000000", 
-    colorBgContainerDisabled: "",
-    colorTextDisabled: "",
-  },
-  algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
-});
 
 function App() {
   const { isDark } = useAppSelector((state) => state.theme);
