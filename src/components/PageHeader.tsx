@@ -13,6 +13,7 @@ const PageHeader: React.FC<Props> = ({ title, subTitle, children, className }) =
     <>
       <Helmet>
         <title>{title} | Personal Assistant</title>
+        
         <meta name="description" content={`Your smart assistant for daily tasks. This page contain ${subTitle}`} />
       </Helmet>
 
