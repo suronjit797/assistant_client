@@ -34,7 +34,7 @@ const Sidebar = React.memo(() => {
           </div>
           <div className="pt-3">
             <Link to="/" className="logo block text-center">
-                <Image preview={false} width={80} src="/photos/logo.webp" />
+                <Image preview={false} width={80} src="/photos/logo.webp" alt="Personal Assistant Logo" />
             </Link>
           </div>
         </div>

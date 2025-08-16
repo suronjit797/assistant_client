@@ -306,7 +306,7 @@ const PasswordManager: React.FC = () => {
     <Spin spinning={isLoading}>
       <div>
         <div>
-          <PageHeader {...{ title: "PasswordManager", subTitle: "All PasswordManager" }} />
+          <PageHeader {...{ title: "Password Manager", subTitle: "All Password Manager" }} />
 
           {/* filter */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">

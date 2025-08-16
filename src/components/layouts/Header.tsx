@@ -17,7 +17,6 @@ const Header = () => {
   const dispatch = useAppDispatch();
   const logOut = useLogout();
 
-
   return (
     <div className={`px-4 py-2 select-none ${!isDark && "bg-gray-100"} sticky top-0 `}>
       <div className="flex items-center">
@@ -26,10 +25,11 @@ const Header = () => {
           shape="circle"
           icon={<HiBars3CenterLeft className="text-xl" />}
           onClick={() => dispatch(changeNavOpen(!isNavOpen))}
+          title="Toggle Navigation"
         />
 
         <div className="ms-auto flex items-center gap-2 ">
-          <Button type="text" shape="circle" className="cursor-pointer">
+          <Button type="text" shape="circle" className="cursor-pointer" title="Maximize">
             <FiMaximize className="text-md" />
           </Button>
           <Button
@@ -37,11 +37,12 @@ const Header = () => {
             shape="circle"
             className="cursor-pointer text-lg"
             onClick={() => dispatch(changeTheme(!isDark))}
+            title="Toggle Theme"
           >
             {" "}
             {isDark ? <IoSunnySharp className="text-md" /> : <IoMoon className="text-md" />}{" "}
           </Button>
-          <Button type="text" shape="circle" className="cursor-pointer">
+          <Button type="text" shape="circle" className="cursor-pointer" title="Notification">
             <IoMdNotificationsOutline className="text-lg" />
           </Button>
 
@@ -114,7 +115,7 @@ const navigationConfig = (logOut: () => void): NavConfig[] => [
     path: "/profile",
     icon: <TiCogOutline />,
     authorizedRoles: ["superAdmin", "businessAdmin", "installer", "admin", "user", "public"],
-},
+  },
 
   {
     name: "Logout",

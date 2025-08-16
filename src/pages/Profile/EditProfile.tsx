@@ -141,7 +141,7 @@ export default function EditProfile() {
               {profileData.avatar?.url || userDetails?.avatar?.url ? (
                 <img
                   src={profileData.avatar?.url || userDetails?.avatar?.url}
-                  alt="Profile"
+                  alt="Profile Photo"
                   className="w-full h-full rounded-full object-cover"
                 />
               ) : (

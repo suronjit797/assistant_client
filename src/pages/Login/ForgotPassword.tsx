@@ -47,7 +47,7 @@ const ForgotPassword = () => {
         {/* left side */}
         <div className="col-span-4 p-8 flex-1 lg:px-20 bg-slate-100  h-full shadow-lg flex items-center justify-center flex-col">
           <div className="pb-6">
-            <img src="/photos/logo_light.webp" className="w-28 h-16" alt="logo" />
+            <img src="/photos/logo_light.webp" className="w-28 h-16" alt="Personal Assistant logo" />
           </div>
           <div className="text-center pb-2 text-lg">Customer Management Portal</div>
           <hr className="border-gray-300 pb-2 w-full dark:border-slate-600 my-3" />

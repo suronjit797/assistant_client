@@ -63,7 +63,7 @@ const ImgUpload: React.FC<ImgUploadProps> = ({ url,  setImage }) => {
       ) : imageUrl || url ? (
         <img
           src={imageUrl || url}
-          alt="avatar"
+          alt="user avatar"
           style={{ width: "100%" }}
         />
       ) : (

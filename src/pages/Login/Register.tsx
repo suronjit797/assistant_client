@@ -66,7 +66,7 @@ const Register = () => {
         <div className="py-4 max-w-[350px] w-full  my-auto">
           <div className="glass-card flex items-center flex-col p-8 ">
             <div className="text-center pb-2 text-sm">
-              <Image preview={false} width={80} src="/photos/logo.webp" alt="logo" />
+              <Image preview={false} width={80} src="/photos/logo.webp"alt="Personal Assistant Logo" />
               <div className="text-white">{appConfig.name}</div>
             </div>
             <hr className="border-gray-300 pb-2 w-full dark:border-slate-600 my-3" />

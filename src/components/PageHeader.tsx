@@ -1,4 +1,5 @@
 import React from "react";
+import { Helmet } from "react-helmet";
 
 interface Props {
   title: string;
@@ -10,6 +11,11 @@ interface Props {
 const PageHeader: React.FC<Props> = ({ title, subTitle, children, className }) => {
   return (
     <>
+      <Helmet>
+        <title>{title} | Personal Assistant</title>
+        <meta name="description" content={`Your smart assistant for daily tasks. This page contain ${subTitle}`} />
+      </Helmet>
+
       <div className={`flex items-center ${className}`}>
         <div>
           <h5 className="font-bold uppercase text-sm mb-3"> {title} </h5>

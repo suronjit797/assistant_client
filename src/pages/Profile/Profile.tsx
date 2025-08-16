@@ -40,7 +40,7 @@ export default function Profile() {
 
           <div className="flex flex-col items-center">
             {userDetails?.avatar?.url ? (
-              <img src={userDetails?.avatar?.url} alt="Profile" className="rounded-full h-36 w-36 object-cover" />
+              <img src={userDetails?.avatar?.url} alt="Profile Photo" className="rounded-full h-36 w-36 object-cover" />
             ) : (
               <div className="h-36 w-36 bg-gray-200 rounded-full flex items-center justify-center">
                 <span className="text-gray-500"></span>
