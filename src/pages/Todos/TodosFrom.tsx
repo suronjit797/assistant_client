@@ -1,10 +1,12 @@
 import { todosPriorities } from "@/constant/constants";
 import { ITodos } from "@/interfaces/todosInterface";
 import { useCreateTodosMutation, useUpdateTodosMutation } from "@/redux/api/todoApi";
-import { Button, DatePicker, Drawer, Form, Input, Select } from "antd";
+import { Button, DatePicker, Form, Input, Select, Card } from "antd";
 import dayjs from "dayjs";
 import React from "react";
 import Swal from "sweetalert2";
+import SlidePanel from "@/components/SlidePanel";
+import { FiCalendar, FiFlag, FiFileText, FiEdit3 } from "react-icons/fi";
 
 const TodosForm: React.FC<{
   mode?: "create" | "edit";
@@ -78,68 +80,137 @@ const TodosForm: React.FC<{
     form.resetFields();
   };
 
+  const footerContent = (
+    <div className="flex justify-end space-x-3">
+      <Button onClick={onCancel} size="large">
+        Cancel
+      </Button>
+      <Button
+        type="primary"
+        htmlType="submit"
+        form="todo-form"
+        loading={loading || updateLoading || isLoading}
+        size="large"
+        className="min-w-[120px]"
+      >
+        {mode === "create" ? "Create Todo" : "Update Todo"}
+      </Button>
+    </div>
+  );
+
   return (
-    <Drawer
-      title={mode === "edit" ? "Edit Todo" : "Add Todo"}
-      closable={{ "aria-label": "Close Button" }}
-      onClose={onCancel}
+    <SlidePanel
+      title={mode === "edit" ? "Edit Todo" : "Create New Todo"}
       open={open}
+      onClose={onCancel}
+      width={500}
+      footer={footerContent}
     >
-      <Form form={form} layout="vertical" className="p-4" initialValues={data} onFinish={handleSubmit}>
-        <Form.Item
-          name="title"
-          label="Title"
-          rules={[{ required: mode === "create", message: "Please enter a title" }]}
-        >
-          <Input placeholder="Enter todo title" className="w-full" />
-        </Form.Item>
-        <Form.Item
-          name="description"
-          label="Description"
-          rules={[{ required: mode === "create", message: "Please enter a description" }]}
-        >
-          <Input placeholder="Enter todo description" className="w-full" />
-        </Form.Item>
+      <div className="space-y-6">
+        {/* Header Card */}
+        <Card className="border-0 shadow-sm bg-gradient-to-r from-blue-50 to-cyan-50">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-blue-100 rounded-lg">
+              {mode === "edit" ? (
+                <FiEdit3 className="text-blue-600 text-xl" />
+              ) : (
+                <FiFileText className="text-blue-600 text-xl" />
+              )}
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-800 mb-1">
+                {mode === "edit" ? "Update Task" : "New Task"}
+              </h3>
+              <p className="text-sm text-gray-600">
+                {mode === "edit" 
+                  ? "Modify the details of your existing task" 
+                  : "Add a new task to your todo list"}
+              </p>
+            </div>
+          </div>
+        </Card>
 
-        <Form.Item
-          name="priority"
-          label="Priority"
-          rules={[{ required: mode === "create", message: "Please select a priority" }]}
+        {/* Form */}
+        <Form 
+          form={form} 
+          id="todo-form"
+          layout="vertical" 
+          initialValues={data} 
+          onFinish={handleSubmit}
+          className="space-y-4"
         >
-          <Select
-            placeholder="Select todo priority"
-            className="w-full"
-            options={todosPriorities.map((type) => ({
-              value: type,
-              label: <div className="capitalize"> {type} </div>,
-            }))}
-          />
-        </Form.Item>
-
-        <Form.Item
-          name="dueDate"
-          getValueProps={(value) => ({ value: value ? dayjs(value) : undefined })}
-          label="Due Date"
-          // rules={[{ required: true, message: "Please enter an dueDate" }]}
-        >
-          <DatePicker className="w-full" />
-        </Form.Item>
-
-        <div className="flex justify-end space-x-4 mt-6">
-          <Button onClick={onCancel} className="mr-2">
-            Cancel
-          </Button>
-          <Button
-            type="primary"
-            htmlType="submit"
-            loading={loading || updateLoading || isLoading}
-            className="bg-blue-600 hover:bg-blue-700"
+          {/* Title */}
+          <Form.Item
+            name="title"
+            label={<span className="text-gray-700 font-medium">Task Title</span>}
+            rules={[{ required: mode === "create", message: "Please enter a task title" }]}
           >
-            {mode === "create" ? "Create" : "Update"}
-          </Button>
-        </div>
-      </Form>
-    </Drawer>
+            <Input 
+              placeholder="Enter a descriptive title for your task"
+              prefix={<FiFileText className="text-gray-400" />}
+              size="large"
+              className="rounded-lg"
+            />
+          </Form.Item>
+
+          {/* Description */}
+          <Form.Item
+            name="description"
+            label={<span className="text-gray-700 font-medium">Description</span>}
+            rules={[{ required: mode === "create", message: "Please enter a description" }]}
+          >
+            <Input.TextArea 
+              placeholder="Provide additional details about this task"
+              rows={3}
+              className="rounded-lg"
+            />
+          </Form.Item>
+
+          {/* Priority and Due Date Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Form.Item
+              name="priority"
+              label={<span className="text-gray-700 font-medium">Priority Level</span>}
+              rules={[{ required: mode === "create", message: "Please select a priority" }]}
+            >
+              <Select
+                placeholder="Choose priority"
+                size="large"
+                className="w-full"
+                suffixIcon={<FiFlag className="text-gray-400" />}
+                options={todosPriorities.map((type) => ({
+                  value: type,
+                  label: (
+                    <div className="flex items-center gap-2 capitalize">
+                      <span className={`h-2 w-2 rounded-full ${
+                        type === 'high' ? 'bg-red-500' : 
+                        type === 'medium' ? 'bg-yellow-500' : 'bg-green-500'
+                      }`} />
+                      {type}
+                    </div>
+                  ),
+                }))}
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="dueDate"
+              getValueProps={(value) => ({ value: value ? dayjs(value) : undefined })}
+              label={<span className="text-gray-700 font-medium">Due Date</span>}
+            >
+              <DatePicker 
+                className="w-full" 
+                size="large"
+                suffixIcon={<FiCalendar className="text-gray-400" />}
+                placeholder="Select due date"
+                showTime
+                format="YYYY-MM-DD HH:mm"
+              />
+            </Form.Item>
+          </div>
+        </Form>
+      </div>
+    </SlidePanel>
   );
 };
 
