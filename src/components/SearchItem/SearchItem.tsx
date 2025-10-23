@@ -27,3 +27,5 @@ const SearchItem: React.FC<{ name?: string }> = ({ name = "" }) => {
 };
 
 export default SearchItem;
+
+
