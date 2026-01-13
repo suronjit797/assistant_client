@@ -18,7 +18,7 @@ const Header = () => {
   const logOut = useLogout();
 
   return (
-    <div className={`px-6 py-4 select-none backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-40 ${!isDark ? "bg-white/80" : "bg-gray-900/80"}`}>
+    <div className={`px-6 py-3 select-none backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 sticky top-0 z-40 ${!isDark ? "bg-white/80" : "bg-gray-900/80"}`}>
       <div className="flex items-center justify-between">
         {/* Left Section */}
         <div className="flex items-center space-x-4">

@@ -16,7 +16,7 @@ interface SummaryCardProps {
   cash: number;
 }
 
-export const TransactionsSummary = ({ title, subtitle, items, totalCredit, totalDebit, cash }: SummaryCardProps) => {
+export const SummaryCard = ({ title, subtitle, items, totalCredit, totalDebit, cash }: SummaryCardProps) => {
   const creditItems = items.filter((item) => item.type === "credit");
   const debitItems = items.filter((item) => item.type === "debit");
 

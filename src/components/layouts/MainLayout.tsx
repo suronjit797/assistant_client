@@ -28,7 +28,7 @@ const MainLayout: React.FC = () => {
         <Header />
         
         {/* Content Area */}
-        <div className="flex-1 p-6 overflow-hidden">
+        <div className="flex-1 px-6 py-3 overflow-hidden">
           <div className={`
             h-full rounded-2xl shadow-xl modern-card overflow-hidden
             ${
@@ -38,7 +38,7 @@ const MainLayout: React.FC = () => {
             }
             backdrop-blur-sm
           `}>
-            <div className="h-full overflow-y-auto modern-scrollbar p-6">
+            <div className="h-full overflow-y-auto modern-scrollbar px-6 py-3">
               <div className="animate-fadeIn">
                 <Outlet />
               </div>

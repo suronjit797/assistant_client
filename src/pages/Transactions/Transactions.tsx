@@ -12,11 +12,11 @@ import {
   useUpdateTransactionsMutation,
 } from "@/redux/api/transactionApi";
 import { useAppSelector } from "@/redux/store";
-import { Button, DatePicker, Spin, TableProps } from "antd";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { Button, DatePicker, Spin, TableProps, Tag } from "antd";
 import dayjs from "dayjs";
 import React, { Key, useState } from "react";
 import { AiOutlinePlus } from "react-icons/ai";
-import { FiEdit } from "react-icons/fi";
 import { IoMdStar, IoMdStarOutline } from "react-icons/io";
 import { MdOutlineFilterAltOff } from "react-icons/md";
 import { RiDeleteBin7Line } from "react-icons/ri";
@@ -24,8 +24,7 @@ import { TfiReload } from "react-icons/tfi";
 import Swal from "sweetalert2";
 import CustomTable from "../../components/CustomTable";
 import TransactionsForm from "./TransactionsFrom";
-import TransactionSummaryCards from "./TransactionsSummary";
-
+import { TransactionsSummary } from "./TransactionsSummary";
 
 const Transactions: React.FC = () => {
   // hooks
@@ -52,6 +51,8 @@ const Transactions: React.FC = () => {
   const { data, isFetching, refetch } = useGetAllTransactionsQuery({
     ...getNonEmptyQueryParams,
     ...(user.role === "superAdmin" ? { populate: "user" } : {}),
+    createdAt_gt: dayjs(`${year}-${month.toString().padStart(2, "0")}-01`, "YYYY-MM-DD").toISOString(),
+    createdAt_lt: dayjs(`${year}-${month.toString().padStart(2, "0")}-31`, "YYYY-MM-DD").toISOString(),
   });
   const {
     data: summaryData,
@@ -179,19 +180,26 @@ const Transactions: React.FC = () => {
         const type = record?.type;
         // Color map
         const colorMap: Record<string, string> = {
-          income: "bg-green-500",
-          expense: "bg-red-500",
-          give: "bg-yellow-500",
-          take: "bg-purple-500",
-          withdraw: "bg-pink-500",
-          save: "bg-blue-300",
+          income: /* "bg-green-500", */ "green",
+          expense: /* "bg-red-500", */ "green",
+          give: /* "bg-yellow-500", */ "green",
+          take: /* "bg-purple-500", */ "green",
+          withdraw: /* "bg-pink-500", */ "green",
+          save: /* "bg-blue-300", */ "green",
         };
 
         return (
-          <div className="flex items-center capitalize">
-            <span className={`h-2 w-2 rounded-full mr-2 ${colorMap[type] || "bg-gray-400"}`} />
+          // <div className={`flex items-center capitalize ${colorMap[type] || "bg-gray-400"}`}>
+          //   <span className={`h-2 w-2 rounded-full mr-2 ${colorMap[type] || "bg-gray-400"}`} />
+          //   {type}
+          // </div>
+          <Tag color={colorMap[type]}>
+            <span
+              className={`h-2 w-2 rounded-full mr-2 inline-block`}
+              style={{ background: colorMap[type] || "gray" }}
+            />
             {type}
-          </div>
+          </Tag>
         );
       },
     },
@@ -228,13 +236,17 @@ const Transactions: React.FC = () => {
           onClick={() => update({ id: record._id, body: { isPending: !record.isPending } })}
         >
           {record.isPending ? (
-            <div className="flex items-center">
-              <div className="h-2 w-2 rounded-full bg-red-500 mr-2" /> Pending
-            </div>
+            <Tag color="red">
+              <div className="flex items-center">
+                <div className="h-2 w-2 rounded-full bg-red-500 mr-2" /> Pending
+              </div>
+            </Tag>
           ) : (
-            <div className="flex items-center">
-              <div className="h-2 w-2 rounded-full bg-blue-300 mr-2" /> Completed
-            </div>
+            <Tag color="geekblue">
+              <div className="flex items-center">
+                <div className="h-2 w-2 rounded-full bg-blue-300 mr-2" /> Completed
+              </div>
+            </Tag>
           )}
         </div>
       ),
@@ -262,24 +274,22 @@ const Transactions: React.FC = () => {
       title: "Action",
       ellipsis: true,
       render: (_text, record) => (
-        <div className="flex gap-2 justify-center">
+        <div className="flex gap-2 justify-center ">
           <Button
-            icon={<FiEdit />}
-            type="primary"
-            className="!bg-gray-300 !text-black hover:!bg-gray-400"
+            type="text"
+            icon={<EditOutlined />}
             onClick={() => {
               setEditData(record);
               setOpen(true);
             }}
-            title="Edit Transactions"
+            className="text-info hover:bg-info/10 hover:text-info !shadow-none"
           />
-
           <Button
-            icon={<RiDeleteBin7Line />}
-            type="primary"
+            type="text"
             danger
+            icon={<DeleteOutlined />}
             onClick={() => handleDelete(record?._id)}
-            title="Delete Transactions"
+            className="hover:bg-destructive/10 !shadow-none"
           />
         </div>
       ),
@@ -290,6 +300,40 @@ const Transactions: React.FC = () => {
 
   const isLoading = isFetching || updateLoading || isSummaryFetching || deleteLoading || deleteManyLoading;
 
+  // All time summary data
+  const allTimeSummary = {
+    title: "All Time",
+    subtitle: "Life Time",
+    items: [
+      { label: "Income", value: summaryData?.data?.allTime?.income, type: "credit" as const },
+      { label: "Take (Debt)", value: summaryData?.data?.allTime?.take, type: "credit" as const },
+      { label: "Withdraw", value: summaryData?.data?.allTime?.withdraw, type: "credit" as const },
+      { label: "Expense", value: summaryData?.data?.allTime?.expense, type: "debit" as const },
+      { label: "Give (Lending)", value: summaryData?.data?.allTime?.give, type: "debit" as const },
+      { label: "Save", value: summaryData?.data?.allTime?.save, type: "debit" as const },
+    ],
+    totalCredit: 501010,
+    totalDebit: 0,
+    cash: 501010,
+  };
+
+  // Monthly summary data
+  const monthlySummary = {
+    title: "Monthly Summary",
+    subtitle: "January, 2026",
+    items: [
+      { label: "Income", value: 0, type: "credit" as const },
+      { label: "Take (Debt)", value: 0, type: "credit" as const },
+      { label: "Withdraw", value: 0, type: "credit" as const },
+      { label: "Expense", value: 0, type: "debit" as const },
+      { label: "Give (Lending)", value: 0, type: "debit" as const },
+      { label: "Save", value: 0, type: "debit" as const },
+    ],
+    totalCredit: 0,
+    totalDebit: 0,
+    cash: 0,
+  };
+
   return (
     <Spin spinning={isLoading}>
       <div>
@@ -299,7 +343,7 @@ const Transactions: React.FC = () => {
           {/* filter */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             <div className="flex gap-2">
-              <SearchItem name="todos" />
+              <SearchItem name="transaction" />
               <DatePicker
                 picker="month"
                 value={pickerValue}
@@ -336,13 +380,19 @@ const Transactions: React.FC = () => {
         </div>
 
         {/* Summary */}
-        <div className="my-4">
+        {/* <div className="my-4">
           <TransactionSummaryCards
             allTime={summaryData?.data?.allTime || {}}
             monthly={summaryData?.data?.monthly || {}}
             month={Number(summaryData?.data?.month)}
             year={summaryData?.data?.year}
           />
+          
+        </div> */}
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+          <TransactionsSummary {...allTimeSummary} />
+          <TransactionsSummary {...monthlySummary} />
         </div>
 
         {/* main table */}
